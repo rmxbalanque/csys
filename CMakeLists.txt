@@ -83,3 +83,4 @@ endif()
 # TODO: CMake Install support.
 # TODO: Look into header only version support of ccli.
 # TODO: Add Shared Library Support for Windows.
+# TODO: Add clang-tidy, cpplint, include-what-you-use, and link-what-you-use.

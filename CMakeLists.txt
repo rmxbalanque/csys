@@ -79,8 +79,8 @@ if(CCLI_INCLUDE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# TODO: Add IDE support for headers.
+# TODO: Add IDE support for headers. (source_group)
 # TODO: CMake Install support.
 # TODO: Look into header only version support of ccli.
-# TODO: Add Shared Library Support for Windows.
+# TODO: Add Shared Library Support for Windows. (https://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/)
 # TODO: Add clang-tidy, cpplint, include-what-you-use, and link-what-you-use.

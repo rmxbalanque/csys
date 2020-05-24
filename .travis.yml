@@ -1,0 +1,19 @@
+os: linux
+language: cpp
+dist: xenial
+sudo: false
+
+# Setup compilers.
+compiler:
+  - clang
+  - gcc
+
+# Setup cmake.
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+# Build.
+script:
+  - cmake --build ./ -- -j2

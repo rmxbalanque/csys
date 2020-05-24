@@ -1,5 +1,6 @@
-#ifndef CCLI_CCLI_H
-#define CCLI_CCLI_H
+#ifndef CCLI_H
+#define CCLI_H
 
+#pragma once
 
 #endif

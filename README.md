@@ -1,5 +1,6 @@
 # CCLI
 [![Build Status](https://travis-ci.com/rmxbalanque/ccli.svg?branch=master)](https://travis-ci.com/rmxbalanque/ccli)
+[![Build status](https://ci.appveyor.com/api/projects/status/p5e3c6rdysatd6v9?svg=true)](https://ci.appveyor.com/project/rmxbalanque/ccli)
 
 Custom In-Game Command Line Interface.
 

@@ -34,7 +34,7 @@ endif()
 # -----------------------------------------------------------------------------
 
 # Include tests.
-option(CCLI_INCLUDE_EXAMPLES "Include and build CCLI examples targets" ON)
+option(CCLI_BUILD_EXAMPLES "Include and build CCLI examples targets" ON)
 
 # Build shared option
 option(CCLI_BUILD_SHARED "Build shared library" OFF)
@@ -58,6 +58,7 @@ if(CCLI_BUILD_SHARED)
     add_library(ccli SHARED ${CCLI_SOURCES} ${CCLI_HEADERS})
 else()
     add_library(ccli STATIC ${CCLI_SOURCES} ${CCLI_HEADERS})
+    target_compile_definitions(ccli PRIVATE CCLI_BUILD_STATIC)  # Used for export macros.
 endif()
 
 # Define ccli namespace
@@ -66,17 +67,37 @@ add_library(ccli::ccli ALIAS ccli)
 # Library public include directories
 target_include_directories(ccli PUBLIC include/ccli)
 
+# Library private include directories
+#target_include_directories(ccli PRIVATE )
+
 # Set precompiled headers if supported and enabled
 if(COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
     target_precompile_headers(ccli PRIVATE include/ccli/ccli_pch.h)
 endif()
 
+# Export no symbols by default. (To ensure cross-compiler consistent behaviour)
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
+# Generate export header automatically
+include(GenerateExportHeader)
+GENERATE_EXPORT_HEADER(ccli
+                        BASE_NAME ccli
+                        EXPORT_MACRO_NAME CCLI_API
+                        EXPORT_FILE_NAME ${ccli_SOURCE_DIR}/include/ccli/ccli_api.h
+                        STATIC_DEFINE CCLI_BUILD_STATIC)
 # -----------------------------------------------------------------------------
 # Build binaries
 # -----------------------------------------------------------------------------
 
-if(CCLI_INCLUDE_EXAMPLES)
+if(CCLI_BUILD_EXAMPLES)
+    message(STATUS "Generating Example(s)")
     add_subdirectory(examples)
+endif()
+
+if(CCLI_BUILD_TESTS)
+    message(STATUS "Generating tests")
+    add_subdirectory(tests)
 endif()
 
 # TODO: Add IDE support for headers. (source_group)

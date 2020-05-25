@@ -40,10 +40,10 @@ option(CCLI_INCLUDE_EXAMPLES "Include and build CCLI examples targets" ON)
 option(CCLI_BUILD_SHARED "Build shared library" OFF)
 
 # Precompiled headers option
-option(CCLI_ENABLE_PCH "Build library using precompiled headers to improve compilation times" OFF)
+option(CCLI_ENABLE_PCH "Build library using precompiled headers to improve compilation times" ON)
 
 # Testing options.
-option(CCLI_BUILD_TESTS "Build tests" OFF)
+option(CCLI_BUILD_TESTS "Build tests" ON)
 
 # -----------------------------------------------------------------------------
 # Build Static/Shared Library
@@ -68,7 +68,7 @@ target_include_directories(ccli PUBLIC include/ccli)
 
 # Set precompiled headers if supported and enabled
 if(COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
-    target_precompile_headers(cclie PRIVATE src/ccli_pch.h)
+    target_precompile_headers(ccli PRIVATE include/ccli/ccli_pch.h)
 endif()
 
 # -----------------------------------------------------------------------------
@@ -84,3 +84,6 @@ endif()
 # TODO: Look into header only version support of ccli.
 # TODO: Add Shared Library Support for Windows. (https://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/)
 # TODO: Add clang-tidy, cpplint, include-what-you-use, and link-what-you-use.
+
+# For error ignoring. (Should be removed later).
+set(CMAKE_C_COMPILER ${CMAKE_C_COMPILER})

@@ -21,6 +21,11 @@ namespace ccli
 	public:
 		acTernaryTree() = default;
 
+		~acTernaryTree()
+		{
+			deleteTree(m_Root);
+		}
+
 		// Autocomplete node.
 		typedef struct acNode
 		{
@@ -37,11 +42,25 @@ namespace ccli
 			acNode *m_Greater;
 		} acNode;
 
+		void deleteTree(acNode * node)
+		{
+			if (!node) return;
+
+			// Delete children.
+			deleteTree(node->m_Less);
+			deleteTree(node->m_Equal);
+			deleteTree(node->m_Greater);
+
+			// Delete self.
+			delete node;
+		}
+
 		// Result.
 		bool search(const char *string)
 		{
 			acNode *ptr = m_Root;
 
+			// Traverse tree in look for the given string.
 			while (ptr)
 			{
 				if (*string < ptr->m_Data)
@@ -50,6 +69,7 @@ namespace ccli
 				}
 				else if (*string == ptr->m_Data)
 				{
+					// Word was found.
 					if (*(string + 1) == '\0' && ptr->m_IsWord)
 						return true;
 
@@ -71,22 +91,23 @@ namespace ccli
 
 			while (*str != '\0')
 			{
+				// Insert char into tree.
 				if (*ptr == nullptr)
 				{
-					//if (*(str + 1) == '\0')
-					//	*ptr = new acNode(*str, true);
-					//else
-						*ptr = new acNode(*str);
+					*ptr = new acNode(*str);
 				}
 
+				// Traverse tree.
 				if (*str < (*ptr)->m_Data)
 				{
 					ptr = &(*ptr)->m_Less;
 				}
 				else if (*str == (*ptr)->m_Data)
 				{
+					// String is already in tree, therefore only mark as word.
 					if (*(str + 1) == '\0') (*ptr)->m_IsWord = true;
 
+					// Advance.
 					ptr = &(*ptr)->m_Equal;
 					++str;
 				}
@@ -95,8 +116,6 @@ namespace ccli
 					ptr = &(*ptr)->m_Greater;
 				}
 			}
-
-			//if (ptr && *ptr) (*ptr)->m_IsWord = true;
 		}
 
 		void traverseUtil(std::ostream &os, acNode *root) const
@@ -121,23 +140,26 @@ namespace ccli
 		{
 			if (!root) return;
 
+			// Continue looking in left branch.
 			if (root->m_Less) optionUtil(root->m_Less, ac_options, buffer);
 
+			// Word was found, push into autocomplete options.
 			if (root->m_IsWord)
 			{
-				buffer.append(1, root->m_Data);
-				ac_options.push_back(buffer);
+				ac_options.push_back(buffer.append(1, root->m_Data));
+				buffer.pop_back();
 			}
 
+			// Continue in middle branch, and push character.
 			if (root->m_Equal)
 			{
-				buffer.append(1, root->m_Data);
-				optionUtil(root->m_Equal, ac_options, buffer);
+				optionUtil(root->m_Equal, ac_options, buffer.append(1, root->m_Data));
+				buffer.pop_back();
 			}
 
+			// Continue looking in right branch.
 			if (root->m_Greater)
 			{
-				buffer.pop_back();
 				optionUtil(root->m_Greater, ac_options, buffer);
 			}
 		}
@@ -145,8 +167,9 @@ namespace ccli
 		void options(const char *prefix, std::vector<std::string> &ac_options)
 		{
 			acNode *ptr = m_Root;
+			std::string c_prefix = prefix;
 
-			// Check if prefix exists.
+			// Traverse tree and check if prefix exists.
 			while (ptr)
 			{
 				if (*prefix < ptr->m_Data)
@@ -155,6 +178,7 @@ namespace ccli
 				}
 				else if (*prefix == ptr->m_Data)
 				{
+					// Prefix exists in tree.
 					if (*(prefix + 1) == '\0')
 						break;
 
@@ -170,7 +194,8 @@ namespace ccli
 			// Already a word. (No need to auto complete).
 			if (ptr && ptr->m_IsWord) return;
 
-			optionUtil(ptr, ac_options, "");
+			// Retrieve auto complete options.
+			optionUtil(ptr->m_Equal, ac_options, c_prefix);
 		}
 
 	private:

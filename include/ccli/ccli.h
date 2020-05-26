@@ -10,7 +10,7 @@ struct CCLI_API Shared
 {
 	void Test()
 	{
-		std::cout << "Successfull shared library." << std::endl;
+		std::cout << "Successful shared library." << std::endl;
 	}
 };
 

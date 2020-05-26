@@ -104,6 +104,7 @@ endif()
 # TODO: CMake Install support.
 # TODO: Look into header only version support of ccli.
 # TODO: Add clang-tidy, cpplint, include-what-you-use, and link-what-you-use.
+# TODO: Add Debug compiler flags.
 
 # For error ignoring. (Should be removed later).
 set(CMAKE_C_COMPILER ${CMAKE_C_COMPILER})

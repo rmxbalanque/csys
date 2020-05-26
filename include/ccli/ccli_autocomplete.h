@@ -175,11 +175,20 @@ namespace ccli
 		}
 
 		// String specialization.
+		// TODO: Use CMAKE Flags to determine compiler.
+#if defined(__clang__) || defined(__clang__)
 		template<>
 		void insert(const std::string & str)
 		{
 			insert(str.data());
 		}
+#elif defined(__GNUC__) || defined(__GNUG__)
+		template<typename T = int>
+		void insert(const std::string & str)
+		{
+			insert(str.data());
+		}
+#endif
 
 		template<typename strType>
 		void suggestions(const strType &prefix, std::vector<std::string> &ac_options)

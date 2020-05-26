@@ -176,7 +176,7 @@ namespace ccli
 
 		// String specialization.
 		// TODO: Use CMAKE Flags to determine compiler.
-#if defined(__clang__) || defined(__clang__)
+#if defined(__clang__) || defined(_MSC_VER)
 		template<>
 		void insert(const std::string & str)
 		{

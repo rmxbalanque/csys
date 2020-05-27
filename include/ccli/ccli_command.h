@@ -13,7 +13,6 @@ namespace ccli
   {
     virtual ~CommandBase() = default;
     virtual void operator()(std::string input) = 0;
-    static inline std::vector<CommandBase*> s_Commands;
   };
 
   template<typename Fn, typename ...Args>
@@ -45,13 +44,13 @@ namespace ccli
   };
 
   template<typename Fn, typename ...Args>
-  void registerCommand(CR_STRING name, CR_STRING description, Fn function, Args... args)
+  CommandBase *registerCommand(CR_STRING name, CR_STRING description, Fn function, Args... args)
   {
     // check if function can be called with the given arguments
     static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
 
     // Add commands to system here
-    CommandBase::s_Commands.emplace_back(new Command<Fn, Args...>(name, description, function, args...));
+    return new Command<Fn, Args...>(name, description, function, args...);
   }
 }
 #define CCLI_COMMAND_H

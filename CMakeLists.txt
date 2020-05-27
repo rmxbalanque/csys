@@ -27,7 +27,6 @@ endif()
 #if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    target_compile_features(ccli PRIVATE cxx_std_17)
 #endif()
 
 # -----------------------------------------------------------------------------
@@ -109,3 +108,5 @@ endif()
 
 # For error ignoring. (Should be removed later).
 set(CMAKE_C_COMPILER ${CMAKE_C_COMPILER})
+
+target_compile_features(ccli PRIVATE cxx_std_17)

@@ -18,9 +18,9 @@ struct CCLI_API Shared
 	void Test()
 	{
 	  using namespace ccli;
-	  registerCommand("Some_Name", "Some_Description", func, Arg<int>(""), Arg<std::string>(""));
-    (*CommandBase::s_Commands[0])("1000 test");
-    delete CommandBase::s_Commands[0];
+	  auto command = registerCommand("Some_Name", "Some_Description", func, Arg<int>(""), Arg<std::string>(""));
+    (*command)("1000 test");
+    delete command;
 //		std::cout << "Successful shared library." << std::endl;
 	}
 };

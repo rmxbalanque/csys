@@ -2,15 +2,17 @@
 #define CCLI_H
 
 #pragma once
-
 #include "iostream"
 #include "ccli_api.h"
 #include "ccli_command.h"
 #include <string>
 
-void CCLI_API func(int a, std::string b)
+namespace ccli
 {
-  std::cout << "| " << a << " | " << b << " |";
+	CCLI_API void func(int a, std::string b)
+	{
+		std::cout << "| " << a << " | " << b << " |";
+	}
 }
 
 struct CCLI_API Shared

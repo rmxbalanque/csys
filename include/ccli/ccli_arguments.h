@@ -24,6 +24,7 @@ namespace ccli
     ValueType m_Value;
   };
 
+  // TODO: Client input -> command system (strip name) -> command(client input) -> arguments(client input) (strip own arg)
   // TODO: Use own char* not string
   // TODO: Parse commandline for 'strings' and "strings"
   // TODO: Support arrays with {} and [] style

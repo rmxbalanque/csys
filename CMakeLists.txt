@@ -25,7 +25,7 @@ endif()
 # -----------------------------------------------------------------------------
 
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
@@ -51,7 +51,7 @@ option(CCLI_BUILD_TESTS "Build tests" ON)
 
 # ccli files
 set(CCLI_SOURCES src/ccli.cpp)
-set(CCLI_HEADERS include/ccli/ccli.h)
+set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_arguments.h include/ccli/ccli_command.h)
 
 # Add core ccli target.
 if(CCLI_BUILD_SHARED)

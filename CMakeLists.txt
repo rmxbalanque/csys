@@ -11,24 +11,24 @@ project(ccli VERSION 0.1 LANGUAGES CXX)
 message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 
 # Setup module subdirectory.
-set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 
 # -----------------------------------------------------------------------------
 # Set default build to debug
 # -----------------------------------------------------------------------------
 
-if(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose Release or Debug" FORCE)
-endif()
+endif ()
 
 # -----------------------------------------------------------------------------
 # Compiler config
 # -----------------------------------------------------------------------------
 
-if(NOT CMAKE_CXX_STANDARD)
+if (NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
+endif ()
 
 # -----------------------------------------------------------------------------
 # Build Settings
@@ -64,12 +64,12 @@ set(CCLI_SOURCES src/ccli.cpp)
 set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_autocomplete.h include/ccli/ccli_arguments.h include/ccli/ccli_command.h)
 
 # Add core ccli target.
-if(CCLI_BUILD_SHARED)
+if (CCLI_BUILD_SHARED)
     add_library(ccli SHARED ${CCLI_SOURCES} ${CCLI_HEADERS})
-else()
+else ()
     add_library(ccli STATIC ${CCLI_SOURCES} ${CCLI_HEADERS})
     target_compile_definitions(ccli PRIVATE CCLI_BUILD_STATIC)  # Used for export macros.
-endif()
+endif ()
 
 # Enable warnings.
 ccli_enable_warnings(ccli)
@@ -84,9 +84,9 @@ target_include_directories(ccli PUBLIC include/ccli)
 #target_include_directories(ccli PRIVATE )
 
 # Set precompiled headers if supported and enabled
-if(COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
+if (COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
     target_precompile_headers(ccli PRIVATE include/ccli/ccli_pch.h)
-endif()
+endif ()
 
 # Export no symbols by default. (To ensure cross-compiler consistent behaviour)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
@@ -95,17 +95,16 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 # Generate export header automatically
 include(GenerateExportHeader)
 GENERATE_EXPORT_HEADER(ccli
-                        BASE_NAME ccli
-                        EXPORT_MACRO_NAME CCLI_API
-                        EXPORT_FILE_NAME ${ccli_SOURCE_DIR}/include/ccli/ccli_api.h
-                        STATIC_DEFINE CCLI_BUILD_STATIC)
-
+        BASE_NAME ccli
+        EXPORT_MACRO_NAME CCLI_API
+        EXPORT_FILE_NAME ${ccli_SOURCE_DIR}/include/ccli/ccli_api.h
+        STATIC_DEFINE CCLI_BUILD_STATIC)
 
 # -----------------------------------------------------------------------------
 # Development tools
 # -----------------------------------------------------------------------------
 
-if(CMAKE_BUILD_TYPE STREQUAL Debug)
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
 
     # Enable include-what-you-use
     if (CCLI_ENABLE_IWYU)
@@ -116,29 +115,27 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
         # Enable include-what-you-use built in CMake support.
         set(IWYU_PATH "${CMAKE_SOURCE_DIR}/thirdparty/include-what-you-use/build/bin/include-what-you-use")
         set_target_properties(ccli PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
-    endif()
+    endif ()
 
-endif()
+endif ()
 
 # -----------------------------------------------------------------------------
 # Build binaries
 # -----------------------------------------------------------------------------
 
-if(CCLI_BUILD_EXAMPLES)
+if (CCLI_BUILD_EXAMPLES)
     message(STATUS "Generating Example(s)")
     add_subdirectory(examples)
-endif()
+endif ()
 
-if(CCLI_BUILD_TESTS)
+if (CCLI_BUILD_TESTS)
     message(STATUS "Generating tests")
+    enable_testing()
     add_subdirectory(tests)
-endif()
+endif ()
+
 
 # TODO: Add IDE support for headers. (source_group)
 # TODO: CMake Install support.
 # TODO: Look into header only version support of ccli.
-# TODO: Add Debug compiler flags.
-
-# TODO: Set CMAKE FLAGS on cli.
-# TODO: WIKI.
 # TODO: Header comments

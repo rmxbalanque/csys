@@ -77,7 +77,6 @@ namespace ccli
 		}
 
 		// Search word.
-		template<typename T>
 		std::pair<acNode *, bool> search(const char *string)
 		{
 			acNode *ptr = m_Root;

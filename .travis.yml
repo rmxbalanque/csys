@@ -17,3 +17,4 @@ before_script:
 # Build.
 script:
   - cmake --build ./ -- -j2
+  - ctest -j2 --output-on-failure

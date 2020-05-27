@@ -38,3 +38,9 @@ build_script:
       cmake c:\projects\source -G %GENERATOR% -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCCLI_BUILD_SHARED=%BUILD_SHARED% -DCCLI_BUILD_EXAMPLES=ON -DCCLI_BUILD_TESTS=ON -DCCLI_BUILD_WARNINGS=ON
 
       cmake --build . --config %BUILD_TYPE%
+
+before_test:
+  - set PATH=%PATH%;C:\projects\source\build\%BUILD_TYPE%
+
+test_script:
+  - C:\projects\source\build\tests\%BUILD_TYPE%\ccli_tests.exe

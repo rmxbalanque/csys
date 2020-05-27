@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.1...3.16)
 include(cmake/ccli_utils.cmake)
 
 # Add Custom In-Game CLI Project.
-project(ccli VERSION 0.1 LANGUAGES CXX)
+project(ccli VERSION 0.0.1 LANGUAGES CXX)
 message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 
 # Setup module subdirectory.

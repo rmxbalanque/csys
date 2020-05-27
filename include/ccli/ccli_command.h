@@ -9,7 +9,7 @@
 
 namespace ccli
 {
-  struct CommandBase
+  struct CCLI_API CommandBase
   {
     virtual ~CommandBase() = default;
     virtual void operator()(std::string input) = 0;
@@ -17,7 +17,7 @@ namespace ccli
   };
 
   template<typename Fn, typename ...Args>
-  class Command : public CommandBase
+  class CCLI_API Command : public CommandBase
   {
   public:
 

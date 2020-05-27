@@ -14,7 +14,7 @@ namespace ccli
   {
     using ValueType = T;
     explicit Arg(CR_STRING name) : m_Name(name), m_Value() {}
-    CCLI_API Arg<T>& SetValue(std::stringstream &ss)
+    Arg<T>& SetValue(std::stringstream &ss)
     {
       if (!(ss >> m_Value)) throw "Invalid Argument";
       return *this;

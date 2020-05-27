@@ -1,6 +1,6 @@
 os: linux
 language: cpp
-dist: xenial
+dist: bionic
 sudo: false
 
 # Setup compilers.

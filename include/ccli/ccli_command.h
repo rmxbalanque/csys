@@ -9,7 +9,7 @@
 
 namespace ccli
 {
-  struct CCLI_API CommandBase
+  struct  CommandBase
   {
     virtual ~CommandBase() = default;
     virtual void operator()(std::string input) = 0;

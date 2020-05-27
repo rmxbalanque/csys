@@ -8,7 +8,7 @@
 #include "ccli_command.h"
 #include <string>
 
-void func(int a, std::string b)
+void CCLI_API func(int a, std::string b)
 {
   std::cout << "| " << a << " | " << b << " |";
 }

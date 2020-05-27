@@ -4,6 +4,7 @@
 
 #ifndef CCLI_ARGUMENTS_H
 #include "ccli_pch.h"
+#include "base.h"
 #include "ccli.h"
 #include <sstream>
 

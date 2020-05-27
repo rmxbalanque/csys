@@ -12,7 +12,7 @@ compiler:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCCLI_BUILD_SHARED=ON -DCCLI_BUILD_EXAMPLES=ON -DCCLI_BUILD_TESTS=ON -DCCLI_BUILD_WARNINGS=ON
 
 # Build.
 script:

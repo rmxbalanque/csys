@@ -42,3 +42,4 @@ Thumbs.db
 /cmake-build-release/
 /cmake-build-relwithdebinfo/
 /.idea/
+/thirdparty/include-what-you-use

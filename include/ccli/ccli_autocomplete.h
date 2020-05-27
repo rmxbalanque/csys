@@ -13,6 +13,8 @@
 namespace ccli
 {
 	// TODO: Check how to add suppport for UTF Encoding.
+	// TODO: Todo add max word suggestion depth.
+	// TODO:
 
 	// Auto complete ternary tree.
 	template<typename charType = char>
@@ -23,10 +25,10 @@ namespace ccli
 		// Autocomplete node.
 		struct acNode
 		{
-			explicit acNode(const charType data, bool isWord = false) : m_Data(data), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr), m_IsWord(isWord)
+			explicit acNode(const charType data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
 			{};
 
-			explicit acNode(const charType &&data, bool isWord = false) : m_Data(data), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr), m_IsWord(isWord)
+			explicit acNode(const charType &&data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
 			{};
 
 			~acNode()

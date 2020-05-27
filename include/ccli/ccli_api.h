@@ -9,15 +9,15 @@
 #  ifndef CCLI_API
 #    ifdef ccli_EXPORTS
         /* We are building this library */
-#      define CCLI_API 
+#      define CCLI_API __attribute__((visibility("default")))
 #    else
         /* We are using this library */
-#      define CCLI_API 
+#      define CCLI_API __attribute__((visibility("default")))
 #    endif
 #  endif
 
 #  ifndef CCLI_NO_EXPORT
-#    define CCLI_NO_EXPORT 
+#    define CCLI_NO_EXPORT __attribute__((visibility("hidden")))
 #  endif
 #endif
 

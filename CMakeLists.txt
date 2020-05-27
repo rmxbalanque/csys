@@ -24,10 +24,10 @@ endif()
 # Compiler config
 # -----------------------------------------------------------------------------
 
-if(NOT CMAKE_CXX_STANDARD)
+#if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
+#endif()
 
 # -----------------------------------------------------------------------------
 # Build Settings

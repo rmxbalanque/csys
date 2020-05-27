@@ -5,6 +5,8 @@
 #ifndef CCLI_COMMAND_H
 #include "ccli_arguments.h"
 #include <functional>
+#include <type_traits>
+
 namespace ccli
 {
   struct CommandBase
@@ -53,4 +55,4 @@ namespace ccli
   }
 }
 #define CCLI_COMMAND_H
-#endif //CCLI_CCLI_COMMAND_H
+#endif //CCLI_COMMAND_H

@@ -32,4 +32,4 @@ namespace ccli
 }
 #define CCLI_ARGUMENTS_H
 
-#endif //CCLI_CCLI_ARGUMENTS_H
+#endif //CCLI_ARGUMENTS_H

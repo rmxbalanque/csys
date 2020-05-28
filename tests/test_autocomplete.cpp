@@ -1,9 +1,9 @@
+#include <iostream>
 #include "doctest.h"
 #include "ccli_autocomplete.h"
 
 #define SEARCH_CHECK(word){\
-	auto [ptr, result] = tree.search(word);\
-	CHECK(result == true);}\
+	CHECK(tree.search(word));}\
 
 #define SUGGESTION_CHECK(prefix, ...)\
 	{\
@@ -23,7 +23,8 @@
 
 TEST_CASE("Autocomplete")
 {
-	ccli::acTernarySearchTree tree({"roland", "munguia", "12345", "michael", "rino", "muchos"});
+	ccli::acTernarySearchTree::sVector test = {"roland", "munguia", "12345", "michael", "rino", "muchos"};
+	ccli::acTernarySearchTree tree(test);
 
 	// Word search.
 	SUBCASE("Searching for word completion")

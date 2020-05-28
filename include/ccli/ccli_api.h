@@ -6,7 +6,6 @@
 #  undef CCLI_HEADER_ONLY
 #  define CCLI_INLINE
 #  ifndef CCLI_API
-
 	 // Windows Shared Library.
 #    if defined(_WIN32)
 #    	ifdef ccli_EXPORTS
@@ -14,13 +13,13 @@
 #    	else
 #    	  define CCLI_API __declspec(dllimport)
 #    	endif
-#	 endif
-
-	// Linux shared library.
-#    ifdef ccli_EXPORTS
-#      define CCLI_API __attribute__((visibility("default")))
-#    else
-#      define CCLI_API __attribute__((visibility("default")))
+	  // Linux shared library.
+#	 else
+#      ifdef ccli_EXPORTS
+#        define CCLI_API __attribute__((visibility("default")))
+#      else
+#        define CCLI_API __attribute__((visibility("default")))
+#      endif
 #    endif
 #  endif
 

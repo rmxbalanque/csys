@@ -9,7 +9,7 @@
 
 namespace ccli
 {
-  struct  CommandBase
+  struct CCLI_API CommandBase
   {
     virtual ~CommandBase() = default;
     virtual void operator()(std::string input) = 0;
@@ -44,7 +44,7 @@ namespace ccli
   };
 
   template<typename Fn, typename ...Args>
-  CommandBase *registerCommand(CR_STRING name, CR_STRING description, Fn function, Args... args)
+  CCLI_API CommandBase *registerCommand(CR_STRING name, CR_STRING description, Fn function, Args... args)
   {
     // check if function can be called with the given arguments
     static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");

@@ -31,5 +31,5 @@ endfunction()
 
 # Build tests with ccli library.
 if (CCLI_BUILD_TESTS)
-    ccli_prepare_test(ccli_tests ccli::ccli)
+    ccli_prepare_test(ccli_tests ccli::ccli_header_only)
 endif()

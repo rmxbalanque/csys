@@ -1,6 +1,3 @@
-//
-// Created by roland on 5/25/20.
-//
 
 #ifndef CCLI_CCLI_AUTOCOMPLETE_H
 #define CCLI_CCLI_AUTOCOMPLETE_H
@@ -12,23 +9,26 @@
 
 namespace ccli
 {
-	// TODO: Check how to add suppport for UTF Encoding.
+	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
-	// TODO:
 
 	// Auto complete ternary tree.
-	template<typename charType = char>
 	class CCLI_API acTernarySearchTree
 	{
 	public:
 
-		// Autocomplete node.
+		// Type definitions.
+		using r_sVector = std::vector<std::string> &;
+		using sVector = std::vector<std::string>;
+		using p_sVector = std::vector<std::string> *;
+
+		//!< Autocomplete node.
 		struct acNode
 		{
-			explicit acNode(const charType data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
+			explicit acNode(const char data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
 			{};
 
-			explicit acNode(const charType &&data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
+			explicit acNode(const char &&data, bool isWord = false) : m_Data(data), m_IsWord(isWord), m_Less(nullptr), m_Equal(nullptr), m_Greater(nullptr)
 			{};
 
 			~acNode()
@@ -38,20 +38,26 @@ namespace ccli
 				delete m_Greater;
 			};
 
-			charType m_Data;
-			bool m_IsWord;
-			acNode *m_Less;
-			acNode *m_Equal;
-			acNode *m_Greater;
+			char m_Data;		//!< Node data.
+			bool m_IsWord;		//!< Flag to determine if node is the end of a word.
+			acNode *m_Less;		//!< Left pointer.
+			acNode *m_Equal;	//!< Middle pointer.
+			acNode *m_Greater; 	//!< Right pointer.
 		};
 
 		// Default constructor.
 		acTernarySearchTree() = default;
 
-		// TODO: Deep copy.
+		// No copy allowed
+
 		acTernarySearchTree(const acTernarySearchTree &tree) = default;
 		acTernarySearchTree(acTernarySearchTree &&tree) noexcept = default;
 
+		/*!
+		 *
+		 * \tparam inputType
+		 * \param[in] il
+		 */
 		template<typename inputType>
 		acTernarySearchTree(std::initializer_list<inputType> il)
 		{
@@ -59,8 +65,13 @@ namespace ccli
 			{
 				insert(item);
 			}
-		};
+		}
 
+		/*!
+		 *
+		 * \tparam T
+		 * \param[in] items Container
+		 */
 		template<typename T>
 		explicit acTernarySearchTree(const T &items)
 		{
@@ -68,131 +79,81 @@ namespace ccli
 			{
 				insert(item);
 			}
-		};
-
-		// Vector constructor.
-		~acTernarySearchTree()
-		{
-			delete m_Root;
 		}
 
-		// Search word.
-		std::pair<acNode *, bool> search(const char *string)
-		{
-			acNode *ptr = m_Root;
+		/*!
+		 * /brief Destructor
+		 */
+		~acTernarySearchTree();
 
-			// Traverse tree in look for the given string.
-			while (ptr)
-			{
-				if (*string < ptr->m_Data)
-				{
-					ptr = ptr->m_Less;
-				}
-				else if (*string == ptr->m_Data)
-				{
-					// Word was found.
-					if (*(string + 1) == '\0' && ptr->m_IsWord)
-						return std::make_pair(ptr, true);
+		/*!
+		 * \brief Search if the given word is in the tree
+		 * \param[in] word Word to search
+		 * \return Found
+		 */
+		bool search(const char *word);
 
-					ptr = ptr->m_Equal;
-					++string;
-				}
-				else
-				{
-					ptr = ptr->m_Greater;
-				}
-			}
+		/*!
+		 * \brief Insert word into tree
+		 * \param[in] word Word to be inserted
+		 */
+		void insert(const char *word);
 
-			return std::make_pair(nullptr, false);
-		}
+		/*!
+		 * \brief Insert word into tree
+		 * \param[in] word Word to be inserted
+		 */
+		void insert(const std::string &word);
 
-		// Character overload.
-		void insert(const char *str)
-		{
-			acNode **ptr = &m_Root;
 
-			while (*str != '\0')
-			{
-				// Insert char into tree.
-				if (*ptr == nullptr)
-				{
-					*ptr = new acNode(*str);
-				}
-
-				// Traverse tree.
-				if (*str < (*ptr)->m_Data)
-				{
-					ptr = &(*ptr)->m_Less;
-				}
-				else if (*str == (*ptr)->m_Data)
-				{
-					// String is already in tree, therefore only mark as word.
-					if (*(str + 1) == '\0') (*ptr)->m_IsWord = true;
-
-					// Advance.
-					ptr = &(*ptr)->m_Equal;
-					++str;
-				}
-				else
-				{
-					ptr = &(*ptr)->m_Greater;
-				}
-			}
-		}
-
-		// Iterations support.
-		template<typename inputType>
-		void insert(const inputType & str)
-		{
-			acNode **ptr = &m_Root;
-
-			while (*str != '\0')
-			{
-				// Insert char into tree.
-				if (*ptr == nullptr)
-				{
-					*ptr = new acNode(*str);
-				}
-
-				// Traverse tree.
-				if (*str < (*ptr)->m_Data)
-				{
-					ptr = &(*ptr)->m_Less;
-				}
-				else if (*str == (*ptr)->m_Data)
-				{
-					// String is already in tree, therefore only mark as word.
-					if (*(str + 1) == '\0') (*ptr)->m_IsWord = true;
-
-					// Advance.
-					ptr = &(*ptr)->m_Equal;
-					++str;
-				}
-				else
-				{
-					ptr = &(*ptr)->m_Greater;
-				}
-			}
-		}
-
-		// String specialization.
-		// TODO: Use CMAKE Flags to determine compiler.
-#if defined(__clang__) || defined(_MSC_VER)
-		template<>
-		void insert(const std::string & str)
-		{
-			insert(str.data());
-		}
-#elif defined(__GNUC__) || defined(__GNUG__)
-		template<typename T = int>
-		void insert(const std::string & str)
-		{
-			insert(str.data());
-		}
-#endif
-
+		/*!
+		 * \brief Insert word into tree
+		 * \tparam strType String type to be inserted
+		 * \param[in] word Word to be inserted
+		 */
 		template<typename strType>
-		void suggestions(const strType &prefix, std::vector<std::string> &ac_options)
+		void insert(const strType &word)
+		{
+			acNode **ptr = &m_Root;
+
+			while (*word != '\0')
+			{
+				// Insert char into tree.
+				if (*ptr == nullptr)
+				{
+					*ptr = new acNode(*word);
+				}
+
+				// Traverse tree.
+				if (*word < (*ptr)->m_Data)
+				{
+					ptr = &(*ptr)->m_Less;
+				}
+				else if (*word == (*ptr)->m_Data)
+				{
+					// String is already in tree, therefore only mark as word.
+					if (*(word + 1) == '\0') (*ptr)->m_IsWord = true;
+
+					// Advance.
+					ptr = &(*ptr)->m_Equal;
+					++word;
+				}
+				else
+				{
+					ptr = &(*ptr)->m_Greater;
+				}
+			}
+		}
+		
+
+		/*!
+		 * \brief Retrieve suggestions that match the given prefix
+		 * \tparam strType Prefix string type
+		 * \param[in] prefix Prefix to use for suggestion lookup
+		 * \param[out] ac_options Vector of found suggestions
+		 */
+		template<typename strType>
+		void suggestions(const strType &prefix, r_sVector ac_options)
 		{
 			acNode *ptr = m_Root;
 			auto temp = prefix;
@@ -226,88 +187,50 @@ namespace ccli
 			suggestionsAux(ptr->m_Equal, ac_options, temp);
 		}
 
-		void suggestions(const char *prefix, std::vector<std::string> &ac_options)
-		{
-			acNode *ptr = m_Root;
-			auto temp = prefix;
 
-			// Traverse tree and check if prefix exists.
-			while (ptr)
-			{
-				if (*prefix < ptr->m_Data)
-				{
-					ptr = ptr->m_Less;
-				}
-				else if (*prefix == ptr->m_Data)
-				{
-					// Prefix exists in tree.
-					if (*(prefix + 1) == '\0')
-						break;
+		/*!
+		 * \brief Retrieve suggestions that match the given prefix
+		 * \param[in] prefix Prefix to use for suggestion lookup
+		 * \param[out] ac_options Vector of found suggestions
+		 */
+		void suggestions(const char *prefix, r_sVector ac_options);
 
-					ptr = ptr->m_Equal;
-					++prefix;
-				}
-				else
-				{
-					ptr = ptr->m_Greater;
-				}
-			}
-
-			// Already a word. (No need to auto complete).
-			if (ptr && ptr->m_IsWord) return;
-
-			// Retrieve auto complete options.
-			suggestionsAux(ptr->m_Equal, ac_options, temp);
-		}
-
+		/*!
+		 * \brief Retrieve suggestions that match the given prefix
+		 * \tparam strType Prefix string type
+		 * \param[in] prefix Prefix to use for suggestion lookup
+		 * \return Vector of found suggestions
+		 */
 		template<typename strType>
-		std::vector<std::string> * suggestions(const strType &prefix)
+		p_sVector suggestions(const strType &prefix)
 		{
-			auto temp = new std::vector<std::string>();
+			auto temp = new sVector();
 			suggestions(prefix, *temp);
 			return temp;
 		}
-
-		std::vector<std::string> * suggestions(const char * prefix)
-		{
-			auto temp = new std::vector<std::string>();
-			suggestions(prefix, *temp);
-			return temp;
-		}
-
-	private:
-
-		void suggestionsAux(acNode *root, std::vector<std::string> &ac_options, std::string buffer)
-		{
-			if (!root) return;
-
-			// Continue looking in left branch.
-			if (root->m_Less) suggestionsAux(root->m_Less, ac_options, buffer);
-
-			// Word was found, push into autocomplete options.
-			if (root->m_IsWord)
-			{
-				ac_options.push_back(buffer.append(1, root->m_Data));
-				buffer.pop_back();
-			}
-
-			// Continue in middle branch, and push character.
-			if (root->m_Equal)
-			{
-				suggestionsAux(root->m_Equal, ac_options, buffer.append(1, root->m_Data));
-				buffer.pop_back();
-			}
-
-			// Continue looking in right branch.
-			if (root->m_Greater)
-			{
-				suggestionsAux(root->m_Greater, ac_options, buffer);
-			}
-		}
+		
+		/*!
+		 * \brief Retrieve suggestions that match the given prefix
+		 * \param[in] prefix Prefix to use for suggestion lookup
+		 * \return Vector of found suggestions
+		 */
+		p_sVector suggestions(const char *prefix);
 
 	private:
-		acNode *m_Root = nullptr;
+
+		/*!
+		 * \param[in] root Permutation root
+		 * \param[out] ac_options Vector of found suggestions
+		 * \param[in] buffer Prefix buffer
+		 */
+		void suggestionsAux(acNode *root, r_sVector ac_options, std::string buffer);
+
+		acNode *m_Root = nullptr;  //!< Ternary Search Tree Root node
 	};
 }
+
+#ifdef CCLI_HEADER_ONLY
+#include "ccli_autocomplete.inl"
+#endif
 
 #endif //CCLI_CCLI_AUTOCOMPLETE_H

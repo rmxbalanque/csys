@@ -5,6 +5,11 @@ image:
 
 clone_folder: c:\projects\source
 
+branches:
+  only:
+    - master
+    - development
+
 environment:
   matrix:
     - GENERATOR: '"Visual Studio 15 2017 Win64"'

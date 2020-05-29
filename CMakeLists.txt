@@ -1,3 +1,5 @@
+# CMake Project configuration was modeled after: https://github.com/gabime/spdlog
+
 # Configure CMAKE Version.
 cmake_minimum_required(VERSION 3.1...3.16)
 
@@ -7,7 +9,7 @@ cmake_minimum_required(VERSION 3.1...3.16)
 include(cmake/ccli_utils.cmake)
 
 # Add Custom In-Game CLI Project.
-project(ccli VERSION 0.1 LANGUAGES CXX)
+project(ccli VERSION 0.0.1 LANGUAGES CXX)
 message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 
 # Setup module subdirectory.
@@ -66,9 +68,10 @@ set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_autocomplete.h include/cc
 # Add core ccli target.
 if (CCLI_BUILD_SHARED)
     add_library(ccli SHARED ${CCLI_SOURCES} ${CCLI_HEADERS})
+    target_compile_definitions(ccli PUBLIC CCLI_SHARED_LIB)
 else ()
     add_library(ccli STATIC ${CCLI_SOURCES} ${CCLI_HEADERS})
-    target_compile_definitions(ccli PRIVATE CCLI_BUILD_STATIC)  # Used for export macros.
+    target_compile_definitions(ccli PUBLIC CCLI_STATIC_LIB)  # Used for export macros.
 endif ()
 
 # Enable warnings.
@@ -77,8 +80,12 @@ ccli_enable_warnings(ccli)
 # Define ccli namespace
 add_library(ccli::ccli ALIAS ccli)
 
+# By default we are compiling this library.
+target_compile_definitions(ccli PUBLIC CCLI_COMPILED_LIB)
+#target_compile_definitions(ccli PUBLIC CCLI_HEADER_ONLY)
+
 # Library public include directories
-target_include_directories(ccli PUBLIC include/ccli)
+target_include_directories(ccli PUBLIC include/ccli/)
 
 # Library private include directories
 #target_include_directories(ccli PRIVATE )
@@ -93,12 +100,24 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Generate export header automatically
-include(GenerateExportHeader)
-GENERATE_EXPORT_HEADER(ccli
-        BASE_NAME ccli
-        EXPORT_MACRO_NAME CCLI_API
-        EXPORT_FILE_NAME ${ccli_SOURCE_DIR}/include/ccli/ccli_api.h
-        STATIC_DEFINE CCLI_BUILD_STATIC)
+#include(GenerateExportHeader)
+#GENERATE_EXPORT_HEADER(ccli
+#        BASE_NAME ccli
+#        EXPORT_MACRO_NAME CCLI_API
+#        EXPORT_FILE_NAME ${ccli_SOURCE_DIR}/include/ccli/ccli_api.h
+#        STATIC_DEFINE CCLI_BUILD_STATIC)
+
+# -----------------------------------------------------------------------------
+# Header only version
+# -----------------------------------------------------------------------------
+
+# Add header version ccli
+add_library(ccli_header_only INTERFACE)
+add_library(ccli::ccli_header_only ALIAS ccli_header_only)
+
+# Set sources/includes
+target_include_directories(ccli_header_only INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/ccli>"
+                                                          "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
 # -----------------------------------------------------------------------------
 # Development tools
@@ -134,8 +153,6 @@ if (CCLI_BUILD_TESTS)
     add_subdirectory(tests)
 endif ()
 
-
 # TODO: Add IDE support for headers. (source_group)
 # TODO: CMake Install support.
-# TODO: Look into header only version support of ccli.
 # TODO: Header comments

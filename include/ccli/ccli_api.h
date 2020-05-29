@@ -2,27 +2,52 @@
 #ifndef CCLI_API_H
 #define CCLI_API_H
 
-#ifdef CCLI_BUILD_STATIC
-#  define CCLI_API
-#  define CCLI_NO_EXPORT
-#else
-#  ifndef CCLI_API
-#    ifdef ccli_EXPORTS
-        /* We are building this library */
-#      define CCLI_API __attribute__((visibility("default")))
+#ifdef CCLI_COMPILED_LIB
+#  undef CCLI_HEADER_ONLY
+#  define CCLI_INLINE
+
+#  ifdef CCLI_SHARED_LIB
+	 // Windows Shared Library.
+#    if defined(_WIN32)
+#    	ifdef ccli_EXPORTS
+#    	  define CCLI_API __declspec(dllexport)
+#    	else
+#    	  define CCLI_API __declspec(dllimport)
+#    	endif
+	  // Linux shared library.
+#	 else
+#      ifdef ccli_EXPORTS
+#        define CCLI_API __attribute__((visibility("default")))
+#      else
+#        define CCLI_API __attribute__((visibility("default")))
+#      endif
+#    endif
+#  else
+#    define CCLI_API
+#  endif
+
+	// No export.
+#  ifndef CCLI_NO_EXPORT
+#    if defined(_WIN32)
+#      define CCCLI_NO_EXPORT
 #    else
-        /* We are using this library */
-#      define CCLI_API __attribute__((visibility("default")))
+#      define CCLI_NO_EXPORT __attribute__((visibility("hidden")))
 #    endif
 #  endif
 
-#  ifndef CCLI_NO_EXPORT
-#    define CCLI_NO_EXPORT __attribute__((visibility("hidden")))
-#  endif
+#else
+#  define CCLI_API
+#  define CCLI_NO_EXPORT
+#  define CCLI_HEADER_ONLY
+#  define CCLI_INLINE inline
 #endif
 
-#ifndef CCLI_DEPRECATED
-#  define CCLI_DEPRECATED __attribute__ ((__deprecated__))
+#if defined(__GNUC__) || defined(__clang__)
+#define CCLI_DEPRECATED __attribute__((deprecated))
+#elif defined(_MSC_VER)
+#define CCLI_DEPRECATED __declspec(deprecated)
+#else
+#define CCLI_DEPRECATED
 #endif
 
 #ifndef CCLI_DEPRECATED_EXPORT

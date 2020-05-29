@@ -1,8 +1,10 @@
+#include <fstream>
+#include <vector>
+#include <string>
 #include "ccli.h"
+#include "ccli_autocomplete.h"
 
 int main(void)
 {
-	Shared s;
-	s.Test();
 	return 0;
 }

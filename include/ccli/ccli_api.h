@@ -5,7 +5,8 @@
 #ifdef CCLI_COMPILED_LIB
 #  undef CCLI_HEADER_ONLY
 #  define CCLI_INLINE
-#  ifndef CCLI_API
+
+#  ifdef CCLI_SHARED_LIB
 	 // Windows Shared Library.
 #    if defined(_WIN32)
 #    	ifdef ccli_EXPORTS
@@ -21,6 +22,8 @@
 #        define CCLI_API __attribute__((visibility("default")))
 #      endif
 #    endif
+#  else
+#    define CCLI_API
 #  endif
 
 	// No export.
@@ -31,6 +34,7 @@
 #      define CCLI_NO_EXPORT __attribute__((visibility("hidden")))
 #    endif
 #  endif
+
 #else
 #  define CCLI_API
 #  define CCLI_NO_EXPORT

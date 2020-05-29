@@ -68,10 +68,10 @@ set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_autocomplete.h include/cc
 # Add core ccli target.
 if (CCLI_BUILD_SHARED)
     add_library(ccli SHARED ${CCLI_SOURCES} ${CCLI_HEADERS})
-    target_compile_definitions(ccli PRIVATE CCLI_SHARED_LIB)
+    target_compile_definitions(ccli PUBLIC CCLI_SHARED_LIB)
 else ()
     add_library(ccli STATIC ${CCLI_SOURCES} ${CCLI_HEADERS})
-    target_compile_definitions(ccli PRIVATE CCLI_STATIC_LIB)  # Used for export macros.
+    target_compile_definitions(ccli PUBLIC CCLI_STATIC_LIB)  # Used for export macros.
 endif ()
 
 # Enable warnings.

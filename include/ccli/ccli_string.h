@@ -6,10 +6,10 @@
 #include <string>
 namespace ccli
 {
-	struct string
+	struct String
 	{
-		string() = default;
-		string(const char *str) : m_String(str), m_End(m_String.size() + 1) {}
+		String() = default;
+		String(const char *str) : m_String(str), m_End(m_String.size() + 1) {}
 		operator const char*() { return m_String.c_str(); }
 
 		// Moves until first non-whitespace char, returns the index at that spot, -1 if end

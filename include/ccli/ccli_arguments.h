@@ -3,23 +3,27 @@
 //
 
 #ifndef CCLI_ARGUMENTS_H
+#define CCLI_ARGUMENTS_H
+#pragma once
+
 #include "ccli_pch.h"
 #include "base.h"
 #include "ccli.h"
 #include "ccli_string.h"
+#include "ccli_exceptions.h"
 
 namespace ccli
 {
 	template<typename T>
 	struct ArgData
 	{
-		const string &m_Name;
-		string m_TypeName;
+		const String &m_Name;
+		String m_TypeName;
 		T m_Value;
 	};
 
 	template<typename T>
-	T ParseArg(string &input, unsigned long &start)
+	T ParseArg(String &input, unsigned long &start)
 	{
 		return T();
 	}
@@ -28,10 +32,11 @@ namespace ccli
   struct CCLI_API Arg
   {
     using ValueType = T;
-    explicit Arg(const string &name) : m_Arg{name} {}
-    Arg<T>& Parse(string &input, unsigned long &start)
+    explicit Arg(const String &name) : m_Arg{name} {}
+    Arg<T>& Parse(String &input, unsigned long &start)
     {
-    	if (start == input.m_End) throw "Not enough args";
+    	if (start == input.m_End)
+    		throw ArgumentException("Not enough arguments were given");
     	m_Arg.m_Value = ParseArg<ValueType>(input, start);
       return *this;
     }
@@ -48,18 +53,18 @@ namespace ccli
 	template<> \
 	struct ArgData<type> \
 	{ \
-		const string &m_Name; \
-		string m_TypeName = type_name; \
+		const String &m_Name; \
+		String m_TypeName = type_name; \
 		type m_Value; \
 	}; \
 	template<> \
-	type ParseArg<type>(string &input, unsigned long &start)
+	type ParseArg<type>(String &input, unsigned long &start)
 
 	ARGDATA_SPEC(bool, "Boolean")
 	{
 		auto range = input.POI(start);
 		std::string boolean(input.m_String.begin() + range.first,
-												input.m_String.begin() + range.second /*+ (range.second == input.m_End ? -1:0)*/);
+												input.m_String.begin() + range.second);
 		for (auto &c : boolean) c = char(std::tolower(c));
 		start = range.second;
 
@@ -85,6 +90,8 @@ namespace ccli
 		start = range.second;
 		return input[range.first];
 	}
+
+	ARGDATA_SPEC(ccli::string, "String") { return ""; }
 
 #define ARGDATA_SPEC_GENERAL(function, type, large_message, invalid_message) \
 	{ \
@@ -143,9 +150,8 @@ namespace ccli
 	ARGDATA_SPEC_GENERAL(std::stold, long double,
 											 "Too large for float", "Invalid or missing argument")
 
-	ARGDATA_SPEC(ccli::string, "String") { return ""; }
-
 	// arrays
+	// Get own throw class
 
   // TODO: Client input -> command system (strip name) -> command(client input) -> arguments(client input) (strip own arg)
   // TODO: Use own char* not string
@@ -155,6 +161,5 @@ namespace ccli
   // TODO: Give better feedback and errors when they mess up
   // TODO: If given MORE arguments than expected, it drops the rest (should give an error and message)
 }
-#define CCLI_ARGUMENTS_H
 
 #endif //CCLI_ARGUMENTS_H

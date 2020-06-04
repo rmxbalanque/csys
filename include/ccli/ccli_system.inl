@@ -3,7 +3,7 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
-#include "ccli_system.h.h"
+#include "ccli_system.h"
 #endif
 
 namespace ccli

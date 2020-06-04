@@ -16,7 +16,7 @@ namespace ccli
 	template<typename T>
 	struct CCLI_API ArgData
 	{
-		const String &m_Name;
+		const String m_Name;
 		String m_TypeName;
 		T m_Value;
 	};
@@ -35,14 +35,14 @@ namespace ccli
     Arg<T>& Parse(String &input, unsigned long &start)
     {
     	if (start == input.m_End)
-    		throw ArgumentException("Not enough arguments were given");
+    		throw ArgumentException("Not enough arguments were given", "");
     	m_Arg.m_Value = ParseArg<ValueType>(input, start);
       return *this;
     }
 
     std::string Info()
 		{
-    	return "";
+    	return std::string(" [") + m_Arg.m_Name.m_String + ":" + m_Arg.m_TypeName.m_String + "]";
 		}
 
 		ArgData<ValueType> m_Arg;
@@ -66,7 +66,6 @@ namespace ccli
 												input.m_String.begin() + range.second);
 		for (auto &c : boolean) c = char(std::tolower(c));
 		start = range.second;
-
 		if (boolean == "true") return true;
 		if (boolean == "false") return false;
 		throw "Missing or invalid boolean argument";
@@ -152,6 +151,7 @@ namespace ccli
 	// arrays
 	// Get own throw class
 
+	// TODO: make work with empty functions
   // TODO: Client input -> command system (strip name) -> command(client input) -> arguments(client input) (strip own arg)
   // TODO: Use own char* not string
   // TODO: Parse commandline for 'strings' and "strings"

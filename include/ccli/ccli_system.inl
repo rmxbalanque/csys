@@ -12,7 +12,7 @@ namespace ccli
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	void System::parse(const std::string &line)
+	CCLI_INLINE void System::parse(const std::string &line)
 	{
 		if (line.empty())
 			return;

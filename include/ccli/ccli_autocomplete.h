@@ -11,6 +11,7 @@ namespace ccli
 {
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
+	// TODO: Add partial complete.
 
 	// Auto complete ternary tree.
 	class CCLI_API acTernarySearchTree

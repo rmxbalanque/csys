@@ -72,6 +72,10 @@ namespace ccli
 		void operator()(String &input) override
 		{
 			// call the function
+			for (auto c : input.m_String)
+				if (!isspace(c))
+					throw CommandException("[ERROR] " + m_Name.m_String + ": Called with arguments");
+
 			try { m_Function(); }
 			catch (...) { throw CommandException("[ERROR] " + m_Name.m_String + ": Called function resulted in exception thrown"); }
 		}

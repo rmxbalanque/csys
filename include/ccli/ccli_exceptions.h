@@ -13,14 +13,14 @@ namespace ccli
 {
 	struct Exception
 	{
-		virtual std::string what() = 0;
+		virtual std::string what() const = 0;
 	};
 
 	class CCLI_API CommandException : public Exception
 	{
 	public:
 		CommandException(const std::string& msg) : m_What(msg) {}
-		std::string what() override { return m_What; }
+		std::string what() const override { return m_What; }
 	private:
 		std::string m_What;
 	};
@@ -28,11 +28,10 @@ namespace ccli
 	class CCLI_API ArgumentException : public Exception
 	{
 	public:
-		ArgumentException(const std::string& msg, const std::string& argName) : m_What(msg), m_ArgName(argName) {}
-		std::string what() override { return m_What; };
+		ArgumentException(const std::string& msg) : m_What(msg) {}
+		std::string what() const override { return m_What; };
 	private:
 		std::string m_What;
-		std::string m_ArgName;
 	};
 }
 

@@ -35,7 +35,7 @@ namespace ccli
     Arg<T>& Parse(String &input, unsigned long &start)
     {
     	if (start == input.m_End)
-    		throw ArgumentException("Not enough arguments were given", "");
+    		throw ArgumentException("Not enough arguments were given");
     	m_Arg.m_Value = ParseArg<ValueType>(input, start);
       return *this;
     }
@@ -68,7 +68,9 @@ namespace ccli
 		start = range.second;
 		if (boolean == "true") return true;
 		if (boolean == "false") return false;
-		throw "Missing or invalid boolean argument";
+		throw ArgumentException("Missing or invalid boolean argument: '"
+		+ std::string(input.m_String.begin() + range.first, input.m_String.begin() + range.second)
+		+ "'");
 	}
 
 	ARGDATA_SPEC(char, "Char")

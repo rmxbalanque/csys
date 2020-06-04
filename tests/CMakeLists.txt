@@ -15,6 +15,7 @@ include(../cmake/ccli_utils.cmake)
 # Sources.
 set(CCLI_TEST_SOURCES
         test_autocomplete.cpp
+        test_system.cpp
         main.cpp)
 
 # Set up testing.

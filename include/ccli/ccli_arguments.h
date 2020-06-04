@@ -8,14 +8,13 @@
 
 #include "ccli_pch.h"
 #include "base.h"
-#include "ccli.h"
 #include "ccli_string.h"
 #include "ccli_exceptions.h"
 
 namespace ccli
 {
 	template<typename T>
-	struct ArgData
+	struct CCLI_API ArgData
 	{
 		const String &m_Name;
 		String m_TypeName;
@@ -23,7 +22,7 @@ namespace ccli
 	};
 
 	template<typename T>
-	T ParseArg(String &input, unsigned long &start)
+	CCLI_API T ParseArg(String &input, unsigned long &start)
 	{
 		return T();
 	}
@@ -91,7 +90,7 @@ namespace ccli
 		return input[range.first];
 	}
 
-	ARGDATA_SPEC(ccli::string, "String") { return ""; }
+	ARGDATA_SPEC(ccli::String, "String") { return ""; }
 
 #define ARGDATA_SPEC_GENERAL(function, type, large_message, invalid_message) \
 	{ \

@@ -10,3 +10,5 @@
 
 // We add .inl into .cpp to create a entry point to build everything from.
 #include "ccli_autocomplete.inl"
+#include "ccli_system.inl"
+#include "ccli_history.inl"

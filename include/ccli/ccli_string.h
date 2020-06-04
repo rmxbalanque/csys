@@ -3,7 +3,12 @@
 //
 
 #ifndef CCLI_STRING_H
+#define CCLI_STRING_H
+
+#pragma once
+
 #include <string>
+
 namespace ccli
 {
 	struct String
@@ -36,7 +41,5 @@ namespace ccli
 		unsigned long m_End;
 	};
 }
-
-#define CCLI_STRING_H
 
 #endif //CCLI_CCLI_STRING_H

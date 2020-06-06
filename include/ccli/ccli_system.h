@@ -25,8 +25,14 @@ namespace ccli
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
 		{
-			// check if function can be called with the given arguments
+			// Check if function can be called with the given arguments
 			static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
+
+			// TODO: This should be an exception.
+			if (m_CommandContainer.find(name.m_String) != m_CommandContainer.end())
+			{
+				std::cout << "ERROR: Command already exists." << std::endl;
+			}
 
 			m_SuggestionTree.insert(name.m_String);
 

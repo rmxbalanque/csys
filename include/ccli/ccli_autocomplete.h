@@ -11,9 +11,9 @@ namespace ccli
 {
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
-	// TODO: Add partial complete.
+	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
 
-	// Auto complete ternary tree.
+	//!< Auto complete ternary tree.
 	class CCLI_API acTernarySearchTree
 	{
 	public:
@@ -184,6 +184,9 @@ namespace ccli
 			// Already a word. (No need to auto complete).
 			if (ptr && ptr->m_IsWord) return;
 
+			// Prefix is not in tree.
+			if (!ptr) return;
+
 			// Retrieve auto complete options.
 			suggestionsAux(ptr->m_Equal, ac_options, temp);
 		}
@@ -195,6 +198,23 @@ namespace ccli
 		 * \param[out] ac_options Vector of found suggestions
 		 */
 		void suggestions(const char *prefix, r_sVector ac_options);
+
+		/*!
+		 * \brief Store suggestions that match prefix in ac_options and return partially completed
+		 * 	      prefix if possible.
+		 * \param[in] prefix Prefix to use for suggestion lookup
+		 * \param[out] ac_options Vector of found suggestions
+		 * \return Partially completed prefix
+		 */
+		std::string suggestions(const std::string &prefix, r_sVector ac_options);
+
+		/*!
+		 * \brief Retrieve suggestions that match the given prefix
+		 * \param[in/out] prefix Prefix to use for suggestion lookup, will be partially completed if flag partial_complete is on
+		 * \param[out] ac_options Vector of found suggestions
+		 * \param[in] partial_complete Flag to determine if prefix string will be partially completed
+		 */
+		void suggestions(std::string & prefix, r_sVector ac_options, bool partial_complete);
 
 		/*!
 		 * \brief Retrieve suggestions that match the given prefix

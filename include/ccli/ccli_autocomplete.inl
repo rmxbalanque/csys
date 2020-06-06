@@ -124,6 +124,67 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, temp);
 	}
 
+	CCLI_INLINE std::string acTernarySearchTree::suggestions(const std::string & prefix, r_sVector &ac_options)
+	{
+		std::string temp = prefix;
+		suggestions(temp, ac_options, true);
+		return temp;
+	}
+
+	CCLI_INLINE void acTernarySearchTree::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
+	{
+		acNode *ptr = m_Root;
+		const char * temp = prefix.data();
+		int prefix_end = prefix.size();
+
+		// Traverse tree and check if prefix exists.
+		while (ptr)
+		{
+			if (*temp < ptr->m_Data)
+			{
+				ptr = ptr->m_Less;
+			}
+			else if (*temp == ptr->m_Data)
+			{
+				// Prefix exists in tree.
+				if (*(temp + 1) == '\0')
+				{
+					if (partial_complete)
+					{
+						acNode * pc_ptr = ptr->m_Equal;
+
+						// Get partially completed string.
+						while (pc_ptr)
+						{
+							if (pc_ptr->m_Equal && !pc_ptr->m_Less && !pc_ptr->m_Greater)
+								prefix.push_back(pc_ptr->m_Data);
+
+							pc_ptr = pc_ptr->m_Equal;
+						}
+					}
+
+					break;
+				}
+
+				ptr = ptr->m_Equal;
+				++temp;
+			}
+			else
+			{
+				ptr = ptr->m_Greater;
+			}
+		}
+
+		// Already a word. (No need to auto complete).
+		if (ptr && ptr->m_IsWord) return;
+
+		// Prefix is not in tree.
+		if (!ptr) return;
+
+		// Retrieve auto complete options.
+		suggestionsAux(ptr->m_Equal, ac_options, prefix.substr(0, prefix_end));
+	}
+
 	CCLI_INLINE acTernarySearchTree::p_sVector acTernarySearchTree::suggestions(const char *prefix)
 	{
 		auto temp = new sVector();

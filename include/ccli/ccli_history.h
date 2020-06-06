@@ -4,6 +4,7 @@
 
 namespace ccli
 {
+	// TODO: Doxygenize command history class.
 	class CCLI_API CommandHistory
 	{
 	public:
@@ -22,6 +23,8 @@ namespace ccli
 		{
 			m_History[m_Record++ % m_MaxRecord] = line;
 		}
+
+		void clear();
 
 		const std::string &operator[](unsigned int index);
 

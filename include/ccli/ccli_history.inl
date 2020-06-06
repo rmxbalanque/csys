@@ -11,6 +11,12 @@ namespace ccli
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
+	CCLI_INLINE void CommandHistory::clear()
+	{
+		m_Record = 0;
+		m_History.clear();
+	}
+
 	CCLI_INLINE const std::string &CommandHistory::operator[](unsigned int index)
 	{
 		return m_History[index];
@@ -24,7 +30,7 @@ namespace ccli
 	CCLI_INLINE std::ostream &operator<<(std::ostream &os, const CommandHistory &history)
 	{
 		os << "History: " << '\n';
-		for(unsigned int i = 0; i < history.m_Record && history.m_Record <= history.m_MaxRecord; ++i)
+		for (unsigned int i = 0; i < history.m_Record && history.m_Record <= history.m_MaxRecord; ++i)
 			std::cout << history.m_History[i] << '\n';
 		return os;
 	}

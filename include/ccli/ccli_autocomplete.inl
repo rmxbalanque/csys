@@ -117,6 +117,9 @@ namespace ccli
 		// Already a word. (No need to auto complete).
 		if (ptr && ptr->m_IsWord) return;
 
+		// Prefix is not in tree.
+		if (!ptr) return;
+
 		// Retrieve auto complete options.
 		suggestionsAux(ptr->m_Equal, ac_options, temp);
 	}

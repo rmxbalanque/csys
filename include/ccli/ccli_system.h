@@ -39,10 +39,11 @@ namespace ccli
 		{
 			ccli::System::registerCommand(std::string("set " + name).data(), "Set variable", [&var](T value)
 			{ var = value; }, ccli::Arg<T>(name.data()));
-			//ccli::registerCommand("get " + name, [&var]() { return var; });
+
+			ccli::System::registerCommand(std::string("get " + name).data(), "Get variable", [&var]() { return var; });
 		}
 
-	private:
+	//private:
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;
 		acTernarySearchTree m_SuggestionTree;
 		CommandHistory m_CommandHistory;

@@ -50,7 +50,7 @@ namespace ccli
 
 #define ARGDATA_SPEC(type, type_name) \
 	template<> \
-	struct ArgData<type> \
+	struct CCLI_API ArgData<type> \
 	{ \
 		const String &m_Name; \
 		String m_TypeName = type_name; \

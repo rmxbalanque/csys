@@ -80,21 +80,21 @@ namespace ccli
 	}
 
 	// Basic type operator definitions.
-	LOG_BASIC_TYPE_DEF(int);
+	LOG_BASIC_TYPE_DEF(int)
 
-	LOG_BASIC_TYPE_DEF(long);
+	LOG_BASIC_TYPE_DEF(long)
 
-	LOG_BASIC_TYPE_DEF(float);
+	LOG_BASIC_TYPE_DEF(float)
 
-	LOG_BASIC_TYPE_DEF(double);
+	LOG_BASIC_TYPE_DEF(double)
 
-	LOG_BASIC_TYPE_DEF(long long);
+	LOG_BASIC_TYPE_DEF(long long)
 
-	LOG_BASIC_TYPE_DEF(long double);
+	LOG_BASIC_TYPE_DEF(long double)
 
-	LOG_BASIC_TYPE_DEF(unsigned int);
+	LOG_BASIC_TYPE_DEF(unsigned int)
 
-	LOG_BASIC_TYPE_DEF(unsigned long);
+	LOG_BASIC_TYPE_DEF(unsigned long)
 
-	LOG_BASIC_TYPE_DEF(unsigned long long);
+	LOG_BASIC_TYPE_DEF(unsigned long long)
 }

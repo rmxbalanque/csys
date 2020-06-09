@@ -36,7 +36,7 @@ namespace ccli
 		std::string m_Data;
 	};
 
-#define LOG_BASIC_TYPE_DECL(type) CommandData& operator<<(type data);
+#define LOG_BASIC_TYPE_DECL(type) CommandData& operator<<(type data)
 
 	class CommandData
 	{

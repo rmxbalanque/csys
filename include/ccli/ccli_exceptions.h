@@ -11,7 +11,7 @@
 
 namespace ccli
 {
-	struct Exception
+	struct CCLI_API Exception
 	{
 		virtual std::string what() const = 0;
 	};

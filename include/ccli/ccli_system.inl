@@ -82,6 +82,7 @@ namespace ccli
 
 				// Get argument.
 				arg.m_String = line.substr(arg_pos, arg_endpos);
+				arg.m_End = line.size() + 1;
 
 				// TODO: Check if this should be made optional.
 				if (arg_endpos != std::string::npos)

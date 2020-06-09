@@ -63,7 +63,7 @@ set(CCLI_IWYU_CLANG_VERSION "9" CACHE STRING "Clang version that include-what-yo
 
 # ccli files
 set(CCLI_SOURCES src/ccli.cpp)
-set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_autocomplete.h include/ccli/ccli_arguments.h include/ccli/ccli_command.h include/ccli/ccli_string.h include/ccli/ccli_system.h include/ccli/ccli_exceptions.h)
+set(CCLI_HEADERS include/ccli/ccli.h include/ccli/ccli_autocomplete.h include/ccli/ccli_arguments.h include/ccli/ccli_command.h include/ccli/ccli_string.h include/ccli/ccli_system.h include/ccli/ccli_exceptions.h include/ccli/ccli_command_data.h)
 
 # Add core ccli target.
 if (CCLI_BUILD_SHARED)

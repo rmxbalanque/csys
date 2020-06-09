@@ -12,3 +12,4 @@
 #include "ccli_autocomplete.inl"
 #include "ccli_system.inl"
 #include "ccli_history.inl"
+#include "ccli_command_data.inl"

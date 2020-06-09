@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "ccli_pch.h"
 #include "ccli_api.h"
 
 using CR_STRING = const std::string&;

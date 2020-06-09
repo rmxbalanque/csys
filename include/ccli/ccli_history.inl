@@ -11,6 +11,11 @@ namespace ccli
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
+	CCLI_INLINE void CommandHistory::push_back(const std::string &line)
+	{
+		m_History[m_Record++ % m_MaxRecord] = line;
+	}
+
 	CCLI_INLINE void CommandHistory::clear()
 	{
 		m_Record = 0;

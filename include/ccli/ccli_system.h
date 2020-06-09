@@ -2,15 +2,18 @@
 #define CCLI_SYSTEM_H
 
 #pragma once
+
 #include "ccli_pch.h"
 #include "ccli_command.h"
 #include "ccli_autocomplete.h"
 #include "ccli_history.h"
+#include "ccli_command_data.h"
 
 namespace ccli
 {
-	// TODO: Fix double command or variable registration.
-	// TODO: Integrate autocomplete.
+	// TODO: Integrate autocomplete. (Separate variables and their commands)
+	// TODO: Add a CommandData Into Registration and return it when parsing.
+	// TODO: Use modern pointers.
 
 	class CCLI_API System
 	{
@@ -20,7 +23,7 @@ namespace ccli
 		// System methods /////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////
 
-		void parse(const std::string & line);
+		void parse(const std::string &line); // TODO: GLOBAL COMMAND DATA FOR NOW TO TEST IT.
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
@@ -32,6 +35,7 @@ namespace ccli
 			if (m_CommandContainer.find(name.m_String) != m_CommandContainer.end())
 			{
 				std::cout << "ERROR: Command already exists." << std::endl;
+				return;
 			}
 
 			m_SuggestionTree.insert(name.m_String);
@@ -46,18 +50,37 @@ namespace ccli
 			ccli::System::registerCommand(std::string("set " + name).data(), "Set variable", [&var](T value)
 			{ var = value; }, ccli::Arg<T>(name.data()));
 
-			ccli::System::registerCommand(std::string("get " + name).data(), "Get variable", [&var]() { return var; });
+			ccli::System::registerCommand(std::string("get " + name).data(), "Get variable", [&]()
+			{ m_CommandData.log(LOG) << var << endl; });
 		}
 
-	//private:
+		acTernarySearchTree &autocomplete()
+		{ return m_SuggestionTree; }
+
+		CommandHistory &history()
+		{ return m_CommandHistory; };
+
+		std::vector<CommandItem> &items()
+		{ return m_CommandData.items(); }
+
+		CommandData &log(ItemType type = ItemType::LOG)
+		{ return m_CommandData.log(type); };
+
+		std::unordered_map<std::string, CommandBase *> commands()
+		{ return m_CommandContainer; }
+
+	private:
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;
 		acTernarySearchTree m_SuggestionTree;
 		CommandHistory m_CommandHistory;
+		CommandData m_CommandData;
 	};
 }
 
 #ifdef CCLI_HEADER_ONLY
+
 #include "ccli_system.inl"
+
 #endif
 
 #endif //CCLI_SYSTEM_H

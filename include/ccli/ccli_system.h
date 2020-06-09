@@ -20,11 +20,42 @@ namespace ccli
 	{
 	public:
 
-		///////////////////////////////////////////////////////////////////////
-		// System methods /////////////////////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-
+		/*!
+		 * \brief Parse given command line
+		 * \param line Command line string
+		 */
 		void parse(const std::string &line);
+
+		/*!
+		 * \brief Get console autocomplete tree
+		 * \return Autocomplete Ternary Search Tree
+		 */
+		acTernarySearchTree &autocomplete();
+
+		/*!
+		 * \brief Get command history container
+		 * \return Command history vector
+		 */
+		CommandHistory &history();;
+
+		/*!
+		 * \brief Get console items
+		 * \return Console items container
+		 */
+		std::vector<CommandItem> &items();
+
+		/*!
+		 * \brief Creates a new item entry to log information
+		 * \param type Log type (COMMAND, LOG, WARNING, ERROR)
+		 * \return Reference to console items obj
+		 */
+		CommandData &log(ItemType type = ItemType::LOG);;
+
+		/*!
+		 * \brief Get registered command container
+		 * \return Commands container
+		 */
+		std::unordered_map<std::string, CommandBase *> commands();
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
@@ -39,6 +70,7 @@ namespace ccli
 				return;
 			}
 
+			// Register for autocomplete.
 			m_SuggestionTree.insert(name.m_String);
 
 			// Add commands to system here
@@ -55,26 +87,12 @@ namespace ccli
 			{ m_CommandData.log(LOG) << var << endl; });
 		}
 
-		acTernarySearchTree &autocomplete()
-		{ return m_SuggestionTree; }
-
-		CommandHistory &history()
-		{ return m_CommandHistory; };
-
-		std::vector<CommandItem> &items()
-		{ return m_CommandData.items(); }
-
-		CommandData &log(ItemType type = ItemType::LOG)
-		{ return m_CommandData.log(type); };
-
-		std::unordered_map<std::string, CommandBase *> commands()
-		{ return m_CommandContainer; }
 
 	private:
-		std::unordered_map<std::string, CommandBase *> m_CommandContainer;
-		acTernarySearchTree m_SuggestionTree;
-		CommandHistory m_CommandHistory;
-		CommandData m_CommandData;
+		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
+		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree
+		CommandHistory m_CommandHistory;									//!< History of executed commands
+		CommandData m_CommandData;											//!< Console Items (Logging)
 	};
 }
 

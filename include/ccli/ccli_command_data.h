@@ -25,8 +25,7 @@ namespace ccli
 
 	struct CCLI_API CommandItem
 	{
-		explicit CommandItem(ItemType type = ItemType::LOG) : m_Type(type)
-		{};
+		explicit CommandItem(ItemType type = ItemType::LOG);
 
 		CommandItem &operator<<(std::string_view str);
 
@@ -34,11 +33,12 @@ namespace ccli
 
 		ItemType m_Type;
 		std::string m_Data;
+		int m_TimeStamp;
 	};
 
 #define LOG_BASIC_TYPE_DECL(type) CommandData& operator<<(type data)
 
-	class CommandData
+	class CCLI_API CommandData
 	{
 	public:
 

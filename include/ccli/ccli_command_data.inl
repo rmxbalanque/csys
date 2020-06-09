@@ -2,8 +2,12 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
+
 #include "ccli_command_data.h"
+
 #endif
+
+#include "ccli_pch.h"
 
 namespace ccli
 {
@@ -12,9 +16,16 @@ namespace ccli
 	// Command Item ///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	static constexpr std::string_view s_Command = "> ";
-	static constexpr std::string_view s_Warning = "[WARNING]: ";
-	static constexpr std::string_view s_Error = "[ERROR]: ";
+	CCLI_INLINE static constexpr std::string_view s_Command = "> ";
+	CCLI_INLINE static constexpr std::string_view s_Warning = "[WARNING]: ";
+	CCLI_INLINE static constexpr std::string_view s_Error = "[ERROR]: ";
+	CCLI_INLINE static const auto s_TimeBegin = std::chrono::steady_clock::now();
+
+	CCLI_INLINE CommandItem::CommandItem(ItemType type) : m_Type(type)
+	{
+		auto timeNow = std::chrono::steady_clock::now();
+		m_TimeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(timeNow-s_TimeBegin).count();
+	}
 
 	CCLI_INLINE CommandItem &CommandItem::operator<<(const std::string_view str)
 	{

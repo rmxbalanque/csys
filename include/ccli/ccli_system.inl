@@ -1,7 +1,9 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
+
 #include "ccli_system.h"
+
 #endif
 
 namespace ccli
@@ -129,5 +131,24 @@ namespace ccli
 			// Execute command.
 			(*command->second)(arg);
 		}
+
+
 	}
+
+	// Getters ////////////////////////////////////////////////////////////////
+
+	CCLI_INLINE acTernarySearchTree &System::autocomplete()
+	{ return m_SuggestionTree; }
+
+	CCLI_INLINE CommandHistory &System::history()
+	{ return m_CommandHistory; }
+
+	CCLI_INLINE std::vector<CommandItem> &System::items()
+	{ return m_CommandData.items(); }
+
+	CCLI_INLINE CommandData &System::log(ItemType type)
+	{ return m_CommandData.log(type); }
+
+	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()
+	{ return m_CommandContainer; }
 }

@@ -158,6 +158,8 @@ namespace ccli
 						{
 							if (pc_ptr->m_Equal && !pc_ptr->m_Less && !pc_ptr->m_Greater)
 								prefix.push_back(pc_ptr->m_Data);
+							else
+								break;
 
 							pc_ptr = pc_ptr->m_Equal;
 						}

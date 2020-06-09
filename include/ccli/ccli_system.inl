@@ -90,6 +90,15 @@ namespace ccli
 					log(WARN) << s_WarnMoreArgs << endl;
 				}
 			}
+			else
+			{
+				// Get arg.
+				size_t arg_pos = line.find_first_not_of(' ', var_endpos);
+				if (arg_pos == line.length() || arg_pos != std::string::npos)
+				{
+					log(WARN) << s_WarnMoreArgs << endl;
+				}
+			}
 
 			// Command not found.
 			auto command = m_CommandContainer.find(spec_command_name.m_String);

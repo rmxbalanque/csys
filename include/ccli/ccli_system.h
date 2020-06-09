@@ -14,6 +14,8 @@ namespace ccli
 	// TODO: Integrate autocomplete. (Separate variables and their commands)
 	// TODO: Add a CommandData Into Registration and return it when parsing.
 	// TODO: Use modern pointers.
+	// TODO: Proper history and index.
+	// TODO: Logging filters.
 
 	class CCLI_API System
 	{
@@ -23,7 +25,7 @@ namespace ccli
 		// System methods /////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////
 
-		void parse(const std::string &line); // TODO: GLOBAL COMMAND DATA FOR NOW TO TEST IT.
+		void parse(const std::string &line);
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)

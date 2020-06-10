@@ -10,13 +10,14 @@
 #include <type_traits>
 #include "ccli_arguments.h"
 #include "ccli_exceptions.h"
+#include "ccli_command_data.h"
 
 namespace ccli
 {
   struct  CommandBase
   {
     virtual ~CommandBase() = default;
-    virtual void operator()(String &input) = 0;
+    virtual CommandItem operator()(String &input) = 0;
     virtual std::string Help() = 0;
   };
 
@@ -27,12 +28,13 @@ namespace ccli
     Command(const String &name, const String &description, Fn function, Args... args)
             : m_Name(name), m_Description(description), m_Function(function), m_Arguments(args...) {}
 
-    void operator()(String &input) override
+		CommandItem operator()(String &input) override
     {
       // call the function
 			unsigned long start = 0;
 			try { Call(input, start, std::make_index_sequence<sizeof... (Args)>{}); }
-			catch (ArgumentException ae) { throw CommandException("[ERROR] " + m_Name.m_String + ": " + ae.what()); }
+			catch (ArgumentException ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
+			return CommandItem(COMMAND);
     }
 
     std::string Help() override
@@ -69,15 +71,13 @@ namespace ccli
 		Command(const String &name, const String &description, Fn function)
 						: m_Name(name), m_Description(description), m_Function(function) {}
 
-		void operator()(String &input) override
+		CommandItem operator()(String &input) override
 		{
 			// call the function
 			for (auto c : input.m_String)
 				if (!isspace(c))
-					throw CommandException("[ERROR] " + m_Name.m_String + ": Called with arguments");
-
-			try { m_Function(); }
-			catch (...) { throw CommandException("[ERROR] " + m_Name.m_String + ": Called function resulted in exception thrown"); }
+					return CommandItem(ERROR) << (m_Name.m_String + ": Called with arguments");
+			return CommandItem(COMMAND);
 		}
 
 		std::string Help() override
@@ -89,7 +89,7 @@ namespace ccli
 
 	private:
 		template<size_t... Is>
-		void Call(String &input, unsigned long &start, std::index_sequence<Is...>) {}
+		[[maybe_unused]] void Call(String &input, unsigned long &start, std::index_sequence<Is...>) {}
 
 		template<size_t ...Is>
 		std::string DisplayArguments(std::index_sequence<Is...>) { return ""; }
@@ -99,16 +99,6 @@ namespace ccli
 		std::function<void(void)> m_Function;
 		std::tuple<> m_Arguments;
 	};
-
-	template<typename Fn, typename ...Args>
-  CommandBase *registerCommand(const String &name, const String &description, Fn function, Args... args)
-  {
-    // check if function can be called with the given arguments
-    static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
-
-    // Add commands to system here
-    return new Command<Fn, Args...>(name, description, function, args...);
-  }
 }
 
 #endif //CCLI_COMMAND_H

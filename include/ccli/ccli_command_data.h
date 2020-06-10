@@ -15,7 +15,7 @@ namespace ccli
 {
 	static const char endl = '\n';
 
-	enum CCLI_API ItemType
+	enum ItemType
 	{
 		COMMAND = 0,
 		LOG,

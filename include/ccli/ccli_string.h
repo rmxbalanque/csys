@@ -8,27 +8,31 @@
 #pragma once
 
 #include <string>
+#include <cctype>
+#include "ccli_api.h"
 
 namespace ccli
 {
-	struct String
+	struct CCLI_API String
 	{
 		String() = default;
-		String(const char *str) : m_String(str), m_End(m_String.size() + 1) {}
+		String(const char *str) : m_String(str) {}
 		operator const char*() { return m_String.c_str(); }
+		operator std::string() { return m_String; }
 
-		// Moves until first non-whitespace char, returns the index at that spot, -1 if end
+		// Moves until first non-whitespace char, returns the index at that spot
 		std::pair<unsigned long, unsigned long> POI(unsigned long start = 0)
 		{
-			std::pair<unsigned long, unsigned long> range(m_End, m_End - 1);
+			unsigned long end = m_String.size() + 1;
+			std::pair<unsigned long, unsigned long> range(end, end - 1);
 			unsigned long pos = start;
-			for (; pos < m_End; ++pos)
+			for (; pos < end; ++pos)
 				if (!std::isspace(m_String[pos]))
 				{
 					range.first = pos;
 					break;
 				}
-			for (; pos < m_End; ++pos)
+			for (; pos < end; ++pos)
 				if (std::isspace(m_String[pos]))
 				{
 					range.second = pos;
@@ -37,8 +41,10 @@ namespace ccli
 
 			return range;
 		}
+
+		unsigned long End() const { return m_String.size() + 1; }
+
 		std::string m_String;
-		unsigned long m_End;
 	};
 }
 

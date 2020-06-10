@@ -14,7 +14,6 @@ namespace ccli
 	// TODO: Integrate autocomplete. (Separate variables and their commands)
 	// TODO: Add a CommandData Into Registration and return it when parsing.
 	// TODO: Use modern pointers.
-	// TODO: Logging filters.
 
 	class CCLI_API System
 	{

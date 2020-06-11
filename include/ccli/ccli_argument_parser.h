@@ -172,7 +172,7 @@ namespace ccli
 		if (input.m_String[range.first] != '[') throw ArgumentException("Invalid vector argument missing [ delimiter before", input.m_String.substr(range.first, range.second));
 		input.m_String[range.first] = ' ';
 		start = range.first + 1;
-
+		std::cout << input.m_String << std::endl;
 		while (range.first < input.End() - 1) // maybe not -1
 		{
 			if (input.m_String[range.second - 1] == ']')
@@ -180,6 +180,7 @@ namespace ccli
 				while (input.m_String[range.second - 1] == ']' && range.first != range.second)
 					--range.second;
 				input.m_String[range.second] = ' ';
+				std::cout << input.m_String << std::endl;
 				start = range.first;
 				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
 				return;
@@ -187,48 +188,10 @@ namespace ccli
 			else
 			{
 				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
+				std::cout << input.m_String << std::endl;
 				range = input.NextPoi(start);
 			}
 		}
-//		auto range = input.NextPoi(start);
-//		if (range.first == input.End() - 1)
-//			return;
-//		if (input.m_String[range.first] != '[')
-//			throw ArgumentException("Invalid vector argument missing [ delimiter before", input.m_String.substr(range.first, range.second));
-//		input.m_String[range.first] = ' ';
-//		std::cout << input.m_String << std::endl;
-//		// TODO: issue where if you have [ [something]] it messes up
-//		start = range.first + 1;
-//		while (start < input.End() - 1)
-//		{
-//			// if you are done with the array
-//			if (input.m_String[range.second - 1] == ']')
-//			{
-//				// move back til you hit the ] for the case of ]]]
-//				while (input.m_String[range.second - 1] == ']')
-//					--range.second;
-//				input.m_String[range.second] = ' ';
-//				std::cout << input.m_String << std::endl;
-//				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
-//				return;
-//			}
-//			// check for the edge case where they miss the ] at the end
-//			else if (start == input.End())
-//				throw ArgumentException("Invalid argument", input.m_String.substr(range.first, range.second));
-//			else
-//			{
-//				// generic case where you pass in the arguments
-//				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
-////				std::cout << input.m_String << std::endl;
-//				range = input.NextPoi(start);
-//				start = range.first;
-//			}
-		}
-		// we know there is more than one argument so we go until we hit ]
-		// go until start - 1 == ]
-
-		// do while? go until ] is hit on the range.second
-
 }
 
 #endif //CCLI_ARGUMENT_PARSER_H

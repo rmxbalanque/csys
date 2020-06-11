@@ -55,7 +55,7 @@ namespace ccli
 		TYPE m_Value; \
 	};
 
-	ARG_BASE_SPEC(ccli::String,       "String")
+	ARG_BASE_SPEC(String,             "String")
 	ARG_BASE_SPEC(bool,               "Boolean")
 	ARG_BASE_SPEC(char,               "Char")
 	ARG_BASE_SPEC(unsigned char,      "Unsigned_Char")

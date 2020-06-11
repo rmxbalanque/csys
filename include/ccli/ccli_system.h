@@ -35,7 +35,7 @@ namespace ccli
 		 * \brief Get command history container
 		 * \return Command history vector
 		 */
-		CommandHistory &history();;
+		CommandHistory &history();
 
 		/*!
 		 * \brief Get console items

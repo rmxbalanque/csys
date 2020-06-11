@@ -17,11 +17,12 @@ namespace ccli
 	{
 		String() = default;
 		String(const char *str) : m_String(str) {}
+		String(std::string str) : m_String(std::move(str)) {}
 		operator const char*() { return m_String.c_str(); }
 		operator std::string() { return m_String; }
 
 		// Moves until first non-whitespace char, returns the index at that spot
-		std::pair<unsigned long, unsigned long> POI(unsigned long start = 0)
+		std::pair<unsigned long, unsigned long> NextPoi(unsigned long &start)
 		{
 			unsigned long end = m_String.size() + 1;
 			std::pair<unsigned long, unsigned long> range(end, end - 1);
@@ -39,6 +40,7 @@ namespace ccli
 					break;
 				}
 
+			start = range.second;
 			return range;
 		}
 

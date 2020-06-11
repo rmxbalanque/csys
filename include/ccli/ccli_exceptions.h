@@ -7,32 +7,29 @@
 #pragma once
 
 #include <string>
+#include <exception>
 #include "ccli_api.h"
 
 namespace ccli
 {
-	struct CCLI_API Exception
-	{
-		virtual std::string what() const = 0;
-	};
-
-	class CCLI_API CommandException : public Exception
+	class CCLI_API ArgumentException: public std::exception
 	{
 	public:
-		CommandException(const std::string& msg) : m_What(msg) {}
-		std::string what() const override { return m_What; }
-	private:
-		std::string m_What;
+		explicit ArgumentException(const std::string &message, const std::string & arg):
+		msg_(message + ": '" + arg + "'")
+		{}
+
+		~ArgumentException() override = default;
+
+		[[nodiscard]] virtual const char* what() const noexcept
+		{
+			return msg_.c_str();
+		}
+
+	protected:
+		std::string msg_;
 	};
 
-	class CCLI_API ArgumentException : public Exception
-	{
-	public:
-		ArgumentException(const std::string& msg) : m_What(msg) {}
-		std::string what() const override { return m_What; };
-	private:
-		std::string m_What;
-	};
 }
 
 #endif //CCLI_CCLI_EXCEPTIONS_H

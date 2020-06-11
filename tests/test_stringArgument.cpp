@@ -8,12 +8,15 @@
 TEST_CASE("String Argument")
 {
 	using namespace ccli;
-	System s;
-	s.registerCommand("string", "disc", [](std::string s) {
-		std::cout << s << std::endl;
-	}, Arg<String>("str1"));
+	std::string str = "ok";
 
+//	System s;
+//	s.registerCommand("string", "disc", [](std::string s) {
+//		std::cout << s << std::endl;
+//	}, Arg<String>("str1"));
+//
+////	s.parse("string \"str1\"");
+////	s.parse("string \"str1\"\"str2\""); // missing the removal of ""
 //	s.parse("string \"str1\"");
-	s.parse("string \"str1\"\"str2\"");
 //	s.parse("string ");
 }

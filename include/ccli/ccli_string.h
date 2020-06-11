@@ -24,7 +24,7 @@ namespace ccli
 		// Moves until first non-whitespace char, returns the index at that spot
 		std::pair<unsigned long, unsigned long> NextPoi(unsigned long &start)
 		{
-			unsigned long end = m_String.size() + 1;
+			unsigned long end = (unsigned long)m_String.size() + 1;
 			std::pair<unsigned long, unsigned long> range(end, end - 1);
 			unsigned long pos = start;
 			for (; pos < end; ++pos)
@@ -44,7 +44,7 @@ namespace ccli
 			return range;
 		}
 
-		unsigned long End() const { return m_String.size() + 1; }
+		[[nodiscard]] unsigned long End() const { return (unsigned long)m_String.size() + 1; }
 
 		std::string m_String;
 	};

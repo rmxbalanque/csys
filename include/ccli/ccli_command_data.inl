@@ -17,14 +17,14 @@ namespace ccli
 	///////////////////////////////////////////////////////////////////////////
 
 	CCLI_INLINE static constexpr std::string_view s_Command = "> ";
-	CCLI_INLINE static constexpr std::string_view s_Warning = "[WARNING]: ";
+	CCLI_INLINE static constexpr std::string_view s_Warning = "\t[WARNING]: ";
 	CCLI_INLINE static constexpr std::string_view s_Error = "[ERROR]: ";
 	CCLI_INLINE static const auto s_TimeBegin = std::chrono::steady_clock::now();
 
 	CCLI_INLINE CommandItem::CommandItem(ItemType type) : m_Type(type)
 	{
 		auto timeNow = std::chrono::steady_clock::now();
-		m_TimeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(timeNow-s_TimeBegin).count();
+		m_TimeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(timeNow - s_TimeBegin).count();
 	}
 
 	CCLI_INLINE CommandItem &CommandItem::operator<<(const std::string_view str)
@@ -37,16 +37,18 @@ namespace ccli
 	{
 		switch (m_Type)
 		{
-			case ItemType::COMMAND:
+			case COMMAND:
 				return s_Command.data() + m_Data;
-			case ItemType::LOG:
+			case LOG:
 				return '\t' + m_Data;
-			case ItemType::WARN:
-				return '\t' + (s_Warning.data() + m_Data);
-			case ItemType::ERROR:
+			case WARNING:
+				return s_Warning.data() + m_Data;
+			case ERROR:
 				return s_Error.data() + m_Data;
+			case NONE:
 			default:
 				return "";
+				break;
 		}
 	}
 

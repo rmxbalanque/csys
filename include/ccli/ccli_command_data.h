@@ -6,6 +6,7 @@
 #define TEQUILA_CCLI_COMMAND_DATA_H
 #pragma once
 
+#include "ccli_pch.h"
 #include "base.h"
 
 // TODO: Doxygenize classes.
@@ -19,8 +20,9 @@ namespace ccli
 	{
 		COMMAND = 0,
 		LOG,
-		WARN,
+		WARNING,
 		ERROR,
+		NONE
 	};
 
 	struct CCLI_API CommandItem

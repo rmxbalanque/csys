@@ -11,7 +11,6 @@
 
 namespace ccli
 {
-	// TODO: Integrate autocomplete. (Separate variables and their commands)
 	// TODO: Add a CommandData Into Registration and return it when parsing.
 	// TODO: Use modern pointers.
 
@@ -20,16 +19,27 @@ namespace ccli
 	public:
 
 		/*!
+		 * \brief Initialize system object
+		 */
+		System();
+
+		/*!
 		 * \brief Parse given command line
 		 * \param line Command line string
 		 */
 		void parse(const std::string &line);
 
 		/*!
-		 * \brief Get console autocomplete tree
+		 * \brief Get console registered command autocomplete tree
 		 * \return Autocomplete Ternary Search Tree
 		 */
-		acTernarySearchTree &autocomplete();
+		acTernarySearchTree &cmdAutocomplete();
+
+		/*!
+		 * \brief Get console registered variables autocomplete tree
+		 * \return Autocomplete Ternary Search Tree
+		 */
+		acTernarySearchTree &varAutocomplete();
 
 		/*!
 		 * \brief Get command history container
@@ -70,7 +80,10 @@ namespace ccli
 			}
 
 			// Register for autocomplete.
-			m_SuggestionTree.insert(name.m_String);
+			if (m_RegisterCommandSuggestion)
+			{
+				m_SuggestionTree.insert(name.m_String);
+			}
 
 			// Add commands to system here
 			m_CommandContainer[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
@@ -79,19 +92,32 @@ namespace ccli
 		template<typename T, typename V>
 		void registerVariable(const std::string &name, V &var)
 		{
+			// Disable.
+			m_RegisterCommandSuggestion = false;
+
+			// Register set.
 			ccli::System::registerCommand(std::string("set " + name).data(), "Set variable", [&var](T value)
 			{ var = value; }, ccli::Arg<T>(name.data()));
 
+			// Register get.
 			ccli::System::registerCommand(std::string("get " + name).data(), "Get variable", [&]()
 			{ m_CommandData.log(LOG) << var << endl; });
-		}
 
+			// Enable again.
+			m_RegisterCommandSuggestion = true;
+
+			// Register variable
+			m_VariableSuggestionTree.insert(name.c_str());
+		}
 
 	private:
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
-		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree
+		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree for commands
+		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;									//!< History of executed commands
 		CommandData m_CommandData;											//!< Console Items (Logging)
+
+		bool m_RegisterCommandSuggestion = true;							//!< Flag that determines if commands will be registered for autcoomplete.
 	};
 }
 

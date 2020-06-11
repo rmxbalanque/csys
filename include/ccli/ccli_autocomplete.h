@@ -12,6 +12,7 @@ namespace ccli
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
 	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
+	// TODO: Add test cases for all of the functions.
 
 	//!< Auto complete ternary tree.
 	class CCLI_API acTernarySearchTree
@@ -88,6 +89,18 @@ namespace ccli
 		~acTernarySearchTree();
 
 		/*!
+		 * \brief Get tree node count
+		 * \return Tree node count
+		 */
+		[[nodiscard]] size_t size() const;
+
+		/*!
+		 * \brief Get tree word count
+		 * \return Word count
+		 */
+		[[nodiscard]] size_t count() const;
+
+		/*!
 		 * \brief Search if the given word is in the tree
 		 * \param[in] word Word to search
 		 * \return Found
@@ -106,7 +119,6 @@ namespace ccli
 		 */
 		void insert(const std::string &word);
 
-
 		/*!
 		 * \brief Insert word into tree
 		 * \tparam strType String type to be inserted
@@ -116,6 +128,7 @@ namespace ccli
 		void insert(const strType &word)
 		{
 			acNode **ptr = &m_Root;
+			++m_Count;
 
 			while (*word != '\0')
 			{
@@ -123,6 +136,7 @@ namespace ccli
 				if (*ptr == nullptr)
 				{
 					*ptr = new acNode(*word);
+					++m_Size;
 				}
 
 				// Traverse tree.
@@ -133,7 +147,13 @@ namespace ccli
 				else if (*word == (*ptr)->m_Data)
 				{
 					// String is already in tree, therefore only mark as word.
-					if (*(word + 1) == '\0') (*ptr)->m_IsWord = true;
+					if (*(word + 1) == '\0')
+					{
+						if ((*ptr)->m_IsWord)
+							--m_Count;
+
+						(*ptr)->m_IsWord = true;
+					}
 
 					// Advance.
 					ptr = &(*ptr)->m_Equal;
@@ -246,7 +266,9 @@ namespace ccli
 		 */
 		void suggestionsAux(acNode *root, r_sVector ac_options, std::string buffer);
 
-		acNode *m_Root = nullptr;  //!< Ternary Search Tree Root node
+		acNode *m_Root = nullptr;  	//!< Ternary Search Tree Root node
+		size_t m_Size = 0;			//!< Node count
+		size_t m_Count = 0;			//!< Word count
 	};
 }
 

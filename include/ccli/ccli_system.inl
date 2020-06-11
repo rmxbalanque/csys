@@ -22,6 +22,13 @@ namespace ccli
 	static constexpr std::string_view s_ErrorSetGetNotFound = "Command doesn't exists and/or variable is not registered";
 	static constexpr std::string_view s_ErrorCmdNotFound = "Command doesn't exist";
 
+	CCLI_INLINE System::System()
+	{
+		// Register pre-defined commands.
+		m_SuggestionTree.insert(s_Set.data());
+		m_SuggestionTree.insert(s_Get.data());
+	}
+
 	CCLI_INLINE void System::parse(const std::string &line)
 	{
 		// Error.
@@ -88,7 +95,7 @@ namespace ccli
 				// TODO: Check if this should be made optional.
 				if (arg_endpos != std::string::npos)
 				{
-					log(WARN) << s_WarnMoreArgs << endl;
+					log(WARNING) << s_WarnMoreArgs << endl;
 				}
 			}
 			else
@@ -97,7 +104,7 @@ namespace ccli
 				size_t arg_pos = line.find_first_not_of(' ', var_endpos);
 				if (arg_pos == line.length() || arg_pos != std::string::npos)
 				{
-					log(WARN) << s_WarnMoreArgs << endl;
+					log(WARNING) << s_WarnMoreArgs << endl;
 				}
 			}
 
@@ -136,8 +143,11 @@ namespace ccli
 
 	// Getters ////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE acTernarySearchTree &System::autocomplete()
+	CCLI_INLINE acTernarySearchTree &System::cmdAutocomplete()
 	{ return m_SuggestionTree; }
+
+	CCLI_INLINE acTernarySearchTree &System::varAutocomplete()
+	{ return m_VariableSuggestionTree; }
 
 	CCLI_INLINE CommandHistory &System::history()
 	{ return m_CommandHistory; }

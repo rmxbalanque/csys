@@ -2,7 +2,9 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
+
 #include "ccli_autocomplete.h"
+
 #endif
 
 namespace ccli
@@ -19,6 +21,16 @@ namespace ccli
 	///////////////////////////////////////////////////////////////////////////
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
+
+	CCLI_INLINE size_t acTernarySearchTree::size() const
+	{
+		return m_Size;
+	}
+
+	CCLI_INLINE size_t acTernarySearchTree::count() const
+	{
+		return m_Count;
+	}
 
 	CCLI_INLINE bool acTernarySearchTree::search(const char *string)
 	{
@@ -52,6 +64,7 @@ namespace ccli
 	CCLI_INLINE void acTernarySearchTree::insert(const char *str)
 	{
 		acNode **ptr = &m_Root;
+		++m_Count;
 
 		while (*str != '\0')
 		{
@@ -59,6 +72,7 @@ namespace ccli
 			if (*ptr == nullptr)
 			{
 				*ptr = new acNode(*str);
+				++m_Size;
 			}
 
 			// Traverse tree.
@@ -69,7 +83,13 @@ namespace ccli
 			else if (*str == (*ptr)->m_Data)
 			{
 				// String is already in tree, therefore only mark as word.
-				if (*(str + 1) == '\0') (*ptr)->m_IsWord = true;
+				if (*(str + 1) == '\0')
+				{
+					if ((*ptr)->m_IsWord)
+						--m_Count;
+
+					(*ptr)->m_IsWord = true;
+				}
 
 				// Advance.
 				ptr = &(*ptr)->m_Equal;
@@ -124,7 +144,7 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, temp);
 	}
 
-	CCLI_INLINE std::string acTernarySearchTree::suggestions(const std::string & prefix, r_sVector &ac_options)
+	CCLI_INLINE std::string acTernarySearchTree::suggestions(const std::string &prefix, r_sVector &ac_options)
 	{
 		std::string temp = prefix;
 		suggestions(temp, ac_options, true);
@@ -134,7 +154,7 @@ namespace ccli
 	CCLI_INLINE void acTernarySearchTree::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
 	{
 		acNode *ptr = m_Root;
-		const char * temp = prefix.data();
+		const char *temp = prefix.data();
 		int prefix_end = prefix.size();
 
 		// Traverse tree and check if prefix exists.
@@ -151,7 +171,7 @@ namespace ccli
 				{
 					if (partial_complete)
 					{
-						acNode * pc_ptr = ptr->m_Equal;
+						acNode *pc_ptr = ptr->m_Equal;
 
 						// Get partially completed string.
 						while (pc_ptr)

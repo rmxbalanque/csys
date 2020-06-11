@@ -16,7 +16,9 @@ include(../cmake/ccli_utils.cmake)
 set(CCLI_TEST_SOURCES
         test_autocomplete.cpp
         test_system.cpp
-        test_stringArgument.cpp
+        test_string_argument.cpp
+        test_command_data.cpp
+        test_history.cpp
         main.cpp)
 
 # Set up testing.

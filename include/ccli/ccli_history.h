@@ -2,9 +2,11 @@
 #define CCLI_HISTORY_H
 #pragma once
 
+#include "ccli_pch.h"
+#include "ccli_api.h"
+
 namespace ccli
 {
-	// TODO: Avoid looping back since that breaks the history recency.
 	class CCLI_API CommandHistory
 	{
 	public:
@@ -13,14 +15,37 @@ namespace ccli
 		 * \brief Command history constructor.
 		 * \param maxRecord Maximum amount of command strings to keep track at once.
 		 */
-		explicit CommandHistory(unsigned int maxRecord = 100) : m_Record(0), m_MaxRecord(maxRecord), m_History(maxRecord)
-		{}
+		explicit CommandHistory(unsigned int maxRecord = 100);
 
 		/*!
-		 * \brief Record command string. (Start at the beggining once end is reached).
+		 * \brief Record command string. (Start at the beginning once end is reached).
 		 * \param line Command string to be recorded.
 		 */
 		void push_back(const std::string & line);
+
+		/*!
+		 * \brief Get newest register command entry index
+		 * \return Newest command entry index
+		 */
+		[[nodiscard]] unsigned int get_new_index() const;
+
+		/*!
+		 * \brief Get newest register command entry
+		 * \return Newest command entry
+		 */
+		const std::string & get_new();
+
+		/*!
+		 * \brief Get oldest register command entry index
+		 * \return Oldest command entry index
+		 */
+		[[nodiscard]] unsigned int get_old_index() const;
+
+		/*!
+		 * \brief Get oldest register command entry
+		 * \return Oldest command entry string
+		 */
+		const std::string & get_old();
 
 		/*!
 		 * \brief Clear command history
@@ -31,9 +56,18 @@ namespace ccli
 		 * \brief Retrieve command history at given index
 		 * \param index Position to lookup in command history vector
 		 * \return Command at given index
+		 *
+		 * \note No bound checking is performed when accessing with these index operator.
+		 *  Use the *index()* method for safe history vector indexing.
 		 */
 		const std::string &operator[](unsigned int index);
 		const std::string &operator[](int index);
+
+		/*!
+		 * \brief Safe history index. (Clamps if array ends are reached)
+		 * \return Command at given index
+		 */
+		const std::string &index(int index);
 
 		/*!
 		 * \brief Output available command history.
@@ -44,9 +78,14 @@ namespace ccli
 		friend std::ostream &operator<<(std::ostream &os, const CommandHistory &history);
 
 		/*!
-		 * \return Size of available command history.
+		 * \return Number of registered commands.
 		 */
 		size_t size();
+
+		/*!
+		 * \return Maximum commands that are able to be recorded
+		 */
+		size_t capacity();
 
 	private:
 		unsigned int m_Record;				//!< Amount of commands recorded

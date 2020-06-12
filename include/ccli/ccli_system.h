@@ -58,7 +58,7 @@ namespace ccli
 		 * \param type Log type (COMMAND, LOG, WARNING, ERROR)
 		 * \return Reference to console items obj
 		 */
-		CommandData &log(ItemType type = ItemType::LOG);;
+		CommandData &log(ItemType type = ItemType::LOG);
 
 		/*!
 		 * \brief Get registered command container

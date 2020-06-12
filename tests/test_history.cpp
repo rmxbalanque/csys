@@ -14,7 +14,7 @@ TEST_CASE("Test ccli history ")
 			c_history.push_back(cmd);
 		}
 
-		for (int i = 0; i < commands.size(); ++i)
+		for (int i = 0; i < (int)commands.size(); ++i)
 		{
 			CHECK(c_history[i] == commands[i]);
 		}
@@ -64,7 +64,7 @@ TEST_CASE("Test ccli history ")
 
 		CHECK(c_history.size() == 4);
 
-		for (int i = 0; i < c_history.capacity(); ++i)
+		for (int i = 0; i < (int)c_history.capacity(); ++i)
 			c_history.push_back("dummy" + std::to_string(i));
 
 		CHECK(c_history.size() == c_history.capacity());

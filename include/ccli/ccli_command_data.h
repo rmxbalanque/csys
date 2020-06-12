@@ -35,7 +35,7 @@ namespace ccli
 
 		ItemType m_Type;
 		std::string m_Data;
-		int m_TimeStamp;
+		unsigned int m_TimeStamp;
 	};
 
 #define LOG_BASIC_TYPE_DECL(type) CommandData& operator<<(type data)

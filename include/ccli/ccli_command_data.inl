@@ -24,7 +24,7 @@ namespace ccli
 	CCLI_INLINE CommandItem::CommandItem(ItemType type) : m_Type(type)
 	{
 		auto timeNow = std::chrono::steady_clock::now();
-		m_TimeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(timeNow - s_TimeBegin).count();
+		m_TimeStamp = static_cast<unsigned int>(std::chrono::duration_cast<std::chrono::milliseconds>(timeNow - s_TimeBegin).count());
 	}
 
 	CCLI_INLINE CommandItem &CommandItem::operator<<(const std::string_view str)

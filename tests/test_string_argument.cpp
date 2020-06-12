@@ -3,20 +3,66 @@
 //
 
 #include "doctest.h"
-#include "ccli_command.h"
+#include "ccli_system.h"
+#include <cstring>
 
 TEST_CASE("String Argument")
 {
 	using namespace ccli;
-	std::string str = "ok";
+	System s;
 
-//	System s;
-//	s.registerCommand("string", "disc", [](std::string s) {
-//		std::cout << s << std::endl;
-//	}, Arg<String>("str1"));
-//
-////	s.parse("string \"str1\"");
-////	s.parse("string \"str1\"\"str2\""); // missing the removal of ""
-//	s.parse("string \"str1\"");
-//	s.parse("string ");
+#pragma region CORRECT USAGE SINGLE WORD
+	s.registerCommand("0", "", [](String str) {
+			CHECK(str.m_String == "Zero");
+		}, Arg<String>(""));
+
+	s.registerCommand("1", "", [](const char *str) {
+			CHECK(!strcmp(str, "One"));
+		}, Arg<String>(""));
+
+	s.registerCommand("2", "", [](std::string str) {
+			CHECK(str == "Two");
+		}, Arg<String>(""));
+
+	// single word strings
+	s.parse("0 \"Zero\"");
+	s.parse("0 \"Ze\"ro\"");
+	s.parse("0 \"Ze\"\"ro\"");
+
+	s.parse("1 \"One\"");
+	s.parse("2 \"Two\"");
+#pragma endregion
+
+#pragma region CORRECT USAGE MANY WORDS
+	s.registerCommand("0,1", "", [](String str, String str1) {
+						CHECK((str.m_String == "Zero" && str1.m_String == "One"));
+	}, Arg<String>(""), Arg<String>(""));
+
+	// multi word strings
+	s.parse("0,1 \"Zero\" \"One\"");
+#pragma endregion
+
+#pragma region CORRECT USAGE VECTOR OF MULTI WORD(S)
+	s.registerCommand("0,1,2", "", [](std::vector<String> strs) {
+		std::string ar[] = { "Zero", "One", "Two"};
+		for (unsigned i = 0; i < 3; ++i)
+			if (strs[i].m_String != ar[i])
+			{
+				CHECK(false);
+				return;
+			}
+		CHECK(true);
+	}, Arg<std::vector<String>>(""));
+
+	// multi word strings
+	s.parse("0,1,2 [\"Zero\" \"One\" \"Two\"]");
+#pragma endregion
+
+#pragma region CORRECT USAGE VECTOR OF VECTOR OF WORD(S)
+
+#pragma endregion
+
+#pragma region CORRECT USAGE VECTOR OF VECTOR OF VECTOR OF WORD(S)
+
+#pragma endregion
 }

@@ -90,7 +90,7 @@ namespace ccli
 
 	private:
 		template<size_t... Is>
-		[[maybe_unused]] void Call(String &input, unsigned long &start, std::index_sequence<Is...>) {}
+		[[maybe_unused]] void Call(String &input, unsigned long &start, std::index_sequence<Is...>);
 
 		template<size_t ...Is>
 		std::string DisplayArguments(std::index_sequence<Is...>) { return ""; }

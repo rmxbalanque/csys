@@ -21,7 +21,7 @@ namespace ccli
 
 		~ArgumentException() override = default;
 
-		[[nodiscard]] virtual const char* what() const noexcept
+		[[nodiscard]] const char* what() const noexcept override
 		{
 			return msg_.c_str();
 		}

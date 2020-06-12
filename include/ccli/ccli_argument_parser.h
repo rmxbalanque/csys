@@ -26,7 +26,7 @@ namespace ccli
 	inline ArgumentParser<T>::ArgumentParser(String &input, unsigned long &start)
 	{
 		// getting rid of warnings
-		input;start;
+		if (input.End() == start) {}
 
 //		static_assert(, "Unsupported type T"); // ADD THIS SO PEOPLE DONT USE THEIR OWN TYPES
 		throw ArgumentException("Unsupported type: " + std::string(typeid(T).name()));
@@ -59,24 +59,34 @@ namespace ccli
 	{
 		auto range = input.NextPoi(start);
 		if (input.m_String[range.first] != '"')
-			throw ArgumentException("Invalid string argument", input.m_String.substr(range.first, range.second));
+			throw ArgumentException("String argument missing opening \"", input.m_String.substr(range.first, range.second - range.first));
 		++range.first;
+
 		while (true)
 		{
-			range.second = input.m_String.find('"', range.first);
+			range.second = input.m_String.find('\"', range.first);
 			if (range.second == std::string::npos)
 				throw ArgumentException("Invalid string argument", m_Value);
+//			std::cout << "second = " << input.m_String[range.second] << " Sub = |" << input.m_String.substr(range.first, range.second - range.first) << "|" << std::endl;
+			if (range.second != 0 && input.m_String[range.second - 1] == '\\')
+			{
+				input.m_String[range.second - 1] = '"';
+				m_Value.m_String += input.m_String.substr(range.first, range.second - range.first);
+				range.first = range.second + 1;
+				continue;
+			}
 
-			m_Value.m_String += input.m_String.substr(range.first, range.second - 2);
-			std::cout << "value = |" << m_Value.m_String << '|' << std::endl;
+			m_Value.m_String += input.m_String.substr(range.first, range.second - range.first);
+//			std::cout << "value = |" << m_Value.m_String << '|' << std::endl;
 
 			if (range.second != (unsigned long)input.m_String.size() - 1)
 			{
-				if (isspace(input.m_String[range.second + 1]))
+				if (isspace(input.m_String[range.second + 1]) || input.m_String[range.second + 1] == ']')
 					break;
 				else
-					while(input.m_String[range.second + 1] == '"' && range.second < input.End() - 1)
+					while(input.m_String[range.second] == '"' && range.second < input.End() - 1)
 						++range.second;
+//					std::cout << "start = " << input.m_String[range.second] << std::endl;
 				range.first = range.second;
 			}
 			else if (range.second == (unsigned long)input.m_String.size() - 1)
@@ -93,7 +103,7 @@ namespace ccli
 
 		// Get argument
 		auto range = input.NextPoi(start);
-		std::string arg = input.m_String.substr(range.first, range.second);
+		std::string arg = input.m_String.substr(range.first, range.second - range.first);
 
 		// check if the length is between the len of "true" and "false"
 		if (arg.length() > 5 || arg.length() < 4)
@@ -106,18 +116,18 @@ namespace ccli
 
 			// if the current letter is not a letter of "true" or "false", error out
 			if (arg[i] != s_true[i] && arg[i] != s_false[i])
-				throw ArgumentException(s_err_msg, input.m_String.substr(range.first, range.second));
+				throw ArgumentException(s_err_msg, input.m_String.substr(range.first, range.second - range.first));
 		}
 
 		if (arg == "true") m_Value = true;
 		else if (arg == "false") m_Value = false;
-		else ArgumentException(s_err_msg, input.m_String.substr(range.first, range.second));
+		else ArgumentException(s_err_msg, input.m_String.substr(range.first, range.second - range.first));
 	}
 
 	ARG_PARSE_BASE_SPEC(char)
 	{
 		auto range = input.NextPoi(start);
-		std::string arg = input.m_String.substr(range.first, range.second);
+		std::string arg = input.m_String.substr(range.first, range.second - range.first);
 		// must follow '<char>' convention
 		if (arg.length() == 3 && arg[0] == '\'' && arg[2] == '\'')
 			m_Value = arg[1];
@@ -128,7 +138,7 @@ namespace ccli
 	ARG_PARSE_BASE_SPEC(unsigned char)
 	{
 		auto range = input.NextPoi(start);
-		std::string arg = input.m_String.substr(range.first, range.second);
+		std::string arg = input.m_String.substr(range.first, range.second - range.first);
 		// must follow '<char>' convention
 		if (arg.length() == 3 && arg[0] == '\'' && arg[2] == '\'')
 			m_Value = (unsigned char) arg[1];
@@ -199,10 +209,9 @@ namespace ccli
 		if (range.first == input.End() - 1) return;
 		if (input.m_String[range.first] != '[')
 			throw ArgumentException("Invalid vector argument missing [ delimiter before",
-															input.m_String.substr(range.first, range.second));
+															input.m_String.substr(range.first, range.second - range.first));
 
 		input.m_String[range.first] = ' ';
-
 		range = input.NextPoi(range.first);
 		start = range.first;
 

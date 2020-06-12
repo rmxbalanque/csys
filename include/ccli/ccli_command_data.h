@@ -22,6 +22,7 @@ namespace ccli
 		LOG,
 		WARNING,
 		ERROR,
+		INFO,
 		NONE
 	};
 

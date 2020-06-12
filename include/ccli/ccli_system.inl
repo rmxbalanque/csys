@@ -56,7 +56,7 @@ namespace ccli
 		}
 
 		// About to run script.
-		m_CommandData.log(LOG) << "Running \"" << script_name << "\"" << ccli::endl;
+		m_CommandData.log(INFO) << "Running \"" << script_name << "\"" << ccli::endl;
 
 		// Run script.
 		for (const auto &cmd : script_pair->second->data())

@@ -30,6 +30,11 @@ TEST_CASE("Autocomplete")
 		CHECK(temp.get() == "[ERROR]: ");
 		CHECK(temp.m_Data.empty());
 
+		// Info
+		temp = ccli::CommandItem(ccli::ItemType::INFO) << "Test";
+		CHECK(temp.m_Type == ccli::ItemType::INFO);
+		CHECK(temp.get() == "Test");
+
 		// None
 		temp = ccli::CommandItem(ccli::ItemType::NONE);
 		CHECK(temp.m_Type == ccli::ItemType::NONE);

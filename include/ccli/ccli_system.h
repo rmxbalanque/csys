@@ -12,7 +12,6 @@
 
 namespace ccli
 {
-	// TODO: Add a CommandData Into Registration and return it when parsing.
 	// TODO: Use modern pointers.
 
 	class CCLI_API System
@@ -123,11 +122,16 @@ namespace ccli
 			m_VariableSuggestionTree.insert(name.c_str());
 		}
 
+		/*!
+		 * \brief Register script into console system
+		 * \param name Script name
+		 * \param path Scrip path
+		 */
 		void registerScript(std::string_view name, std::filesystem::path path = std::filesystem::current_path().c_str());
 
 	private:
 
-		void parseCommandLine(const std::string & line);
+		void parseCommandLine(const std::string & line);					//!< Parse command line and execute command
 
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
 		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree for commands

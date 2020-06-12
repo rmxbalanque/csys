@@ -45,10 +45,11 @@ namespace ccli
 				return s_Warning.data() + m_Data;
 			case ERROR:
 				return s_Error.data() + m_Data;
+			case INFO:
+				return m_Data;
 			case NONE:
 			default:
 				return "";
-				break;
 		}
 	}
 

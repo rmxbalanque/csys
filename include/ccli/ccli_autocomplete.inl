@@ -155,7 +155,7 @@ namespace ccli
 	{
 		acNode *ptr = m_Root;
 		const char *temp = prefix.data();
-		int prefix_end = (int)prefix.size();
+		int prefix_end = static_cast<int>(prefix.size());
 
 		// Traverse tree and check if prefix exists.
 		while (ptr)

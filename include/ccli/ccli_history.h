@@ -90,7 +90,7 @@ namespace ccli
 	private:
 		unsigned int m_Record;				//!< Amount of commands recorded
 		unsigned int m_MaxRecord;			//!< Maximum command record to keep track of
-		std::vector<std::string> m_History; //!< Console command history
+		std::vector<std::string> m_History; //!< Console command history TODO: Check if this should be a poitner to a vector.
 	};
 }
 

@@ -25,12 +25,12 @@ TEST_CASE("String Argument")
 		}, Arg<String>(""));
 
 	// single word strings
-	s.parse("0 \"Zero\"");
-	s.parse("0 \"Ze\"ro\"");
-	s.parse("0 \"Ze\"\"ro\"");
+	s.runCommand("0 \"Zero\"");
+	s.runCommand("0 \"Ze\"ro\"");
+	s.runCommand("0 \"Ze\"\"ro\"");
 
-	s.parse("1 \"One\"");
-	s.parse("2 \"Two\"");
+	s.runCommand("1 \"One\"");
+	s.runCommand("2 \"Two\"");
 #pragma endregion
 
 #pragma region CORRECT USAGE MANY WORDS
@@ -39,7 +39,7 @@ TEST_CASE("String Argument")
 	}, Arg<String>(""), Arg<String>(""));
 
 	// multi word strings
-	s.parse("0,1 \"Zero\" \"One\"");
+	s.runCommand("0,1 \"Zero\" \"One\"");
 #pragma endregion
 
 #pragma region CORRECT USAGE VECTOR OF MULTI WORD(S)
@@ -55,7 +55,7 @@ TEST_CASE("String Argument")
 	}, Arg<std::vector<String>>(""));
 
 	// multi word strings
-	s.parse("0,1,2 [\"Zero\" \"One\" \"Two\"]");
+	s.runCommand("0,1,2 [\"Zero\" \"One\" \"Two\"]");
 #pragma endregion
 
 #pragma region CORRECT USAGE VECTOR OF VECTOR OF WORD(S)

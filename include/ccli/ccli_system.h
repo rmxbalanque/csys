@@ -8,6 +8,7 @@
 #include "ccli_autocomplete.h"
 #include "ccli_history.h"
 #include "ccli_command_data.h"
+#include "ccli_script.h"
 
 namespace ccli
 {
@@ -24,10 +25,10 @@ namespace ccli
 		System();
 
 		/*!
-		 * \brief Parse given command line
+		 * \brief Parse given command and run it
 		 * \param line Command line string
 		 */
-		void parse(const std::string &line);
+		void runCommand(const std::string &line);
 
 		/*!
 		 * \brief Get console registered command autocomplete tree
@@ -61,10 +62,22 @@ namespace ccli
 		CommandData &log(ItemType type = ItemType::LOG);
 
 		/*!
+		 * \brief Run the given script
+		 * \param script_name Script to be executed
+		 */
+		void runScript(std::string_view script_name);
+
+		/*!
 		 * \brief Get registered command container
 		 * \return Commands container
 		 */
 		std::unordered_map<std::string, CommandBase *> commands();
+
+		/*!
+		 * \brief Get registered scripts container
+		 * \return Scripts container
+		 */
+		std::unordered_map<std::string, Script *> scripts();
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
@@ -110,14 +123,19 @@ namespace ccli
 			m_VariableSuggestionTree.insert(name.c_str());
 		}
 
+		void registerScript(std::string_view name, std::filesystem::path path = std::filesystem::current_path().c_str());
+
 	private:
+
+		void parseCommandLine(const std::string & line);
+
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
 		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree for commands
 		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;									//!< History of executed commands
 		CommandData m_CommandData;											//!< Console Items (Logging)
-
-		bool m_RegisterCommandSuggestion = true;							//!< Flag that determines if commands will be registered for autcoomplete.
+		std::unordered_map<std::string, Script*> m_Scripts;					//!< Scripts
+		bool m_RegisterCommandSuggestion = true;							//!< Flag that determines if commands will be registered for autocomplete.
 	};
 }
 

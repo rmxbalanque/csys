@@ -69,7 +69,7 @@ namespace ccli
 
 	CCLI_INLINE const std::string &CommandHistory::index(int index)
 	{
-		return m_History[std::max(0, std::min(index, (int)m_History.size() - 1))];
+		return m_History[std::max(0, std::min(index, static_cast<int>(m_History.size()) - 1))];
 	}
 
 	CCLI_INLINE std::ostream &operator<<(std::ostream &os, const CommandHistory &history)

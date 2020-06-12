@@ -19,6 +19,7 @@ set(CCLI_TEST_SOURCES
         test_string_argument.cpp
         test_command_data.cpp
         test_history.cpp
+        test_script.cpp
         main.cpp)
 
 # Set up testing.

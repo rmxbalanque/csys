@@ -13,3 +13,4 @@
 #include "ccli_system.inl"
 #include "ccli_history.inl"
 #include "ccli_command_data.inl"
+#include "ccli_script.inl"

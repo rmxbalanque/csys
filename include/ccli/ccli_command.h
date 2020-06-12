@@ -34,7 +34,7 @@ namespace ccli
 			unsigned long start = 0;
 			try { Call(input, start, std::make_index_sequence<sizeof... (Args)>{}); }
 			catch (ArgumentException& ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
-			return CommandItem(COMMAND);
+			return CommandItem(NONE);
     }
 
     std::string Help() override
@@ -78,7 +78,7 @@ namespace ccli
 				if (!isspace(c))
 					return CommandItem(ERROR) << (m_Name.m_String + ": Called with arguments");
 			m_Function();
-			return CommandItem(COMMAND);
+			return CommandItem(NONE);
 		}
 
 		std::string Help() override

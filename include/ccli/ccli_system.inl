@@ -29,7 +29,87 @@ namespace ccli
 		m_SuggestionTree.insert(s_Get.data());
 	}
 
-	CCLI_INLINE void System::parse(const std::string &line)
+	CCLI_INLINE void System::runCommand(const std::string &line)
+	{
+		// Error checking.
+		if (line.empty())
+			return;
+		
+		// Log command.
+		log(ccli::ItemType::COMMAND) << line << ccli::endl;
+
+		// Parse command line.
+		parseCommandLine(line);
+		
+	}
+
+	CCLI_INLINE void System::runScript(std::string_view script_name)
+	{
+		// Attempt to find script.
+		auto script_pair = m_Scripts.find(script_name.data());
+
+		// Exit if not found.
+		if (script_pair == m_Scripts.end())
+		{
+			m_CommandData.log(ERROR) << "Script \"" << script_name << "\" not found" << ccli::endl;
+			return;
+		}
+
+		// About to run script.
+		m_CommandData.log(LOG) << "Running \"" << script_name << "\"" << ccli::endl;
+
+		// Run script.
+		for (const auto &cmd : script_pair->second->data())
+		{
+			// Parse command.
+			runCommand(cmd);
+		}
+	}
+
+	CCLI_INLINE void System::registerScript(std::string_view name, std::filesystem::path path)
+	{
+		// Helper for easy file accessing.
+		// TODO: Check what to do with this.
+		if (path == std::filesystem::current_path())
+			path /= name.data();
+
+		// Attempt to find scripts.
+		auto script = m_Scripts.find(name.data());
+
+		// TODO: Assert or cout error? Or other.
+		// Don't register if script already exists.
+		if (script == m_Scripts.end())
+			m_Scripts[name.data()] = new Script(path.c_str());
+	}
+
+	// Getters ////////////////////////////////////////////////////////////////
+
+	CCLI_INLINE acTernarySearchTree &System::cmdAutocomplete()
+	{ return m_SuggestionTree; }
+
+	CCLI_INLINE acTernarySearchTree &System::varAutocomplete()
+	{ return m_VariableSuggestionTree; }
+
+	CCLI_INLINE CommandHistory &System::history()
+	{ return m_CommandHistory; }
+
+	CCLI_INLINE std::vector<CommandItem> &System::items()
+	{ return m_CommandData.items(); }
+
+	CCLI_INLINE CommandData &System::log(ItemType type)
+	{ return m_CommandData.log(type); }
+
+	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()
+	{ return m_CommandContainer; }
+
+	CCLI_INLINE std::unordered_map<std::string, Script *> System::scripts()
+	{ return m_Scripts; }
+
+	///////////////////////////////////////////////////////////////////////////
+	// Private methods ////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+
+	CCLI_INLINE void System::parseCommandLine(const std::string &line)
 	{
 		// Error.
 		if (line.empty())
@@ -117,7 +197,11 @@ namespace ccli
 			}
 
 			// Execute command.
-			(*command->second)(arg);
+			auto cmd_out = (*command->second)(arg);
+			
+			// Log output.
+			if (cmd_out.m_Type != NONE)
+				m_CommandData.items().emplace_back(cmd_out);
 		}
 		else
 		{
@@ -135,29 +219,11 @@ namespace ccli
 			String arg = cmd_endpos == std::string::npos ? "" : line.substr(cmd_endpos).data();
 
 			// Execute command.
-			(*command->second)(arg);
+			auto cmd_out = (*command->second)(arg);
+
+			// Log output.
+			if (cmd_out.m_Type != NONE)
+				m_CommandData.items().emplace_back(cmd_out);
 		}
-
-
 	}
-
-	// Getters ////////////////////////////////////////////////////////////////
-
-	CCLI_INLINE acTernarySearchTree &System::cmdAutocomplete()
-	{ return m_SuggestionTree; }
-
-	CCLI_INLINE acTernarySearchTree &System::varAutocomplete()
-	{ return m_VariableSuggestionTree; }
-
-	CCLI_INLINE CommandHistory &System::history()
-	{ return m_CommandHistory; }
-
-	CCLI_INLINE std::vector<CommandItem> &System::items()
-	{ return m_CommandData.items(); }
-
-	CCLI_INLINE CommandData &System::log(ItemType type)
-	{ return m_CommandData.log(type); }
-
-	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()
-	{ return m_CommandContainer; }
 }

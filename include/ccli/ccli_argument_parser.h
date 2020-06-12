@@ -215,11 +215,11 @@ namespace ccli
 		range = input.NextPoi(range.first);
 		start = range.first;
 
-		std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
+//		std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
 		while (range.first < input.End() - 1)
 		{
 			start = range.first;
-			std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
+//			std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
 
 			if (input.m_String[start] == '[')
 			{
@@ -236,7 +236,7 @@ namespace ccli
 					--range.second;
 				input.m_String[range.second] = ' ';
 
-			  std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
+//			  std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
 			  if (!std::isspace(input.m_String[start]))
 					m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
 				return;

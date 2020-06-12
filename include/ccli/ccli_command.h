@@ -77,6 +77,7 @@ namespace ccli
 			for (auto c : input.m_String)
 				if (!isspace(c))
 					return CommandItem(ERROR) << (m_Name.m_String + ": Called with arguments");
+			m_Function();
 			return CommandItem(COMMAND);
 		}
 

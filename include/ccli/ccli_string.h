@@ -16,7 +16,7 @@ namespace ccli
 	struct CCLI_API String
 	{
 		String() = default;
-		String(const char *str) : m_String(str) {}
+		String(const char *str) : m_String(str ? str:"") {}
 		String(std::string str) : m_String(std::move(str)) {}
 		operator const char*() { return m_String.c_str(); }
 		operator std::string() { return m_String; }

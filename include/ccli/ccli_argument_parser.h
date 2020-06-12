@@ -19,13 +19,15 @@ namespace ccli
 	struct CCLI_API ArgumentParser
 	{
 		inline ArgumentParser(String &input, unsigned long &start);
-
 		T m_Value;
 	};
 
 	template<typename T>
 	inline ArgumentParser<T>::ArgumentParser(String &input, unsigned long &start)
 	{
+		// getting rid of warnings
+		input;start;
+
 //		static_assert(, "Unsupported type T"); // ADD THIS SO PEOPLE DONT USE THEIR OWN TYPES
 		throw ArgumentException("Unsupported type: " + std::string(typeid(T).name()));
 	}
@@ -55,27 +57,32 @@ namespace ccli
 
 	ARG_PARSE_BASE_SPEC(ccli::String)
 	{
-		ccli::String result;
 		auto range = input.NextPoi(start);
 		if (input.m_String[range.first] != '"')
 			throw ArgumentException("Invalid string argument", input.m_String.substr(range.first, range.second));
-		else
-			++range.first;
-
-		// make ending in ] okay so like "]
+		++range.first;
 		while (true)
 		{
-			m_Value.m_String += input.m_String.substr(range.first, range.second);
-			// at the end
-			if (m_Value.m_String[m_Value.End() - 2] == '\"')
-				break;
-				// doesnt end it "
-			else if (range.second == input.End() - 1)
+			range.second = input.m_String.find('"', range.first);
+			if (range.second == std::string::npos)
 				throw ArgumentException("Invalid string argument", m_Value);
-			range = input.NextPoi(start);
-		}
 
-		m_Value.m_String.pop_back();
+			m_Value.m_String += input.m_String.substr(range.first, range.second - 2);
+			std::cout << "value = |" << m_Value.m_String << '|' << std::endl;
+
+			if (range.second != (unsigned long)input.m_String.size() - 1)
+			{
+				if (isspace(input.m_String[range.second + 1]))
+					break;
+				else
+					while(input.m_String[range.second + 1] == '"' && range.second < input.End() - 1)
+						++range.second;
+				range.first = range.second;
+			}
+			else if (range.second == (unsigned long)input.m_String.size() - 1)
+				break;
+		}
+		start = range.second + 1;
 	}
 
 	ARG_PARSE_BASE_SPEC(bool)
@@ -211,13 +218,18 @@ namespace ccli
 			}
 			else if (input.m_String[range.second - 1] == ']')
 			{
-				if (range.first == range.second - 1) return;
+				if (range.first == range.second - 1)
+				{
+					++start;
+					return;
+				}
 				while (input.m_String[range.second - 1] == ']' && range.first != range.second)
 					--range.second;
 				input.m_String[range.second] = ' ';
 
 			  std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
-				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
+			  if (!std::isspace(input.m_String[start]))
+					m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
 				return;
 			}
 			else

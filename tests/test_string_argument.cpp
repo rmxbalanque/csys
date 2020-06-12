@@ -3,7 +3,7 @@
 //
 
 #include "doctest.h"
-#include "ccli.h"
+#include "ccli_command.h"
 
 TEST_CASE("String Argument")
 {

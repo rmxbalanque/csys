@@ -1,6 +1,5 @@
-#include "ccli_command_data.h"
 #include "doctest.h"
-#undef WARN
+#include "ccli_command_data.h"
 
 TEST_CASE("Autocomplete")
 {

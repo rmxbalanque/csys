@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <vector>
+#include "ccli_pch.h"
 #include "base.h"
 
 namespace ccli

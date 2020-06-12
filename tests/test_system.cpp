@@ -1,5 +1,5 @@
-#include "ccli_system.h"
 #include "doctest.h"
+#include "ccli_system.h"
 
 TEST_CASE("Test CCLI System Class")
 {

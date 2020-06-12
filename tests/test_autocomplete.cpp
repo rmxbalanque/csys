@@ -1,4 +1,3 @@
-#include <iostream>
 #include "doctest.h"
 #include "ccli_autocomplete.h"
 

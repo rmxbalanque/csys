@@ -13,7 +13,7 @@
 namespace ccli
 {
 	// TODO: Use modern pointers.
-
+	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
 	class CCLI_API System
 	{
 	public:
@@ -101,8 +101,8 @@ namespace ccli
 			m_CommandContainer[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
 		}
 
-		template<typename T, typename V>
-		void registerVariable(const std::string &name, V &var)
+		template<typename T>
+		void registerVariable(const std::string &name, T &var)
 		{
 			// Disable.
 			m_RegisterCommandSuggestion = false;

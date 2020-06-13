@@ -122,7 +122,7 @@ namespace ccli
 		size_t cmd_pos = line.find_first_not_of(' ');
 		if (cmd_pos == std::string::npos) return;
 		size_t cmd_endpos = line.find_first_of(' ', cmd_pos);
-		auto str = line.substr(cmd_pos, cmd_endpos);
+		auto str = line.substr(cmd_pos, cmd_endpos - cmd_pos);
 
 		// Set or get
 		bool is_cmd_set = str == s_Set;
@@ -141,7 +141,7 @@ namespace ccli
 
 			// Get command.
 			size_t var_endpos = line.find_first_of(' ', cmd_endpos + 1);
-			String spec_command_name = line.substr(cmd_pos, var_endpos).data();
+			String spec_command_name = line.substr(cmd_pos, var_endpos - cmd_pos).data();
 			String arg;
 
 			if (is_cmd_set)
@@ -170,7 +170,7 @@ namespace ccli
 				}
 
 				// Get argument.
-				arg.m_String = line.substr(arg_pos, arg_endpos);
+				arg.m_String = line.substr(arg_pos, arg_endpos - arg_pos);
 
 				// TODO: Check if this should be made optional.
 				if (arg_endpos != std::string::npos)

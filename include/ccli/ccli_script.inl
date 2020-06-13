@@ -6,11 +6,28 @@
 #endif
 
 #include <fstream>
-//#include "ccli_system.h"
 
 namespace ccli
 {
 	CCLI_INLINE Script::Script(std::string_view path, bool load_on_init) : m_Path(path)
+	{
+		// Load file.
+		if (load_on_init && std::filesystem::exists(path) && !std::filesystem::is_empty(path))
+		{
+			load();
+		}
+	}
+
+	CCLI_INLINE Script::Script(const std::string &path, bool load_on_init) : m_Path(path)
+	{
+		// Load file.
+		if (load_on_init && std::filesystem::exists(path) && !std::filesystem::is_empty(path))
+		{
+			load();
+		}
+	}
+
+	CCLI_INLINE Script::Script(const char *path, bool load_on_init) : m_Path(path)
 	{
 		// Load file.
 		if (load_on_init && std::filesystem::exists(path) && !std::filesystem::is_empty(path))
@@ -32,7 +49,7 @@ namespace ccli
 			// Read commands.
 			while (std::getline(script_fstream, line_buf))
 			{
-				m_Data.push_back(line_buf);
+				m_Data.emplace_back(line_buf);
 			}
 
 			// Close file.

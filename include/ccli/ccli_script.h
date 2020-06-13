@@ -8,20 +8,18 @@
 
 namespace ccli
 {
-	//class System;
-
 	class CCLI_API Script
 	{
 	public:
 		explicit Script(std::string_view path, bool load_on_init = true);
+		explicit Script(const std::string & path, bool load_on_init = true);
+		explicit Script(const char * path, bool load_on_init = true);
 
 		void load();
 
 		void reload();
 
 		const std::vector<std::string> & data();
-
-		//	void run(System & sys);
 
 	private:
 		std::vector<std::string> m_Data;

@@ -10,12 +10,26 @@ addons:
     packages:
       - libstdc++-8-dev
       - libc++-8-dev
-      - gcc-8
+      - g++-8
 
 # Setup compilers.
 compiler:
   - clang
   - gcc
+
+# Build matrix
+#matrix:
+#  fast_finish: true
+#  include:
+#    - os: linux
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - g++-7
+#      env:
+#        - MATRIX_EVAL=
 
 # Setup cmake.
 before_script:

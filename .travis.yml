@@ -1,41 +1,69 @@
+# Adapted from:
+# https://github.com/gabime/spdlog
+
 os: linux
 language: cpp
 dist: bionic
 sudo: false
 
-addons:
+addons: &gcc8
   apt:
     source:
       - ubuntu-toolchain-r-test
     packages:
-      - libstdc++-8-dev
       - libc++-8-dev
       - g++-8
 
-# Setup compilers.
-compiler:
-  - clang
-  - gcc
+addons: &clang7
+  apt:
+    source:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-8
+    packages:
+      - libstdc++-8-dev
+      - clang-8
 
-# Build matrix
-#matrix:
-#  fast_finish: true
-#  include:
-#    - os: linux
-#      addons:
-#        apt:
-#          sources:
-#            - ubuntu-toolchain-r-test
-#          packages:
-#            - g++-7
-#      env:
-#        - MATRIX_EVAL=
+# Setup compilers.
+#compiler:
+#  - clang
+#  - gcc
+
+
+ #TODO: Add build matrix to test different compilers and different libraries types (Shared, Static, Header Only)
+ #Build matrix
+matrix:
+  fast_finish: true
+  include:
+    # Test GCC 8, C++17, Build Debug/Release
+    - os: linux
+      addons: *gcc8
+      env: GCC_VERSION=8 BUILD_TYPE=Debug BUILD_SHARED=false
+
+    - os: linux
+      addons: *gcc8
+      env: GCC_VERSION=8 BUILD_TYPE=Debug BUILD_SHARED=true
+
+    # Test GCC 8, C++17, Build Debug/Release
+    - os: linux
+      addons: *clang7
+      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=true
+
+    - os: linux
+      addons: *clang7
+      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=false
+
 
 # Setup cmake.
 before_script:
+  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
+  - if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}"; fi
+  - which $CXX
+  - which $CC
+  - $CXX --version
+  - cmake --version
   - mkdir build
   - cd build
-  - cmake .. -DCCLI_BUILD_SHARED=ON -DCCLI_BUILD_EXAMPLES=ON -DCCLI_BUILD_TESTS=ON -DCCLI_BUILD_WARNINGS=ON
+  - cmake .. -DCCLI_BUILD_SHARED=${BUILD_SHARED} -DCCLI_BUILD_EXAMPLES=ON -DCCLI_BUILD_TESTS=ON -DCCLI_BUILD_WARNINGS=ON
 
 # Build.
 script:

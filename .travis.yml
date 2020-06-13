@@ -14,7 +14,7 @@ addons: &gcc8
       - libc++-8-dev
       - g++-8
 
-addons: &clang7
+addons: &clang8
   apt:
     source:
       - ubuntu-toolchain-r-test
@@ -32,6 +32,7 @@ addons: &clang7
  #TODO: Add build matrix to test different compilers and different libraries types (Shared, Static, Header Only)
  #Build matrix
 matrix:
+  fast_finish: true
   include:
     # Test GCC 8, C++17, Build Debug/Release
     - os: linux
@@ -45,13 +46,13 @@ matrix:
     # Test GCC 8, C++17, Build Debug/Release
     - os: linux
       dist: bionic
-      addons: *clang7
-      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=true
+      addons: *clang8
+      env: CLANG_VERSION=8 BUILDT_TYPE=Debug BUILD_SHARED=true
 
     - os: linux
       dist: bionic
-      addons: *clang7
-      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=false
+      addons: *clang8
+      env: CLANG_VERSION=8 BUILDT_TYPE=Debug BUILD_SHARED=false
 
 
 # Setup cmake.

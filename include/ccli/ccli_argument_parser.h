@@ -64,7 +64,7 @@ namespace ccli
 
 		while (true)
 		{
-			range.second = input.m_String.find('\"', range.first);
+			range.second = static_cast<unsigned long>(input.m_String.find('\"', range.first));
 			if (range.second == std::string::npos)
 				throw ArgumentException("Invalid string argument", m_Value);
 //			std::cout << "second = " << input.m_String[range.second] << " Sub = |" << input.m_String.substr(range.first, range.second - range.first) << "|" << std::endl;

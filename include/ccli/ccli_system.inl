@@ -66,20 +66,20 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void System::registerScript(std::string_view name, std::filesystem::path path)
+	CCLI_INLINE void System::registerScript(const std::string &name, std::filesystem::path path)
 	{
 		// Helper for easy file accessing.
 		// TODO: Check what to do with this.
 		if (path == std::filesystem::current_path())
-			path /= name.data();
+			path /= name;
 
 		// Attempt to find scripts.
-		auto script = m_Scripts.find(name.data());
+		auto script = m_Scripts.find(name);
 
 		// TODO: Assert or cout error? Or other.
 		// Don't register if script already exists.
 		if (script == m_Scripts.end())
-			m_Scripts[name.data()] = new Script(path.c_str());
+			m_Scripts[name] = new Script(path.c_str());
 
 		// TODO: Register in autocomplete
 	}

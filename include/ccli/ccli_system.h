@@ -127,7 +127,7 @@ namespace ccli
 		 * \param name Script name
 		 * \param path Scrip path
 		 */
-		void registerScript(std::string_view name, std::filesystem::path path = std::filesystem::current_path().c_str());
+		void registerScript(const std::string &name, std::filesystem::path path = std::filesystem::current_path().c_str());
 
 		void unregisterCommand(const std::string &cmd_name);
 

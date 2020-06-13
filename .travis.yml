@@ -8,6 +8,7 @@ addons:
     source:
       - ubuntu-toolchain-r-test
     packages:
+      - libstdc++-7-dev
       - libc++-dev
 
 # Setup compilers.

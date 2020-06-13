@@ -3,6 +3,13 @@ language: cpp
 dist: bionic
 sudo: false
 
+addons:
+  apt:
+    source:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libc++-dev
+
 # Setup compilers.
 compiler:
   - clang

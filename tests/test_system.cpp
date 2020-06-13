@@ -23,4 +23,12 @@ TEST_CASE("Test CCLI System Class")
 	CHECK(time_variable == 15);
 	temp.runCommand("set temp_var 30");
 	CHECK(temp_var == 30);
+
+	temp.unregisterVariable("time");
+	temp.runCommand("set time 10");
+	CHECK(time_variable == 15);
+
+	temp.unregisterCommand("test");
+	temp.runCommand("test false");
+	CHECK(test_flag);
 }

@@ -80,6 +80,64 @@ namespace ccli
 		// Don't register if script already exists.
 		if (script == m_Scripts.end())
 			m_Scripts[name.data()] = new Script(path.c_str());
+
+		// TODO: Register in autocomplete
+	}
+
+
+	CCLI_INLINE void System::unregisterCommand(const std::string &cmd_name)
+	{
+		// Exit if non existent.
+		if (cmd_name.empty()) return;
+
+		// Get command.
+		auto it = m_CommandContainer.find(cmd_name);
+
+		// Erase if found.
+		if (it != m_CommandContainer.end())
+		{
+			// TODO: Erase from autocomplete
+			delete it->second;
+			m_CommandContainer.erase(it);
+		}
+	}
+
+	CCLI_INLINE void System::unregisterVariable(const std::string &var_name)
+	{
+		// Exit if non existent.
+		if (var_name.empty()) return;
+
+		// Get command.
+		auto s_it = m_CommandContainer.find("set " + var_name);
+		auto g_it = m_CommandContainer.find("get " + var_name);
+
+		// Erase if found.
+		if (s_it != m_CommandContainer.end() && g_it != m_CommandContainer.end())
+		{
+			// TODO: Erase from autocomplete
+			delete s_it->second;
+			m_CommandContainer.erase(s_it);
+
+			delete g_it->second;
+			m_CommandContainer.erase(g_it);
+		}
+	}
+
+	CCLI_INLINE void System::unregisterScript(const std::string &script_name)
+	{
+		// Exit if non existent.
+		if (script_name.empty()) return;
+
+		// Get command.
+		auto it = m_Scripts.find(script_name);
+
+		// Erase if found.
+		if (it != m_Scripts.end())
+		{
+			// TODO: Erase from autocomplete
+			delete it->second;
+			m_Scripts.erase(it);
+		}
 	}
 
 	// Getters ////////////////////////////////////////////////////////////////

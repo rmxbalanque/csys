@@ -129,6 +129,12 @@ namespace ccli
 		 */
 		void registerScript(std::string_view name, std::filesystem::path path = std::filesystem::current_path().c_str());
 
+		void unregisterCommand(const std::string &cmd_name);
+
+		void unregisterVariable(const std::string &var_name);
+
+		void unregisterScript(const std::string &script_name);
+
 	private:
 
 		void parseCommandLine(const std::string & line);					//!< Parse command line and execute command

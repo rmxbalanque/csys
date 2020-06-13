@@ -9,14 +9,6 @@
 
 namespace ccli
 {
-	CCLI_INLINE Script::Script(std::string_view path, bool load_on_init) : m_Path(path)
-	{
-		// Load file.
-		if (load_on_init && std::filesystem::exists(path) && !std::filesystem::is_empty(path))
-		{
-			load();
-		}
-	}
 
 	CCLI_INLINE Script::Script(const std::string &path, bool load_on_init) : m_Path(path)
 	{

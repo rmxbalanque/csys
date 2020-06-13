@@ -11,7 +11,6 @@ namespace ccli
 	class CCLI_API Script
 	{
 	public:
-		explicit Script(std::string_view path, bool load_on_init = true);
 		explicit Script(const std::string & path, bool load_on_init = true);
 		explicit Script(const char * path, bool load_on_init = true);
 

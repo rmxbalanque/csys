@@ -13,7 +13,8 @@ namespace ccli
 	// TODO: Todo add max word suggestion depth.
 	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
 	// TODO: Add test cases for all of the functions.
-
+	// TODO: Add erase word method.
+	
 	//!< Auto complete ternary tree.
 	class CCLI_API acTernarySearchTree
 	{

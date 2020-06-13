@@ -79,7 +79,7 @@ namespace ccli
 		// TODO: Assert or cout error? Or other.
 		// Don't register if script already exists.
 		if (script == m_Scripts.end())
-			m_Scripts[name] = new Script(path.c_str());
+			m_Scripts[name] = new Script(static_cast<const char *>(path.c_str()));
 
 		// TODO: Register in autocomplete
 	}

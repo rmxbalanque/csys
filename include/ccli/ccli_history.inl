@@ -17,7 +17,6 @@ namespace ccli
 
 	CCLI_INLINE CommandHistory::CommandHistory(unsigned int maxRecord) : m_Record(0), m_MaxRecord(maxRecord), m_History(maxRecord)
 	{
-		m_History.reserve(maxRecord);
 	}
 
 	CCLI_INLINE void CommandHistory::push_back(const std::string &line)
@@ -54,7 +53,6 @@ namespace ccli
 	CCLI_INLINE void CommandHistory::clear()
 	{
 		m_Record = 0;
-		m_History.clear();
 	}
 
 	CCLI_INLINE const std::string &CommandHistory::operator[](unsigned int index)

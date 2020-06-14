@@ -43,7 +43,7 @@ TEST_CASE("Test ccli history ")
 		CHECK(c_history.size() == 3);
 
 		c_history.clear();
-		for (int i = 0; i < 3; ++i)
+		for (unsigned int i = 0; i < 3; ++i)
 			c_history.push_back(commands[i]);
 		CHECK(c_history.get_old() == "h1");
 		CHECK(c_history.get_old_index() == 0);

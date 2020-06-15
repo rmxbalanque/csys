@@ -104,7 +104,12 @@ namespace ccli
 
 	CCLI_INLINE void acTernarySearchTree::insert(const std::string &str)
 	{
-		insert(str.data());
+		insert(str.c_str());
+	}
+
+	CCLI_INLINE void acTernarySearchTree::remove(const std::string &word)
+	{
+		removeAux(m_Root, word.c_str());
 	}
 
 	CCLI_INLINE void acTernarySearchTree::suggestions(const char *prefix, std::vector<std::string> &ac_options)
@@ -244,5 +249,46 @@ namespace ccli
 		{
 			suggestionsAux(root->m_Greater, ac_options, buffer);
 		}
+	}
+
+	bool acTernarySearchTree::removeAux(acTernarySearchTree::acNode *root, const char *word)
+	{
+		if (!root) return false;
+
+		// String is in TST.
+		if (*(word + 1) == '\0' && root->m_Data == *word)
+		{
+			// Un-mark word node.
+			if (root->m_IsWord)
+			{
+				root->m_IsWord = false;
+				return (!root->m_Equal && !root->m_Less && !root->m_Greater);
+			}
+			// String is a prefix.
+			else
+				return false;
+		}
+		else
+		{
+			// String is a prefix.
+			if (*word < root->m_Data)
+				removeAux(root->m_Less, word);
+			else if (*word > root->m_Data)
+				removeAux(root->m_Greater, word);
+
+			// String is in TST.
+			else if (*word == root->m_Data)
+			{
+				// Char is unique.
+				if (removeAux(root->m_Equal, word + 1))
+				{
+					delete root->m_Equal;
+					root->m_Equal = nullptr;
+					return !root->m_IsWord && (!root->m_Equal && !root->m_Less && !root->m_Greater);
+				}
+			}
+		}
+
+		return false;
 	}
 }

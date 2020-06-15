@@ -13,7 +13,6 @@ namespace ccli
 	// TODO: Todo add max word suggestion depth.
 	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
 	// TODO: Add test cases for all of the functions.
-	// TODO: Add erase word method.
 	
 	//!< Auto complete ternary tree.
 	class CCLI_API acTernarySearchTree
@@ -166,7 +165,12 @@ namespace ccli
 				}
 			}
 		}
-		
+
+		/*!
+		 * \brief Removes a word from the tree if found
+		 * \param[in] word String to be removed
+		 */
+		void remove(const std::string &word);
 
 		/*!
 		 * \brief Retrieve suggestions that match the given prefix
@@ -266,6 +270,14 @@ namespace ccli
 		 * \param[in] buffer Prefix buffer
 		 */
 		void suggestionsAux(acNode *root, r_sVector ac_options, std::string buffer);
+
+		/*!
+		 * \brief Remove word auxiliary function
+		 * \param[in] root Current node to process
+		 * \param[in] word String to look for and remove
+		 * \return If node is word
+		 */
+		bool removeAux(acNode *root, const char * word);
 
 		acNode *m_Root = nullptr;  	//!< Ternary Search Tree Root node
 		size_t m_Size = 0;			//!< Node count

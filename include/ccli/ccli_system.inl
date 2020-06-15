@@ -18,15 +18,15 @@ namespace ccli
 	static constexpr std::string_view s_ErrorNoVar = "No variable provided";
 	static constexpr std::string_view s_ErrorBadArg = "No a valid argument";
 	static constexpr std::string_view s_ErrorNoArg = "No argument provided";
-	static constexpr std::string_view s_WarnMoreArgs = "More arguments than required were specified";
+	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
 	static constexpr std::string_view s_ErrorSetGetNotFound = "Command doesn't exists and/or variable is not registered";
 	static constexpr std::string_view s_ErrorCmdNotFound = "Command doesn't exist";
 
 	CCLI_INLINE System::System()
 	{
 		// Register pre-defined commands.
-		m_SuggestionTree.insert(s_Set.data());
-		m_SuggestionTree.insert(s_Get.data());
+		m_CommandSuggestionTree.insert(s_Set.data());
+		m_CommandSuggestionTree.insert(s_Get.data());
 	}
 
 	CCLI_INLINE void System::runCommand(const std::string &line)
@@ -81,7 +81,7 @@ namespace ccli
 		if (script == m_Scripts.end())
 			m_Scripts[name] = new Script(path.string(), true);
 
-		// TODO: Register in autocomplete
+		m_VariableSuggestionTree.insert(name);
 	}
 
 
@@ -96,7 +96,7 @@ namespace ccli
 		// Erase if found.
 		if (it != m_CommandContainer.end())
 		{
-			// TODO: Erase from autocomplete
+			m_CommandSuggestionTree.remove(cmd_name);
 			delete it->second;
 			m_CommandContainer.erase(it);
 		}
@@ -114,7 +114,8 @@ namespace ccli
 		// Erase if found.
 		if (s_it != m_CommandContainer.end() && g_it != m_CommandContainer.end())
 		{
-			// TODO: Erase from autocomplete
+			m_VariableSuggestionTree.remove(var_name);
+
 			delete s_it->second;
 			m_CommandContainer.erase(s_it);
 
@@ -134,7 +135,7 @@ namespace ccli
 		// Erase if found.
 		if (it != m_Scripts.end())
 		{
-			// TODO: Erase from autocomplete
+			m_VariableSuggestionTree.remove(script_name);
 			delete it->second;
 			m_Scripts.erase(it);
 		}
@@ -143,7 +144,7 @@ namespace ccli
 	// Getters ////////////////////////////////////////////////////////////////
 
 	CCLI_INLINE acTernarySearchTree &System::cmdAutocomplete()
-	{ return m_SuggestionTree; }
+	{ return m_CommandSuggestionTree; }
 
 	CCLI_INLINE acTernarySearchTree &System::varAutocomplete()
 	{ return m_VariableSuggestionTree; }
@@ -230,10 +231,11 @@ namespace ccli
 				// Get argument.
 				arg.m_String = line.substr(arg_pos, arg_endpos - arg_pos);
 
-				// TODO: Check if this should be made optional.
+				// Extra args.
 				if (arg_endpos != std::string::npos)
 				{
-					log(WARNING) << s_WarnMoreArgs << endl;
+					log(ERROR) << s_ErrorMoreArgs << endl;
+					return;
 				}
 			}
 			else
@@ -242,7 +244,8 @@ namespace ccli
 				size_t arg_pos = line.find_first_not_of(' ', var_endpos);
 				if (arg_pos == line.length() || arg_pos != std::string::npos)
 				{
-					log(WARNING) << s_WarnMoreArgs << endl;
+					log(WARNING) << s_ErrorMoreArgs << endl;
+					return;
 				}
 			}
 

@@ -94,7 +94,7 @@ namespace ccli
 			// Register for autocomplete.
 			if (m_RegisterCommandSuggestion)
 			{
-				m_SuggestionTree.insert(name.m_String);
+				m_CommandSuggestionTree.insert(name.m_String);
 			}
 
 			// Add commands to system here
@@ -129,10 +129,22 @@ namespace ccli
 		 */
 		void registerScript(const std::string &name, std::filesystem::path path = std::filesystem::current_path().c_str());
 
+		/*!
+		 * \brief Unregister command from console system
+		 * \param cmd_name Command to unregister
+		 */
 		void unregisterCommand(const std::string &cmd_name);
 
+		/*!
+		 * \brief Unregister variable from console system
+		 * \param var_name Variable to unregister
+		 */
 		void unregisterVariable(const std::string &var_name);
 
+		/*!
+		 * \brief Unregister script from console system
+		 * \param script_name Script to unregister
+		 */
 		void unregisterScript(const std::string &script_name);
 
 	private:
@@ -140,7 +152,7 @@ namespace ccli
 		void parseCommandLine(const std::string & line);					//!< Parse command line and execute command
 
 		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
-		acTernarySearchTree m_SuggestionTree;								//!< Autocomplete Ternary Search Tree for commands
+		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands
 		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;									//!< History of executed commands
 		CommandData m_CommandData;											//!< Console Items (Logging)

@@ -1,5 +1,7 @@
 #include "doctest.h"
 #include "ccli_autocomplete.h"
+#include <algorithm>
+#include <string>
 
 #define SEARCH_CHECK(word){\
 	CHECK(tree.search(word));}\
@@ -27,15 +29,12 @@
 		std::string partial = prefix;\
 		tree.suggestions(partial, results, true);\
 		bool check = false;\
-		for (const auto &result : results)\
+		for (const auto &suggestion : suggestions)\
 		{\
-			for (const auto &suggestion : suggestions)\
-			{\
-				if (suggestion == result)\
-					check = true;\
-			}\
+			check = std::find(results.begin(), results.end(), suggestion.c_str()) != results.end();\
 		}\
 		bool check_2 = partial == partial_ac;\
+		CHECK_MESSAGE(suggestions.size() == results.size(), "Size not matched");\
 		CHECK_MESSAGE(check, "Autocomplete suggestions did not match expected output");\
 		CHECK_MESSAGE(check_2, std::string("Partial completion did not match expected output -> ") + partial + " != " + partial_ac);\
 	}
@@ -89,6 +88,21 @@ TEST_CASE("Autocomplete")
 	{
 		SUGGESTION_PARTIAL_CHECK(tree2, "r", "rol", "roland", "rolipoli", "rolling")
 		SUGGESTION_PARTIAL_CHECK(tree2, "m", "m", "munguia", "muchos", "michael")
+	}
+
+	// Deletion from tree.
+	SUBCASE("Delete notes from tree")
+	{
+		tree2.insert("roli");
+		CHECK(tree2.search("roland"));
+		tree2.remove("roland");
+		CHECK(tree2.search("roli"));
+		tree2.remove("roli");
+		CHECK(!tree2.search("roli"));
+		CHECK(!tree2.search("roland"));
+		CHECK(tree2.search("rolling"));
+		CHECK(tree2.search("rolipoli"));
+		SUGGESTION_PARTIAL_CHECK(tree2, "r", "rol", "rolipoli", "rolling");
 	}
 
 	// ADD MORE TESTS

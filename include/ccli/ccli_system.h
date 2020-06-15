@@ -24,6 +24,11 @@ namespace ccli
 		System();
 
 		/*!
+		 * \brief Clean up console system object
+		 */
+		~System();
+
+		/*!
 		 * \brief Parse given command and run it
 		 * \param line Command line string
 		 */
@@ -85,7 +90,7 @@ namespace ccli
 			static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
 
 			// TODO: This should be an exception.
-			if (m_CommandContainer.find(name.m_String) != m_CommandContainer.end())
+			if (m_Commands.find(name.m_String) != m_Commands.end())
 			{
 				std::cout << "ERROR: Command already exists." << std::endl;
 				return;
@@ -98,7 +103,7 @@ namespace ccli
 			}
 
 			// Add commands to system here
-			m_CommandContainer[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
+			m_Commands[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
 		}
 
 		template<typename T>
@@ -151,7 +156,7 @@ namespace ccli
 
 		void parseCommandLine(const std::string & line);					//!< Parse command line and execute command
 
-		std::unordered_map<std::string, CommandBase *> m_CommandContainer;	//!< Registered command container
+		std::unordered_map<std::string, CommandBase *> m_Commands;			//!< Registered command container
 		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands
 		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;									//!< History of executed commands

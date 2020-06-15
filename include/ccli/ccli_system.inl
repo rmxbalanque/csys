@@ -29,18 +29,28 @@ namespace ccli
 		m_CommandSuggestionTree.insert(s_Get.data());
 	}
 
+	CCLI_INLINE System::~System()
+	{
+		// Erase commands.
+		for (const auto & cmd : m_Commands)
+			delete cmd.second;
+
+		// Erase scripts.
+		for (const auto & script : m_Scripts)
+			delete script.second;
+	}
+
 	CCLI_INLINE void System::runCommand(const std::string &line)
 	{
 		// Error checking.
 		if (line.empty())
 			return;
-		
+
 		// Log command.
 		log(ccli::ItemType::COMMAND) << line << ccli::endl;
 
 		// Parse command line.
 		parseCommandLine(line);
-		
 	}
 
 	CCLI_INLINE void System::runScript(std::string_view script_name)
@@ -91,14 +101,14 @@ namespace ccli
 		if (cmd_name.empty()) return;
 
 		// Get command.
-		auto it = m_CommandContainer.find(cmd_name);
+		auto it = m_Commands.find(cmd_name);
 
 		// Erase if found.
-		if (it != m_CommandContainer.end())
+		if (it != m_Commands.end())
 		{
 			m_CommandSuggestionTree.remove(cmd_name);
 			delete it->second;
-			m_CommandContainer.erase(it);
+			m_Commands.erase(it);
 		}
 	}
 
@@ -108,19 +118,19 @@ namespace ccli
 		if (var_name.empty()) return;
 
 		// Get command.
-		auto s_it = m_CommandContainer.find("set " + var_name);
-		auto g_it = m_CommandContainer.find("get " + var_name);
+		auto s_it = m_Commands.find("set " + var_name);
+		auto g_it = m_Commands.find("get " + var_name);
 
 		// Erase if found.
-		if (s_it != m_CommandContainer.end() && g_it != m_CommandContainer.end())
+		if (s_it != m_Commands.end() && g_it != m_Commands.end())
 		{
 			m_VariableSuggestionTree.remove(var_name);
 
 			delete s_it->second;
-			m_CommandContainer.erase(s_it);
+			m_Commands.erase(s_it);
 
 			delete g_it->second;
-			m_CommandContainer.erase(g_it);
+			m_Commands.erase(g_it);
 		}
 	}
 
@@ -159,7 +169,7 @@ namespace ccli
 	{ return m_CommandData.log(type); }
 
 	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()
-	{ return m_CommandContainer; }
+	{ return m_Commands; }
 
 	CCLI_INLINE std::unordered_map<std::string, Script *> System::scripts()
 	{ return m_Scripts; }
@@ -250,8 +260,8 @@ namespace ccli
 			}
 
 			// Command not found.
-			auto command = m_CommandContainer.find(spec_command_name.m_String);
-			if (command == m_CommandContainer.end())
+			auto command = m_Commands.find(spec_command_name.m_String);
+			if (command == m_Commands.end())
 			{
 				log(ERROR) << s_ErrorSetGetNotFound << endl;
 				return;
@@ -259,7 +269,7 @@ namespace ccli
 
 			// Execute command.
 			auto cmd_out = (*command->second)(arg);
-			
+
 			// Log output.
 			if (cmd_out.m_Type != NONE)
 				m_CommandData.items().emplace_back(cmd_out);
@@ -267,10 +277,10 @@ namespace ccli
 		else
 		{
 			// Normal Command
-			auto command = m_CommandContainer.find(str);
+			auto command = m_Commands.find(str);
 
 			// Command not found.
-			if (command == m_CommandContainer.end())
+			if (command == m_Commands.end())
 			{
 				log(ERROR) << s_ErrorCmdNotFound << endl;
 				return;

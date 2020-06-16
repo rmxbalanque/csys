@@ -32,7 +32,7 @@ namespace ccli
 		CommandItem operator()(String &input) override
     {
       // call the function
-			unsigned long start = 0;
+			size_t start = 0;
 			try { Call(input, start, std::make_index_sequence<sizeof... (Args)>{}); }
 			catch (ArgumentException& ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
 			return CommandItem(NONE);

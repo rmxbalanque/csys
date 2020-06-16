@@ -181,7 +181,7 @@ namespace ccli
 	{
 		// Get first non-whitespace char.
 		size_t line_index = 0;
-		auto range = line.NextPoi(line_index);
+		std::pair<size_t, size_t> range = line.NextPoi(line_index);
 
 		// Just whitespace was passed in. Don't log as command.
 		if (range.first == line.End())

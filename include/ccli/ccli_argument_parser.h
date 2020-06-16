@@ -24,7 +24,7 @@ namespace ccli
 	template<typename T>
 	struct CCLI_API ArgumentParser
 	{
-		inline ArgumentParser(String &input, unsigned long &start);
+		inline ArgumentParser(String &input, size_t &start);
 		static inline bool IsEscapeChar(char c) { return c == '\\'; }
 		static inline bool IsReservedChar(char c)
 		{
@@ -49,12 +49,12 @@ namespace ccli
 	};
 
 	template<typename T>
-	inline ArgumentParser<T>::ArgumentParser(String &input, unsigned long &start)
+	inline ArgumentParser<T>::ArgumentParser(String &input, size_t &start)
 	{
 		// getting rid of warnings
 		if (input.End() == start) {}
 
-//		static_assert(, "Unsupported type T"); // ADD THIS SO PEOPLE DONT USE THEIR OWN TYPES
+		// TYPE T NOT SUPPORTED
 		throw ArgumentException("Unsupported type: " + std::string(typeid(T).name()));
 	}
 
@@ -62,7 +62,7 @@ namespace ccli
   template<> \
   struct CCLI_API ArgumentParser<TYPE> \
   { \
-    inline ArgumentParser(String &input, unsigned long &start); \
+    inline ArgumentParser(String &input, size_t &start); \
 		static inline bool IsEscapeChar(char c) { return c == '\\'; } \
 	  static inline bool IsReservedChar(char c) \
 	  { \
@@ -85,7 +85,7 @@ namespace ccli
 		} \
     TYPE m_Value = 0; \
   }; \
-  inline ArgumentParser<TYPE>::ArgumentParser(String &input, unsigned long &start)
+  inline ArgumentParser<TYPE>::ArgumentParser(String &input, size_t &start)
 
 #define ARG_PARSE_SUBSTR(range) input.m_String.substr(range.first, range.second - range.first)
 
@@ -277,12 +277,12 @@ namespace ccli
 	template<typename T>
 	struct CCLI_API ArgumentParser<std::vector<T>>
 	{
-		ArgumentParser(String &input, unsigned long &start);
+		ArgumentParser(String &input, size_t &start);
 		std::vector<T> m_Value;
 	};
 
 	template<typename T>
-	ArgumentParser<std::vector<T>>::ArgumentParser(String &input, unsigned long &start)
+	ArgumentParser<std::vector<T>>::ArgumentParser(String &input, size_t &start)
 	{
 		// case 1, [something]
 		// case 2, [something something1]

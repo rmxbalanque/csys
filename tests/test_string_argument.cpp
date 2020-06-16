@@ -56,7 +56,7 @@ TEST_CASE("String Argument")
 
 	// multi word strings
 	s.runCommand("0,1 \"Zero\" \"One\"");
-	s.runCommand("0,1     \"Zero\"    \"One\"    ");
+	s.runCommand("0,1     Zero    One    ");
 #pragma endregion
 
 #pragma region CORRECT USAGE VECTOR OF MULTI WORD(S)

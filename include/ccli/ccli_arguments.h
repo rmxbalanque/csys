@@ -80,16 +80,7 @@ namespace ccli
 		std::vector<T> m_Value;
 	};
 
-	// What if we supported most all stl data types? That would be cool
-  // vector of vector of vector ...
-	// array of size 3 of array of ...
-
-  // TODO: Use own char* not string
-  // TODO: Parse commandline for 'strings' and "strings"
-  // TODO: Support arrays with {} and [] style
-  // TODO: to override, if T = {string (accout for '' or ""), arrays with [] and {}, bool (for true and false (optional caps))}
   // TODO: Give better feedback and errors when they mess up
-  // TODO: If given MORE arguments than expected, it drops the rest (should give an error and message)
 }
 
 #endif //CCLI_ARGUMENTS_H

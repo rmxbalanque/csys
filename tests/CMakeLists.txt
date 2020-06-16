@@ -17,6 +17,7 @@ set(CCLI_TEST_SOURCES
         test_autocomplete.cpp
         test_system.cpp
         test_string_argument.cpp
+        test_char_argument.cpp
         test_command_data.cpp
         test_history.cpp
         test_script.cpp

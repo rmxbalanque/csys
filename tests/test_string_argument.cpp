@@ -1,5 +1,5 @@
 //
-// Created by antimatter on 6/9/20.
+// Created by antimatter on 6/9/20
 //
 
 #include "doctest.h"
@@ -12,8 +12,10 @@ TEST_CASE("String Argument")
 	System s;
 
 #pragma region CORRECT USAGE SINGLE WORD
-	s.registerCommand("0", "", [](String str) {
-			CHECK(str.m_String == "Zero");
+	String strt;
+	s.registerCommand("0", "", [&strt](String str) {
+		  strt = str;
+//			std::cout << "String -> " << str.m_String << std::endl;
 		}, Arg<String>(""));
 
 	s.registerCommand("1", "", [](const char *str) {
@@ -24,13 +26,27 @@ TEST_CASE("String Argument")
 			CHECK(str == "Two");
 		}, Arg<String>(""));
 
-	// single word strings
-	s.runCommand("0 \"Zero\"");
-	s.runCommand("0 \"Ze\"ro\"");
-	s.runCommand("0 \"Ze\"\"ro\"");
+	s.registerCommand("3", "", [](std::string str) {
+						CHECK(str == "");
+	}, Arg<String>(""));
 
-	s.runCommand("1 \"One\"");
-	s.runCommand("2 \"Two\"");
+	// single word strings
+	s.runCommand("0 Zero\\]"); // Zero\] -> Zero\]
+	CHECK((strt.m_String == "Zero]"));
+	strt.m_String.clear();
+
+	s.runCommand("0 \"Zero\\\"\""); // Zero\] -> Zero\]
+  CHECK((strt.m_String == "Zero\""));
+	strt.m_String.clear();
+
+	s.runCommand("0 \"Zero \\\" \\\\\""); // Zero\] -> Zero\]
+					CHECK((strt.m_String == "Zero \" \\"));
+	strt.m_String.clear();
+
+	s.runCommand("0 \"Zero\"\"One\"\"    #    \""); // Zero\] -> Zero\]
+					CHECK((strt.m_String == "ZeroOne    #    "));
+	strt.m_String.clear();
+
 #pragma endregion
 
 #pragma region CORRECT USAGE MANY WORDS
@@ -40,6 +56,7 @@ TEST_CASE("String Argument")
 
 	// multi word strings
 	s.runCommand("0,1 \"Zero\" \"One\"");
+	s.runCommand("0,1     \"Zero\"    \"One\"    ");
 #pragma endregion
 
 #pragma region CORRECT USAGE VECTOR OF MULTI WORD(S)
@@ -55,14 +72,37 @@ TEST_CASE("String Argument")
 	}, Arg<std::vector<String>>(""));
 
 	// multi word strings
-	s.runCommand("0,1,2 [\"Zero\" \"One\" \"Two\"]");
+	s.runCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
 #pragma endregion
 
-#pragma region CORRECT USAGE VECTOR OF VECTOR OF WORD(S)
+#pragma region CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
+	s.registerCommand("0,1,2", "", [](std::vector<std::vector<String>> strs) {
+		std::vector<std::vector<std::string>> arr = { {"One", "Two"}, {" |Three| |Yeet|"}, { " Four]", "FIVE?" } };
+		CHECK((strs[0][0].m_String == arr[0][0]));
+		CHECK((strs[0][1].m_String == arr[0][1]));
+		CHECK((strs[1][0].m_String == arr[1][0]));
+		CHECK((strs[2][0].m_String == arr[2][0]));
+		CHECK((strs[2][1].m_String == arr[2][1]));
+	}, Arg<std::vector<std::vector<String>>>(""));
 
+	// multi word strings
+	s.runCommand("0,1,2 [[One Two] [\" |Three| |Yeet|\"] [\" Four\\]\" FIVE?]]");
 #pragma endregion
 
-#pragma region CORRECT USAGE VECTOR OF VECTOR OF VECTOR OF WORD(S)
+	s.registerCommand("char0", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
+	s.registerCommand("char1", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
+	s.registerCommand("char2", "", [](char c) { CHECK(c == '\\'); }, Arg<char>(""));
+	s.registerCommand("char3", "", [](char c) { CHECK(c == 'a'); }, Arg<char>(""));
+	s.registerCommand("char4", "", [](char c) { CHECK(c == 'b'); }, Arg<char>(""));
 
-#pragma endregion
+	// multi word strings
+	s.runCommand("char0 \"");   // \ issue
+	s.runCommand("char0 ");   // \ issue
+	s.runCommand("char0 a\"");  // too many
+	s.runCommand("char0 aa");   // too many
+	s.runCommand("char0 aaa");   // too many
+	s.runCommand("char1 \\\""); // " good
+	s.runCommand("char2 \\\\"); // \ good
+	s.runCommand("char3 a");    // a good
+	s.runCommand("char4 b");    // b good
 }

@@ -14,7 +14,7 @@ TEST_CASE("Test ccli history ")
 			c_history.push_back(cmd);
 		}
 
-		for (int i = 0; i < (int)commands.size(); ++i)
+		for (size_t i = 0, size = commands.size(); i < size; ++i)
 		{
 			CHECK(c_history[i] == commands[i]);
 		}
@@ -72,8 +72,6 @@ TEST_CASE("Test ccli history ")
 		CHECK(c_history.get_new() == "dummy63");
 		CHECK(c_history.get_new_index() == 3);
 		CHECK(c_history.get_old_index() == 4);
-		CHECK(c_history.index(-1) == "dummy60");
-		CHECK(c_history.index(90000) == "dummy59");
 
 		c_history.clear();
 		CHECK(c_history.size() == 0);

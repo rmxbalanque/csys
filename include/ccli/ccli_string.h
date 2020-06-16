@@ -22,10 +22,10 @@ namespace ccli
 		operator std::string() { return m_String; }
 
 		// Moves until first non-whitespace char, returns the index at that spot
-		std::pair<unsigned long, unsigned long> NextPoi(unsigned long &start)
+		std::pair<size_t, size_t> NextPoi(unsigned long &start) const
 		{
-			unsigned long end = (unsigned long)m_String.size() + 1;
-			std::pair<unsigned long, unsigned long> range(end, end - 1);
+			size_t end = m_String.size();
+			std::pair<size_t, size_t> range(end + 1, end);
 			unsigned long pos = start;
 			for (; pos < end; ++pos)
 				if (!std::isspace(m_String[pos]))
@@ -44,7 +44,7 @@ namespace ccli
 			return range;
 		}
 
-		[[nodiscard]] unsigned long End() const { return (unsigned long)m_String.size() + 1; }
+		[[nodiscard]] size_t End() const { return m_String.size() + 1; }
 
 		std::string m_String;
 	};

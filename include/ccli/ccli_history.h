@@ -60,14 +60,7 @@ namespace ccli
 		 * \note No bound checking is performed when accessing with these index operator.
 		 *  Use the *index()* method for safe history vector indexing.
 		 */
-		const std::string &operator[](unsigned int index);
-		const std::string &operator[](int index);
-
-		/*!
-		 * \brief Safe history index. (Clamps if array ends are reached)
-		 * \return Command at given index
-		 */
-		const std::string &index(int index);
+		const std::string &operator[](size_t index);
 
 		/*!
 		 * \brief Output available command history.

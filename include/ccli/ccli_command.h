@@ -19,6 +19,7 @@ namespace ccli
     virtual ~CommandBase() = default;
     virtual CommandItem operator()(String &input) = 0;
     virtual std::string Help() = 0;
+		virtual bool TakesArguments() const = 0;
   };
 
   template<typename Fn, typename ...Args>
@@ -37,13 +38,17 @@ namespace ccli
 			return CommandItem(NONE);
     }
 
-    std::string Help() override
+		[[nodiscard]] std::string Help() override
     {
 			return "COMMAND: " + m_Name.m_String + "\n"
 			     + "     Description - " + m_Description.m_String + "\n\n"
 					 + "     Usage - " + m_Name.m_String + DisplayArguments(std::make_index_sequence<sizeof... (Args)>{}) + "\n\n";
     }
 
+		[[nodiscard]] bool TakesArguments() const override
+		{
+			return true;
+		}
   private:
     template<size_t... Is>
     void Call(String &input, unsigned long &start, std::index_sequence<Is...>)
@@ -81,13 +86,17 @@ namespace ccli
 			return CommandItem(NONE);
 		}
 
-		std::string Help() override
+		[[nodiscard]] std::string Help() override
 		{
 			return "COMMAND: " + m_Name.m_String + "\n"
 			     + "     Description - " + m_Description.m_String + "\n\n"
 					 + "     Usage - " + m_Name.m_String + "\n\n";
 		}
 
+		[[nodiscard]] bool TakesArguments() const override
+		{
+			return false;
+		}
 	private:
 		template<size_t... Is>
 		[[maybe_unused]] void Call(String &input, unsigned long &start, std::index_sequence<Is...>);

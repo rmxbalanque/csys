@@ -55,19 +55,9 @@ namespace ccli
 		m_Record = 0;
 	}
 
-	CCLI_INLINE const std::string &CommandHistory::operator[](unsigned int index)
+	CCLI_INLINE const std::string &CommandHistory::operator[](size_t index)
 	{
 		return m_History[index];
-	}
-
-	CCLI_INLINE const std::string &CommandHistory::operator[](int index)
-	{
-		return m_History[static_cast<unsigned int>(index)];
-	}
-
-	CCLI_INLINE const std::string &CommandHistory::index(int index)
-	{
-		return m_History[std::max(0, std::min(index, static_cast<int>(m_History.size()) - 1))];
 	}
 
 	CCLI_INLINE std::ostream &operator<<(std::ostream &os, const CommandHistory &history)

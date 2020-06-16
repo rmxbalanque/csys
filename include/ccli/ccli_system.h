@@ -107,24 +107,34 @@ namespace ccli
 		}
 
 		template<typename T>
-		void registerVariable(const std::string &name, T &var)
+		void registerVariable(const String &name, T &var)
 		{
 			// Disable.
 			m_RegisterCommandSuggestion = false;
 
+			// Make sure only one word was passed in
+			size_t name_index = 0;
+			name.NextPoi(name_index);
+			auto range = name.NextPoi(name_index);
+			if (range.first != name.End())
+			{
+				log(ERROR) << "Whitespace separated variable names are forbidden" << ccli::endl;
+				return;
+			}
+
 			// Register set.
-			ccli::System::registerCommand(std::string("set " + name).data(), "Set variable", [&var](T value)
-			{ var = value; }, ccli::Arg<T>(name.data()));
+			ccli::System::registerCommand("set " + name.m_String, "Sets the variable " + name.m_String, [&var](T value)
+			{ var = value; }, ccli::Arg<T>(name));
 
 			// Register get.
-			ccli::System::registerCommand(std::string("get " + name).data(), "Get variable", [&]()
+			ccli::System::registerCommand("get " + name.m_String, "Gets the variable " + name.m_String, [&]()
 			{ m_CommandData.log(LOG) << var << endl; });
 
 			// Enable again.
 			m_RegisterCommandSuggestion = true;
 
 			// Register variable
-			m_VariableSuggestionTree.insert(name.c_str());
+			m_VariableSuggestionTree.insert(name.m_String);
 		}
 
 		/*!
@@ -154,7 +164,7 @@ namespace ccli
 
 	private:
 
-		void parseCommandLine(const std::string & line);					//!< Parse command line and execute command
+		void parseCommandLine(const String & line);					//!< Parse command line and execute command
 
 		std::unordered_map<std::string, CommandBase *> m_Commands;			//!< Registered command container
 		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands

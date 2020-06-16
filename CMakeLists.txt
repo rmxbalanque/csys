@@ -13,7 +13,7 @@ project(ccli VERSION 0.0.1 LANGUAGES CXX)
 message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 
 # Setup module subdirectory.
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 # Load modules
 find_package(Filesystem REQUIRED)
@@ -96,6 +96,8 @@ target_link_libraries(ccli PRIVATE std::filesystem)
 # Library private include directories
 #target_include_directories(ccli PRIVATE )
 
+# TODO: Refactor PCH for PRIVATE dev usage and PUBLIC client usage
+# Check: https://youtu.be/bsXLMQ6WgIk?t=4770
 # Set precompiled headers if supported and enabled
 if (COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
     target_precompile_headers(ccli PRIVATE include/ccli/ccli_pch.h)

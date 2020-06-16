@@ -14,6 +14,7 @@ namespace ccli
 {
 	// TODO: Use modern pointers.
 	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
+	// TODO: Trim white space for the string both ends.
 	class CCLI_API System
 	{
 	public:

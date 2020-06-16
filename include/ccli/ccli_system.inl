@@ -233,7 +233,7 @@ namespace ccli
 			}
 
 			// Get the arguments.
-			String arguments = line.m_String.substr(range.first, line.m_String.size());
+			String arguments = command->second->TakesArguments() ? line.m_String.substr(range.first, line.m_String.size()) : "";
 
 			// Execute command.
 			auto cmd_out = (*command->second)(arguments);

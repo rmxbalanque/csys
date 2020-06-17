@@ -188,10 +188,10 @@ namespace ccli
 	CCLI_INLINE CommandHistory &System::history()
 	{ return m_CommandHistory; }
 
-	CCLI_INLINE std::vector<CommandItem> &System::items()
+	CCLI_INLINE std::vector<Item> &System::items()
 	{ return m_CommandData.items(); }
 
-	CCLI_INLINE CommandData &System::log(ItemType type)
+	CCLI_INLINE ItemLog &System::log(ItemType type)
 	{ return m_CommandData.log(type); }
 
 	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()

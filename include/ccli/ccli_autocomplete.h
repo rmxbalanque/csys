@@ -5,7 +5,7 @@
 #pragma once
 
 #include "ccli_pch.h"
-#include "base.h"
+#include "ccli_api.h"
 
 namespace ccli
 {
@@ -51,7 +51,6 @@ namespace ccli
 		acTernarySearchTree() = default;
 
 		// No copy allowed
-
 		acTernarySearchTree(const acTernarySearchTree &tree) = default;
 		acTernarySearchTree(acTernarySearchTree &&tree) noexcept = default;
 

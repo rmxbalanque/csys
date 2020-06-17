@@ -7,7 +7,7 @@
 #include "ccli_command.h"
 #include "ccli_autocomplete.h"
 #include "ccli_history.h"
-#include "ccli_command_data.h"
+#include "ccli_item.h"
 #include "ccli_script.h"
 
 namespace ccli
@@ -59,14 +59,14 @@ namespace ccli
 		 * \brief Get console items
 		 * \return Console items container
 		 */
-		std::vector<CommandItem> &items();
+		std::vector<Item> &items();
 
 		/*!
 		 * \brief Creates a new item entry to log information
 		 * \param type Log type (COMMAND, LOG, WARNING, ERROR)
 		 * \return Reference to console items obj
 		 */
-		CommandData &log(ItemType type = ItemType::LOG);
+		ItemLog &log(ItemType type = ItemType::LOG);
 
 		/*!
 		 * \brief Run the given script
@@ -169,7 +169,7 @@ namespace ccli
 		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands
 		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;									//!< History of executed commands
-		CommandData m_CommandData;											//!< Console Items (Logging)
+		ItemLog m_CommandData;												//!< Console Items (Logging)
 		std::unordered_map<std::string, Script*> m_Scripts;					//!< Scripts
 		bool m_RegisterCommandSuggestion = true;							//!< Flag that determines if commands will be registered for autocomplete.
 	};
@@ -181,4 +181,4 @@ namespace ccli
 
 #endif
 
-#endif //CCLI_SYSTEM_H
+#endif

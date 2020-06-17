@@ -11,14 +11,14 @@
 #include <utility>
 #include "ccli_arguments.h"
 #include "ccli_exceptions.h"
-#include "ccli_command_data.h"
+#include "ccli_item.h"
 
 namespace ccli
 {
   struct  CommandBase
   {
     virtual ~CommandBase() = default;
-    virtual CommandItem operator()(String &input) = 0;
+    virtual Item operator()(String &input) = 0;
     virtual std::string Help() = 0;
 		virtual bool TakesArguments() const = 0;
   };
@@ -30,13 +30,13 @@ namespace ccli
     Command(String name, String description, Fn function, Args... args)
             : m_Name(std::move(name)), m_Description(std::move(description)), m_Function(function), m_Arguments(args...) {}
 
-		CommandItem operator()(String &input) override
+		Item operator()(String &input) override
     {
       // call the function
 			size_t start = 0;
 			try { Call(input, start, std::make_index_sequence<sizeof... (Args)>{}); }
-			catch (Exception& ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
-			return CommandItem(NONE);
+			catch (Exception& ae) { return Item(ERROR) << (m_Name.m_String + ": " + ae.what()); }
+			return Item(NONE);
     }
 
 		[[nodiscard]] std::string Help() override
@@ -77,14 +77,14 @@ namespace ccli
 		Command(String name, String description, Fn function)
 						: m_Name(std::move(name)), m_Description(std::move(description)), m_Function(function) {}
 
-		CommandItem operator()(String &input) override
+		Item operator()(String &input) override
 		{
 			// call the function
 			for (auto c : input.m_String)
 				if (!isspace(c))
-					return CommandItem(ERROR) << (m_Name.m_String + ": Called with arguments");
+					return Item(ERROR) << (m_Name.m_String + ": Called with arguments");
 			m_Function();
-			return CommandItem(NONE);
+			return Item(NONE);
 		}
 
 		[[nodiscard]] std::string Help() override

@@ -15,8 +15,6 @@ message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 # Setup module subdirectory.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
-# Load modules
-find_package(Filesystem REQUIRED)
 
 # -----------------------------------------------------------------------------
 # Set default build to debug
@@ -91,7 +89,6 @@ target_compile_definitions(ccli PUBLIC CCLI_COMPILED_LIB)
 target_include_directories(ccli PUBLIC include/ccli/)
 
 # Link ccli private dependencies
-target_link_libraries(ccli PRIVATE std::filesystem)
 
 # Library private include directories
 #target_include_directories(ccli PRIVATE )
@@ -128,7 +125,6 @@ target_include_directories(ccli_header_only INTERFACE "$<BUILD_INTERFACE:${CMAKE
                                                           "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
 # Link ccli private dependencies
-target_link_libraries(ccli_header_only INTERFACE std::filesystem)
 
 # -----------------------------------------------------------------------------
 # Development tools

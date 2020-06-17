@@ -29,7 +29,7 @@ namespace ccli
   {
     using ValueType = T;
     explicit Arg(const String &name) : m_Arg(name) {}
-    Arg<T>& Parse(String &input, unsigned long &start)
+    Arg<T>& Parse(String &input, size_t &start)
     {
     	if (start == input.End())
     		throw ArgumentException("Not enough arguments were given", input.m_String);

@@ -47,12 +47,12 @@ TEST_CASE("String Argument")
 					CHECK((strt.m_String == "ZeroOne    #    "));
 	strt.m_String.clear();
 
-#pragma endregion
-
-#pragma region CORRECT USAGE MANY WORDS
+// CORRECT USAGE MANY WORDS
 	s.registerCommand("0,1", "", [](String str, String str1) {
-		CHECK(str.m_String == "Zero");
-		CHECK(str1.m_String == "One");
+		bool zero = str.m_String == "Zero";
+		bool one = str1.m_String == "One";
+		CHECK(zero);
+		CHECK(one);
 	}, Arg<String>(""), Arg<String>(""));
 
 	// multi word strings
@@ -75,7 +75,7 @@ TEST_CASE("String Argument")
 	s.runCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
 
 // CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
-	s.registerCommand("0,1,2", "", [](std::vector<std::vector<String>> strs) {
+	s.registerCommand("0,1,2,3", "", [](std::vector<std::vector<String>> strs) {
 		std::vector<std::vector<std::string>> arr = { {"One", "Two"}, {" |Three| |Yeet|"}, { " Four]", "FIVE?" } };
 		CHECK((strs[0][0].m_String == arr[0][0]));
 		CHECK((strs[0][1].m_String == arr[0][1]));
@@ -85,7 +85,7 @@ TEST_CASE("String Argument")
 	}, Arg<std::vector<std::vector<String>>>(""));
 
 	// multi word strings
-	s.runCommand("0,1,2 [[One Two] [\" |Three| |Yeet|\"] [\" Four\\]\" FIVE?]]");
+	s.runCommand("0,1,2,3 [[One Two] [\" |Three| |Yeet|\"] [\" Four\\]\" FIVE?]]");
 
 	s.registerCommand("char0", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
 	s.registerCommand("char1", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));

@@ -16,11 +16,9 @@ namespace ccli
 	static constexpr std::string_view s_Set = "set";
 	static constexpr std::string_view s_Get = "get";
 	static constexpr std::string_view s_ErrorNoVar = "No variable provided";
-	static constexpr std::string_view s_ErrorBadArg = "Not a valid argument";
 	static constexpr std::string_view s_ErrorNoArg = "No argument provided";
 	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
 	static constexpr std::string_view s_ErrorSetGetNotFound = "Command doesn't exist and/or variable is not registered";
-	static constexpr std::string_view s_ErrorCmdNotFound = "Command doesn't exist";
 
 	CCLI_INLINE System::System()
 	{
@@ -44,17 +42,6 @@ namespace ccli
 		// Register pre-defined commands.
 		m_CommandSuggestionTree.insert(s_Set.data());
 		m_CommandSuggestionTree.insert(s_Get.data());
-	}
-
-	CCLI_INLINE System::~System()
-	{
-		// Erase commands.
-		for (const auto & cmd : m_Commands)
-			delete cmd.second;
-
-		// Erase scripts.
-		for (const auto & script : m_Scripts)
-			delete script.second;
 	}
 
 	CCLI_INLINE void System::runCommand(const std::string &line)
@@ -114,7 +101,7 @@ namespace ccli
 		// Don't register if script already exists.
 		if (script == m_Scripts.end())
 		{
-			m_Scripts[name] = new Script(path, true);;
+			m_Scripts[name] = std::make_unique<Script>(path, true);
 			m_VariableSuggestionTree.insert(name);
 		}
 		else
@@ -133,7 +120,6 @@ namespace ccli
 		if (it != m_Commands.end())
 		{
 			m_CommandSuggestionTree.remove(cmd_name);
-			delete it->second;
 			m_Commands.erase(it);
 		}
 	}
@@ -151,11 +137,7 @@ namespace ccli
 		if (s_it != m_Commands.end() && g_it != m_Commands.end())
 		{
 			m_VariableSuggestionTree.remove(var_name);
-
-			delete s_it->second;
 			m_Commands.erase(s_it);
-
-			delete g_it->second;
 			m_Commands.erase(g_it);
 		}
 	}
@@ -172,7 +154,6 @@ namespace ccli
 		if (it != m_Scripts.end())
 		{
 			m_VariableSuggestionTree.remove(script_name);
-			delete it->second;
 			m_Scripts.erase(it);
 		}
 	}
@@ -194,10 +175,10 @@ namespace ccli
 	CCLI_INLINE ItemLog &System::log(ItemType type)
 	{ return m_CommandData.log(type); }
 
-	CCLI_INLINE std::unordered_map<std::string, CommandBase *> System::commands()
+	CCLI_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> & System::commands()
 	{ return m_Commands; }
 
-	CCLI_INLINE std::unordered_map<std::string, Script *> System::scripts()
+	CCLI_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> & System::scripts()
 	{ return m_Scripts; }
 
 	///////////////////////////////////////////////////////////////////////////

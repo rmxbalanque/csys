@@ -9,13 +9,12 @@
 #include "ccli_history.h"
 #include "ccli_item.h"
 #include "ccli_script.h"
+#include <memory>
 
 namespace ccli
 {
-	// TODO: Use modern pointers.
 	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
 	// TODO: Trim white space for the string both ends.
-	// TODO: SYSTEM EXCEPTIONS AND CODE COMMENTS.
 	// TODO: CMakeList Install
 	class CCLI_API System
 	{
@@ -25,11 +24,6 @@ namespace ccli
 		 * \brief Initialize system object
 		 */
 		System();
-
-		/*!
-		 * \brief Clean up console system object
-		 */
-		~System();
 
 		/*!
 		 * \brief Parse given command and run it
@@ -80,13 +74,13 @@ namespace ccli
 		 * \brief Get registered command container
 		 * \return Commands container
 		 */
-		std::unordered_map<std::string, CommandBase *> commands();
+		std::unordered_map<std::string, std::unique_ptr<CommandBase>> & commands();
 
 		/*!
 		 * \brief Get registered scripts container
 		 * \return Scripts container
 		 */
-		std::unordered_map<std::string, Script *> scripts();
+		std::unordered_map<std::string, std::unique_ptr<Script>> & scripts();
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
@@ -103,7 +97,7 @@ namespace ccli
 				m_CommandSuggestionTree.insert(name.m_String);
 
 			// Add commands to system here
-			m_Commands[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
+			m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
 		}
 
 		template<typename T>
@@ -163,15 +157,15 @@ namespace ccli
 
 	private:
 
-		void parseCommandLine(const String & line);							//!< Parse command line and execute command
+		void parseCommandLine(const String & line);											//!< Parse command line and execute command
 
-		std::unordered_map<std::string, CommandBase *> m_Commands;			//!< Registered command container
-		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands
-		acTernarySearchTree m_VariableSuggestionTree;						//!< Autocomplete Ternary Search Tree for registered variables
-		CommandHistory m_CommandHistory;									//!< History of executed commands
-		ItemLog m_CommandData;												//!< Console Items (Logging)
-		std::unordered_map<std::string, Script*> m_Scripts;					//!< Scripts
-		bool m_RegisterCommandSuggestion = true;							//!< Flag that determines if commands will be registered for autocomplete.
+		std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;			//!< Registered command container
+		acTernarySearchTree m_CommandSuggestionTree;										//!< Autocomplete Ternary Search Tree for commands
+		acTernarySearchTree m_VariableSuggestionTree;										//!< Autocomplete Ternary Search Tree for registered variables
+		CommandHistory m_CommandHistory;													//!< History of executed commands
+		ItemLog m_CommandData;																//!< Console Items (Logging)
+		std::unordered_map<std::string, std::unique_ptr<Script>> m_Scripts;					//!< Scripts
+		bool m_RegisterCommandSuggestion = true;											//!< Flag that determines if commands will be registered for autocomplete.
 	};
 }
 

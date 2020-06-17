@@ -52,6 +52,9 @@ option(CCLI_BUILD_TESTS "Build tests" OFF) # ON
 # CCLI compiler warnings
 option(CCLI_BUILD_WARNINGS "Enable compiler warnings" OFF) # ON
 
+# Install options
+option(CCLI_INSTALL "Generate the install target" OFF)
+
 # - Tools -
 
 # Include-What-You-Use
@@ -83,7 +86,6 @@ add_library(ccli::ccli ALIAS ccli)
 
 # By default we are compiling this library.
 target_compile_definitions(ccli PUBLIC CCLI_COMPILED_LIB)
-#target_compile_definitions(ccli PUBLIC CCLI_HEADER_ONLY)
 
 # Library public include directories
 target_include_directories(ccli PUBLIC include/ccli/)
@@ -159,6 +161,14 @@ if (CCLI_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif ()
+
+# -----------------------------------------------------------------------------
+# CMake Install
+# -----------------------------------------------------------------------------
+
+if (CCLI_INSTALL)
+    message(STATUS "Generating install")
+endif()
 
 # TODO: Add IDE support for headers. (source_group)
 # TODO: CMake Install support.

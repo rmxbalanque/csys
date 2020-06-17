@@ -11,7 +11,7 @@ TEST_CASE("String Argument")
 	using namespace ccli;
 	System s;
 
-#pragma region CORRECT USAGE SINGLE WORD
+// CORRECT USAGE SINGLE WORD
 	String strt;
 	s.registerCommand("0", "", [&strt](String str) {
 		  strt = str;
@@ -51,15 +51,15 @@ TEST_CASE("String Argument")
 
 #pragma region CORRECT USAGE MANY WORDS
 	s.registerCommand("0,1", "", [](String str, String str1) {
-						CHECK((str.m_String == "Zero" && str1.m_String == "One"));
+		CHECK(str.m_String == "Zero");
+		CHECK(str1.m_String == "One");
 	}, Arg<String>(""), Arg<String>(""));
 
 	// multi word strings
 	s.runCommand("0,1 \"Zero\" \"One\"");
 	s.runCommand("0,1     Zero    One    ");
-#pragma endregion
 
-#pragma region CORRECT USAGE VECTOR OF MULTI WORD(S)
+// CORRECT USAGE VECTOR OF MULTI WORD(S)
 	s.registerCommand("0,1,2", "", [](std::vector<String> strs) {
 		std::string ar[] = { "Zero", "One", "Two"};
 		for (unsigned i = 0; i < 3; ++i)
@@ -73,9 +73,8 @@ TEST_CASE("String Argument")
 
 	// multi word strings
 	s.runCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
-#pragma endregion
 
-#pragma region CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
+// CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
 	s.registerCommand("0,1,2", "", [](std::vector<std::vector<String>> strs) {
 		std::vector<std::vector<std::string>> arr = { {"One", "Two"}, {" |Three| |Yeet|"}, { " Four]", "FIVE?" } };
 		CHECK((strs[0][0].m_String == arr[0][0]));
@@ -87,7 +86,6 @@ TEST_CASE("String Argument")
 
 	// multi word strings
 	s.runCommand("0,1,2 [[One Two] [\" |Three| |Yeet|\"] [\" Four\\]\" FIVE?]]");
-#pragma endregion
 
 	s.registerCommand("char0", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
 	s.registerCommand("char1", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));

@@ -51,7 +51,7 @@ namespace ccli
 		}
   private:
     template<size_t... Is>
-    void Call(String &input, unsigned long &start, std::index_sequence<Is...>)
+    void Call(String &input, size_t &start, std::index_sequence<Is...>)
     {
       // call function with unpacked tuple
       m_Function((std::get<Is>(m_Arguments).Parse(input, start).m_Arg.m_Value)...);
@@ -99,7 +99,7 @@ namespace ccli
 		}
 	private:
 		template<size_t... Is>
-		[[maybe_unused]] void Call(String &input, unsigned long &start, std::index_sequence<Is...>);
+		[[maybe_unused]] void Call(String &input, size_t &start, std::index_sequence<Is...>);
 
 		template<size_t ...Is>
 		std::string DisplayArguments(std::index_sequence<Is...>) { return ""; }

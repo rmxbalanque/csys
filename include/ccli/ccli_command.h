@@ -8,6 +8,7 @@
 
 #include <functional>
 #include <type_traits>
+#include <utility>
 #include "ccli_arguments.h"
 #include "ccli_exceptions.h"
 #include "ccli_command_data.h"
@@ -26,15 +27,15 @@ namespace ccli
   class CCLI_API Command : public CommandBase
   {
   public:
-    Command(const String &name, const String &description, Fn function, Args... args)
-            : m_Name(name), m_Description(description), m_Function(function), m_Arguments(args...) {}
+    Command(String name, String description, Fn function, Args... args)
+            : m_Name(std::move(name)), m_Description(std::move(description)), m_Function(function), m_Arguments(args...) {}
 
 		CommandItem operator()(String &input) override
     {
       // call the function
 			size_t start = 0;
 			try { Call(input, start, std::make_index_sequence<sizeof... (Args)>{}); }
-			catch (ArgumentException& ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
+			catch (Exception& ae) { return CommandItem(ERROR) << (m_Name.m_String + ": " + ae.what()); }
 			return CommandItem(NONE);
     }
 
@@ -73,8 +74,8 @@ namespace ccli
 	class CCLI_API Command<Fn> : public CommandBase
 	{
 	public:
-		Command(const String &name, const String &description, Fn function)
-						: m_Name(name), m_Description(description), m_Function(function) {}
+		Command(String name, String description, Fn function)
+						: m_Name(std::move(name)), m_Description(std::move(description)), m_Function(function) {}
 
 		CommandItem operator()(String &input) override
 		{

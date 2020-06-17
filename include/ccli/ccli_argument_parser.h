@@ -55,7 +55,7 @@ namespace ccli
 		if (input.End() == start) {}
 
 		// TYPE T NOT SUPPORTED
-		throw ArgumentException("Unsupported type: " + std::string(typeid(T).name()));
+		throw Exception("Unsupported type: " + std::string(typeid(T).name()));
 	}
 
 #define ARG_PARSE_BASE_SPEC(TYPE) \
@@ -99,12 +99,12 @@ namespace ccli
     } \
     catch (const std::out_of_range&) \
     { \
-			throw ArgumentException(std::string("Argument too large for ") + TYPE_NAME, \
+			throw Exception(std::string("Argument too large for ") + TYPE_NAME, \
     													input.m_String.substr(range.first, range.second));  \
 		} \
     catch (const std::invalid_argument&) \
     { \
-    	throw ArgumentException(std::string("Missing or invalid ") + TYPE_NAME + " argument", \
+    	throw Exception(std::string("Missing or invalid ") + TYPE_NAME + " argument", \
     													input.m_String.substr(range.first, range.second)); } \
   }
 
@@ -129,7 +129,7 @@ namespace ccli
 							result.push_back(str[++i]);
 						// reserved char but not being escaped
 						else
-							throw ArgumentException(s_ErrMsgReserved, str);
+							throw Exception(s_ErrMsgReserved, str);
 					}
 
 				return result;
@@ -150,7 +150,7 @@ namespace ccli
 
 				// Check for closing "
 				if (range.second == std::string::npos)
-					throw ArgumentException("Could not find closing '\"'", ARG_PARSE_SUBSTR(range));
+					throw Exception("Could not find closing '\"'", ARG_PARSE_SUBSTR(range));
 
 				// Add word to already existing string
 				m_Value.m_String += GetWord(input.m_String, range.first, range.second);
@@ -191,7 +191,7 @@ namespace ccli
 		{
 			for (size_t i = range.first + 1; i < range.second; ++i)
 				if ((input.m_String[i] = char(std::tolower(input.m_String[i]))) != s_true[i - range.first])
-					throw ArgumentException(s_err_msg + std::string(", expected true"), ARG_PARSE_SUBSTR(range));
+					throw Exception(s_err_msg + std::string(", expected true"), ARG_PARSE_SUBSTR(range));
 			m_Value = true;
 		}
 		// false branch
@@ -199,12 +199,12 @@ namespace ccli
 		{
 			for (size_t i = range.first + 1; i < range.second; ++i)
 				if ((input.m_String[i] = char(std::tolower(input.m_String[i]))) != s_false[i - range.first])
-					throw ArgumentException(s_err_msg + std::string(", expected false"), ARG_PARSE_SUBSTR(range));
+					throw Exception(s_err_msg + std::string(", expected false"), ARG_PARSE_SUBSTR(range));
 			m_Value = false;
 		}
 		// anything else
 		else
-			throw ArgumentException(s_err_msg, ARG_PARSE_SUBSTR(range));
+			throw Exception(s_err_msg, ARG_PARSE_SUBSTR(range));
 	}
 
 	ARG_PARSE_BASE_SPEC(char)
@@ -213,17 +213,17 @@ namespace ccli
 		size_t len = range.second - range.first;
 
 		if (len > 2 || len <= 0)
-			throw ArgumentException("Too many or no chars were given", ARG_PARSE_SUBSTR(range));
+			throw Exception("Too many or no chars were given", ARG_PARSE_SUBSTR(range));
 			// potential reserved char
 		else if (len == 2)
 		{
 			if (!IsEscaping(input.m_String, range.first))
-				throw ArgumentException("Too many chars were given", ARG_PARSE_SUBSTR(range));
+				throw Exception("Too many chars were given", ARG_PARSE_SUBSTR(range));
 			m_Value = input.m_String[range.first + 1];
 		}
 			// if its one char and reserved
 		else if (IsReservedChar(input.m_String[range.first]))
-			throw ArgumentException(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
+			throw Exception(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
 			// one char, not reserved
 		else
 			m_Value = input.m_String[range.first];
@@ -235,17 +235,17 @@ namespace ccli
 		size_t len = range.second - range.first;
 
 		if (len > 2 || len <= 0)
-			throw ArgumentException("Too many or no chars were given", ARG_PARSE_SUBSTR(range));
+			throw Exception("Too many or no chars were given", ARG_PARSE_SUBSTR(range));
 			// potential reserved char
 		else if (len == 2)
 		{
 			if (!IsEscaping(input.m_String, range.first))
-				throw ArgumentException("Too many chars were given", ARG_PARSE_SUBSTR(range));
+				throw Exception("Too many chars were given", ARG_PARSE_SUBSTR(range));
 			m_Value = static_cast<unsigned char>(input.m_String[range.first + 1]);
 		}
 			// if its one char and reserved
 		else if (IsReservedChar(input.m_String[range.first]))
-			throw ArgumentException(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
+			throw Exception(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
 			// one char, not reserved
 		else
 			m_Value = static_cast<unsigned char>(input.m_String[range.first]);
@@ -290,7 +290,7 @@ namespace ccli
 		auto range = input.NextPoi(start);
 		if (range.first == input.End() - 1) return;
 		if (input.m_String[range.first] != '[')
-			throw ArgumentException("Invalid vector argument missing [ delimiter before", ARG_PARSE_SUBSTR(range));
+			throw Exception("Invalid vector argument missing [ delimiter before", ARG_PARSE_SUBSTR(range));
 
 		input.m_String[range.first] = ' ';
 		range = input.NextPoi(range.first);

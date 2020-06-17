@@ -15,6 +15,8 @@ namespace ccli
 	// TODO: Use modern pointers.
 	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
 	// TODO: Trim white space for the string both ends.
+	// TODO: SYSTEM EXCEPTIONS AND CODE COMMENTS.
+	// TODO: CMakeList Install
 	class CCLI_API System
 	{
 	public:
@@ -69,8 +71,10 @@ namespace ccli
 		/*!
 		 * \brief Run the given script
 		 * \param script_name Script to be executed
+		 *
+		 *  \note If script exists but its not loaded, this methods will load the script and proceed to run it.
 		 */
-		void runScript(std::string_view script_name);
+		void runScript(const std::string &script_name);
 
 		/*!
 		 * \brief Get registered command container
@@ -90,18 +94,13 @@ namespace ccli
 			// Check if function can be called with the given arguments
 			static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
 
-			// TODO: This should be an exception.
+			// Error out.
 			if (m_Commands.find(name.m_String) != m_Commands.end())
-			{
-				std::cout << "ERROR: Command already exists." << std::endl;
-				return;
-			}
+				throw ccli::Exception("ERROR: Command already exists");
 
 			// Register for autocomplete.
 			if (m_RegisterCommandSuggestion)
-			{
 				m_CommandSuggestionTree.insert(name.m_String);
-			}
 
 			// Add commands to system here
 			m_Commands[name.m_String] = new Command<Fn, Args...>(name, description, function, args...);
@@ -119,8 +118,7 @@ namespace ccli
 			auto range = name.NextPoi(name_index);
 			if (range.first != name.End())
 			{
-				log(ERROR) << "Whitespace separated variable names are forbidden" << ccli::endl;
-				return;
+				throw ccli::Exception("ERROR: Whitespace separated variable names are forbidden");
 			}
 
 			// Register set.
@@ -143,7 +141,7 @@ namespace ccli
 		 * \param name Script name
 		 * \param path Scrip path
 		 */
-		void registerScript(const std::string &name, std::filesystem::path path = std::filesystem::current_path().c_str());
+		void registerScript(const std::string &name, const std::string &path);
 
 		/*!
 		 * \brief Unregister command from console system
@@ -165,7 +163,7 @@ namespace ccli
 
 	private:
 
-		void parseCommandLine(const String & line);					//!< Parse command line and execute command
+		void parseCommandLine(const String & line);							//!< Parse command line and execute command
 
 		std::unordered_map<std::string, CommandBase *> m_Commands;			//!< Registered command container
 		acTernarySearchTree m_CommandSuggestionTree;						//!< Autocomplete Ternary Search Tree for commands

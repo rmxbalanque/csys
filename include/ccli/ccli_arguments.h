@@ -32,7 +32,7 @@ namespace ccli
     Arg<T>& Parse(String &input, size_t &start)
     {
     	if (start == input.End())
-    		throw ArgumentException("Not enough arguments were given", input.m_String);
+    		throw Exception("Not enough arguments were given", input.m_String);
     	m_Arg.m_Value = ArgumentParser<ValueType>(input, start).m_Value;
       return *this;
     }

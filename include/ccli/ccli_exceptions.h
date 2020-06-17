@@ -8,28 +8,32 @@
 
 #include <string>
 #include <exception>
+#include <utility>
 #include "ccli_api.h"
 
 namespace ccli
 {
-	class CCLI_API ArgumentException: public std::exception
+	class CCLI_API Exception : public std::exception
 	{
 	public:
-		explicit ArgumentException(const std::string &message, const std::string & arg):
-		msg_(message + ": '" + arg + "'")
+		explicit Exception(const std::string &message, const std::string &arg) :
+				m_Msg(message + ": '" + arg + "'")
 		{}
 
-		~ArgumentException() override = default;
+		explicit Exception(std::string message) :
+				m_Msg(std::move(message))
+		{}
 
-		[[nodiscard]] const char* what() const noexcept override
+		~Exception() override = default;
+
+		[[nodiscard]] const char *what() const noexcept override
 		{
-			return msg_.c_str();
+			return m_Msg.c_str();
 		}
 
 	protected:
-		std::string msg_;
+		std::string m_Msg;
 	};
-
 }
 
 #endif //CCLI_CCLI_EXCEPTIONS_H

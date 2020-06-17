@@ -24,6 +24,23 @@ namespace ccli
 
 	CCLI_INLINE System::System()
 	{
+		// Register help command.
+		registerCommand("help", "Display commands information", [&]()
+		{
+			for (const auto &tuple : commands())
+			{
+				// Filter set and get.
+				if (tuple.first.size() >= 3 && (tuple.first[0] == 's' || tuple.first[0] == 'g') && tuple.first[1] == 'e' && tuple.first[2] == 't' && tuple.first[3] == ' ')
+					continue;
+
+				// Print set and get.
+				// TODO: Print set and get.
+
+				// Print the rest of commands
+				log() << tuple.second->Help();
+			}
+		});
+
 		// Register pre-defined commands.
 		m_CommandSuggestionTree.insert(s_Set.data());
 		m_CommandSuggestionTree.insert(s_Get.data());
@@ -53,10 +70,10 @@ namespace ccli
 		parseCommandLine(line);
 	}
 
-	CCLI_INLINE void System::runScript(std::string_view script_name)
+	CCLI_INLINE void System::runScript(const std::string &script_name)
 	{
 		// Attempt to find script.
-		auto script_pair = m_Scripts.find(script_name.data());
+		auto script_pair = m_Scripts.find(script_name);
 
 		// Exit if not found.
 		if (script_pair == m_Scripts.end())
@@ -68,6 +85,19 @@ namespace ccli
 		// About to run script.
 		m_CommandData.log(INFO) << "Running \"" << script_name << "\"" << ccli::endl;
 
+		// Load if script is empty.
+		if (script_pair->second->data().empty())
+		{
+			try
+			{
+				script_pair->second->load();
+			}
+			catch (ccli::Exception & e)
+			{
+				log(ERROR) << e.what() << ccli::endl;
+			}
+		}
+
 		// Run script.
 		for (const auto &cmd : script_pair->second->data())
 		{
@@ -76,22 +106,19 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void System::registerScript(const std::string &name, std::filesystem::path path)
+	CCLI_INLINE void System::registerScript(const std::string &name, const std::string &path)
 	{
-		// Helper for easy file accessing.
-		// TODO: Check what to do with this.
-		if (path == std::filesystem::current_path())
-			path /= name;
-
 		// Attempt to find scripts.
 		auto script = m_Scripts.find(name);
 
-		// TODO: Assert or cout error? Or other.
 		// Don't register if script already exists.
 		if (script == m_Scripts.end())
-			m_Scripts[name] = new Script(path.string(), true);
-
-		m_VariableSuggestionTree.insert(name);
+		{
+			m_Scripts[name] = new Script(path, true);;
+			m_VariableSuggestionTree.insert(name);
+		}
+		else
+			throw ccli::Exception("ERROR: Script \"" + name + "\" already registered");
 	}
 
 	CCLI_INLINE void System::unregisterCommand(const std::string &cmd_name)

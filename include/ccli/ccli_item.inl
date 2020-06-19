@@ -3,11 +3,11 @@
 
 #ifndef CCLI_HEADER_ONLY
 
-#include "ccli_item.h"
+#include "ccli/ccli_item.h"
 
 #endif
 
-#include "ccli_pch.h"
+#include "ccli/ccli_pch.h"
 
 namespace ccli
 {

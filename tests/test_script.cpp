@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "ccli_script.h"
+#include "ccli/ccli_script.h"
 #include <fstream>
 #include <filesystem>
 

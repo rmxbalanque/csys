@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "ccli_history.h"
+#include "ccli/ccli_history.h"
 
 TEST_CASE("Test ccli history ")
 {

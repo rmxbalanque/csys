@@ -2,11 +2,11 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
-#include "ccli_script.h"
+#include "ccli/ccli_script.h"
 #endif
 
 #include <fstream>
-#include "ccli_exceptions.h"
+#include "ccli/ccli_exceptions.h"
 
 namespace ccli
 {

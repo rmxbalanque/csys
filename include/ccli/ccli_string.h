@@ -9,14 +9,14 @@
 
 #include <string>
 #include <cctype>
-#include "ccli_api.h"
+#include "ccli/ccli_api.h"
 
 namespace ccli
 {
 	struct CCLI_API String
 	{
 		String() = default;
-		String(const char *str) : m_String(str ? str:"") {}
+		String([[maybe_unused]] const char *str) : m_String(str ? str:"") {}
 		String(std::string str) : m_String(std::move(str)) {}
 		operator const char*() { return m_String.c_str(); }
 		operator std::string() { return m_String; }

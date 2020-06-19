@@ -2,8 +2,8 @@
 #define CCLI_SCRIPT_H
 #pragma once
 
-#include "ccli_pch.h"
-#include "ccli_api.h"
+#include "ccli/ccli_pch.h"
+#include "ccli/ccli_api.h"
 
 namespace ccli
 {
@@ -53,7 +53,7 @@ namespace ccli
 }
 
 #ifdef CCLI_HEADER_ONLY
-#include "ccli_script.inl"
+#include "ccli/ccli_script.inl"
 #endif
 
 #endif

@@ -1,5 +1,6 @@
 
 # Configure example excutable.
+find_package(ccli REQUIRED)
 add_executable(simple_example simple_example_main.cpp)
 
 # Link with ccli library.

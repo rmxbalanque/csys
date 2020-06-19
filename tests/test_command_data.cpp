@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "ccli_item.h"
+#include "ccli/ccli_item.h"
 
 TEST_CASE("Autocomplete")
 {

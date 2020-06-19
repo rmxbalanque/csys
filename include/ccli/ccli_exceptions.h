@@ -9,7 +9,7 @@
 #include <string>
 #include <exception>
 #include <utility>
-#include "ccli_api.h"
+#include "ccli/ccli_api.h"
 
 namespace ccli
 {

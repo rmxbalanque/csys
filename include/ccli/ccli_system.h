@@ -3,12 +3,13 @@
 
 #pragma once
 
-#include "ccli_pch.h"
-#include "ccli_command.h"
-#include "ccli_autocomplete.h"
-#include "ccli_history.h"
-#include "ccli_item.h"
-#include "ccli_script.h"
+// TODO: Forward declare as much as possible
+#include "ccli/ccli_pch.h"
+#include "ccli/ccli_command.h"
+#include "ccli/ccli_autocomplete.h"
+#include "ccli/ccli_history.h"
+#include "ccli/ccli_item.h"
+#include "ccli/ccli_script.h"
 #include <memory>
 
 namespace ccli
@@ -171,7 +172,7 @@ namespace ccli
 
 #ifdef CCLI_HEADER_ONLY
 
-#include "ccli_system.inl"
+#include "ccli/ccli_system.inl"
 
 #endif
 

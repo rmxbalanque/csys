@@ -9,9 +9,9 @@
 #include <functional>
 #include <type_traits>
 #include <utility>
-#include "ccli_arguments.h"
-#include "ccli_exceptions.h"
-#include "ccli_item.h"
+#include "ccli/ccli_arguments.h"
+#include "ccli/ccli_exceptions.h"
+#include "ccli/ccli_item.h"
 
 namespace ccli
 {

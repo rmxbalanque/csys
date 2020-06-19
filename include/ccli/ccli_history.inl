@@ -3,7 +3,7 @@
 
 #ifndef CCLI_HEADER_ONLY
 
-#include "ccli_history.h"
+#include "ccli/ccli_history.h"
 
 #endif
 

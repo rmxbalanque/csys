@@ -6,9 +6,9 @@
 #define CCLI_ARGUMENT_PARSER_H
 #pragma once
 
-#include "ccli_api.h"
-#include "ccli_string.h"
-#include "ccli_exceptions.h"
+#include "ccli/ccli_api.h"
+#include "ccli/ccli_string.h"
+#include "ccli/ccli_exceptions.h"
 #include <vector>
 #include <stdexcept>
 

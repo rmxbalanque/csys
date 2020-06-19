@@ -2,8 +2,8 @@
 #define CCLI_ITEM_H
 #pragma once
 
-#include "ccli_pch.h"
-#include "ccli_api.h"
+#include "ccli/ccli_pch.h"
+#include "ccli/ccli_api.h"
 
 // TODO: Doxygenize classes.
 // TODO: Find better name for CommandData
@@ -110,7 +110,7 @@ namespace ccli
 
 #ifdef CCLI_HEADER_ONLY
 
-#include "ccli_item.inl"
+#include "ccli/ccli_item.inl"
 
 #endif
 

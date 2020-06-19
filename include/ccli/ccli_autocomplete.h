@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "ccli_pch.h"
-#include "ccli_api.h"
+#include "ccli/ccli_pch.h"
+#include "ccli/ccli_api.h"
 
 namespace ccli
 {
@@ -285,7 +285,7 @@ namespace ccli
 }
 
 #ifdef CCLI_HEADER_ONLY
-#include "ccli_autocomplete.inl"
+#include "ccli/ccli_autocomplete.inl"
 #endif
 
 #endif //CCLI_CCLI_AUTOCOMPLETE_H

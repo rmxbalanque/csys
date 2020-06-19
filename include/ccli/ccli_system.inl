@@ -2,7 +2,7 @@
 
 #ifndef CCLI_HEADER_ONLY
 
-#include "ccli_system.h"
+#include "ccli/ccli_system.h"
 
 #endif
 

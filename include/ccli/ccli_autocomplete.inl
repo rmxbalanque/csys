@@ -3,7 +3,7 @@
 
 #ifndef CCLI_HEADER_ONLY
 
-#include "ccli_autocomplete.h"
+#include "ccli/ccli_autocomplete.h"
 
 #endif
 

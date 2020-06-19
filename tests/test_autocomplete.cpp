@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "ccli_autocomplete.h"
+#include "ccli/ccli_autocomplete.h"
 #include <algorithm>
 #include <string>
 

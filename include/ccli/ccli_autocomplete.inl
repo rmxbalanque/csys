@@ -2,9 +2,7 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
-
 #include "ccli/ccli_autocomplete.h"
-
 #endif
 
 namespace ccli

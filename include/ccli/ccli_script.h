@@ -2,7 +2,8 @@
 #define CCLI_SCRIPT_H
 #pragma once
 
-#include "ccli/ccli_pch.h"
+#include <string>
+#include <vector>
 #include "ccli/ccli_api.h"
 
 namespace ccli

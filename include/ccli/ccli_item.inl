@@ -2,12 +2,9 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
-
 #include "ccli/ccli_item.h"
-
 #endif
 
-#include "ccli/ccli_pch.h"
 
 namespace ccli
 {

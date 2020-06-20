@@ -2,7 +2,8 @@
 #define CCLI_HISTORY_H
 #pragma once
 
-#include "ccli/ccli_pch.h"
+#include <string>
+#include <vector>
 #include "ccli/ccli_api.h"
 
 namespace ccli
@@ -83,7 +84,7 @@ namespace ccli
 	private:
 		unsigned int m_Record;				//!< Amount of commands recorded
 		unsigned int m_MaxRecord;			//!< Maximum command record to keep track of
-		std::vector<std::string> m_History; //!< Console command history TODO: Check if this should be a poitner to a vector.
+		std::vector<std::string> m_History; //!< Console command history
 	};
 }
 

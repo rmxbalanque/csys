@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "ccli/ccli_pch.h"
+#include <vector>
+#include <string>
 #include "ccli/ccli_api.h"
 
 namespace ccli

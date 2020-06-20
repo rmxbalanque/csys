@@ -1,9 +1,7 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
-
 #include "ccli/ccli_system.h"
-
 #endif
 
 namespace ccli

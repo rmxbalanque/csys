@@ -4,19 +4,24 @@
 #pragma once
 
 // TODO: Forward declare as much as possible
-#include "ccli/ccli_pch.h"
 #include "ccli/ccli_command.h"
 #include "ccli/ccli_autocomplete.h"
 #include "ccli/ccli_history.h"
 #include "ccli/ccli_item.h"
 #include "ccli/ccli_script.h"
 #include <memory>
+#include <unordered_map>
+#include <string>
 
 namespace ccli
 {
+	// Forward declarations
+	class Script;
+	class ItemLog;
+	class CommandHistory;
+
 	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
 	// TODO: Trim white space for the string both ends.
-	// TODO: CMakeList Install
 	class CCLI_API System
 	{
 	public:
@@ -171,9 +176,7 @@ namespace ccli
 }
 
 #ifdef CCLI_HEADER_ONLY
-
 #include "ccli/ccli_system.inl"
-
 #endif
 
 #endif

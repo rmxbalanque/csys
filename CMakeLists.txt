@@ -32,6 +32,10 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose Release or Debug" FORCE)
 endif ()
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_DEBUG_POSTFIX D)
+endif()
+
 # -----------------------------------------------------------------------------
 # Compiler config
 # -----------------------------------------------------------------------------
@@ -113,11 +117,10 @@ target_compile_definitions(ccli PUBLIC CCLI_COMPILED_LIB)
 target_include_directories(ccli PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
                                                       "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-# TODO: Refactor PCH for PRIVATE dev usage and PUBLIC client usage
-# Check: https://youtu.be/bsXLMQ6WgIk?t=4770
 # Set precompiled headers if supported and enabled
 if (COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
-    target_precompile_headers(ccli PRIVATE ${CCLI_HEADER_PATH}/ccli_pch.h)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ccli_pch.h.in ${PROJECT_BINARY_DIR}/ccli_pch.h @ONLY)
+    target_precompile_headers(ccli PRIVATE ${PROJECT_BINARY_DIR}/ccli_pch.h)
 endif ()
 
 # Export no symbols by default. (To ensure cross-compiler consistent behaviour)
@@ -213,6 +216,7 @@ if (CCLI_INSTALL)
             NAMESPACE ccli::
             FILE ${CONFIG_TARGETS_FILE}
             DESTINATION ${EXPORT_DEST_DIR})
+
 endif()
 
 # TODO: Add IDE support for headers. (source_group)

@@ -2,11 +2,9 @@
 #define CCLI_ITEM_H
 #pragma once
 
-#include "ccli/ccli_pch.h"
+#include <vector>
+#include <string>
 #include "ccli/ccli_api.h"
-
-// TODO: Doxygenize classes.
-// TODO: Find better name for CommandData
 
 namespace ccli
 {

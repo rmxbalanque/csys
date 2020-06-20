@@ -26,12 +26,17 @@ set(CCLI_TEST_SOURCES
 # Set up testing.
 enable_testing()
 
+set(IWYU_PATH "${CMAKE_SOURCE_DIR}/thirdparty/include-what-you-use/build/bin/include-what-you-use")
+
 # Helper func.
 function(ccli_prepare_test test_target ccli_lib)
     add_executable(${test_target} ${CCLI_TEST_SOURCES})
     ccli_enable_warnings(${test_target})
     target_link_libraries(${test_target} PRIVATE ${ccli_lib})
     target_compile_options(${test_target} PRIVATE -O0 -g)
+    if (CCLI_ENABLE_IWYU)
+        set_target_properties(${test_target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
+    endif()
     add_test(NAME ${test_target} COMMAND ${test_target})
     #set_tests_properties(${test_target} PROPERTIES RUN_SERIAL ON)
 endfunction()

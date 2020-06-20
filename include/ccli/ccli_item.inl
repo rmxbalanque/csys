@@ -5,6 +5,7 @@
 #include "ccli/ccli_item.h"
 #endif
 
+#include <chrono>
 
 namespace ccli
 {

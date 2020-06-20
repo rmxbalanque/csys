@@ -8,6 +8,7 @@
 #endif
 
 #include <algorithm>
+#include <iostream>
 
 namespace ccli
 {

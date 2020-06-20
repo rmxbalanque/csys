@@ -41,7 +41,7 @@
 
 TEST_CASE("Autocomplete")
 {
-	ccli::acTernarySearchTree tree({"roland", "munguia", "12345", "michael", "rino", "muchos"});
+	ccli::AutoComplete tree({"roland", "munguia", "12345", "michael", "rino", "muchos"});
 
 	// Word search.
 	SUBCASE("Searching for word completion")
@@ -83,7 +83,7 @@ TEST_CASE("Autocomplete")
 	}
 
 	// Partial completion
-	ccli::acTernarySearchTree tree2({"roland", "munguia", "12345", "michael", "rolling", "muchos", "rolipoli"});
+	ccli::AutoComplete tree2({"roland", "munguia", "12345", "michael", "rolling", "muchos", "rolipoli"});
 	SUBCASE("Searching for partial complete + suggestions")
 	{
 		SUGGESTION_PARTIAL_CHECK(tree2, "r", "rol", "roland", "rolipoli", "rolling")

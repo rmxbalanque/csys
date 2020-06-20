@@ -15,8 +15,8 @@ namespace ccli
 	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
 	// TODO: Add test cases for all of the functions.
 	
-	//!< Auto complete ternary tree.
-	class CCLI_API acTernarySearchTree
+	//!< Auto complete ternary search tree.
+	class CCLI_API AutoComplete
 	{
 	public:
 
@@ -49,11 +49,11 @@ namespace ccli
 		};
 
 		// Default constructor.
-		acTernarySearchTree() = default;
+		AutoComplete() = default;
 
 		// No copy allowed
-		acTernarySearchTree(const acTernarySearchTree &tree) = default;
-		acTernarySearchTree(acTernarySearchTree &&tree) noexcept = default;
+		AutoComplete(const AutoComplete &tree) = default;
+		AutoComplete(AutoComplete &&tree) noexcept = default;
 
 		/*!
 		 *
@@ -61,7 +61,7 @@ namespace ccli
 		 * \param[in] il
 		 */
 		template<typename inputType>
-		acTernarySearchTree(std::initializer_list<inputType> il)
+		AutoComplete(std::initializer_list<inputType> il)
 		{
 			for (const auto &item : il)
 			{
@@ -75,7 +75,7 @@ namespace ccli
 		 * \param[in] items Container
 		 */
 		template<typename T>
-		explicit acTernarySearchTree(const T &items)
+		explicit AutoComplete(const T &items)
 		{
 			for (const auto &item : items)
 			{
@@ -86,7 +86,7 @@ namespace ccli
 		/*!
 		 * /brief Destructor
 		 */
-		~acTernarySearchTree();
+		~AutoComplete();
 
 		/*!
 		 * \brief Get tree node count

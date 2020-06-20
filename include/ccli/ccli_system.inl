@@ -158,10 +158,10 @@ namespace ccli
 
 	// Getters ////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE acTernarySearchTree &System::cmdAutocomplete()
+	CCLI_INLINE AutoComplete &System::cmdAutocomplete()
 	{ return m_CommandSuggestionTree; }
 
-	CCLI_INLINE acTernarySearchTree &System::varAutocomplete()
+	CCLI_INLINE AutoComplete &System::varAutocomplete()
 	{ return m_VariableSuggestionTree; }
 
 	CCLI_INLINE CommandHistory &System::history()

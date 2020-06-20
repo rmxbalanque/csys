@@ -11,7 +11,7 @@ namespace ccli
 	// Constructor/Destructors ////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE acTernarySearchTree::~acTernarySearchTree()
+	CCLI_INLINE AutoComplete::~AutoComplete()
 	{
 		delete m_Root;
 	}
@@ -20,17 +20,17 @@ namespace ccli
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE size_t acTernarySearchTree::size() const
+	CCLI_INLINE size_t AutoComplete::size() const
 	{
 		return m_Size;
 	}
 
-	CCLI_INLINE size_t acTernarySearchTree::count() const
+	CCLI_INLINE size_t AutoComplete::count() const
 	{
 		return m_Count;
 	}
 
-	CCLI_INLINE bool acTernarySearchTree::search(const char *string)
+	CCLI_INLINE bool AutoComplete::search(const char *string)
 	{
 		acNode *ptr = m_Root;
 
@@ -59,7 +59,7 @@ namespace ccli
 		return false;
 	}
 
-	CCLI_INLINE void acTernarySearchTree::insert(const char *str)
+	CCLI_INLINE void AutoComplete::insert(const char *str)
 	{
 		acNode **ptr = &m_Root;
 		++m_Count;
@@ -100,17 +100,17 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void acTernarySearchTree::insert(const std::string &str)
+	CCLI_INLINE void AutoComplete::insert(const std::string &str)
 	{
 		insert(str.c_str());
 	}
 
-	CCLI_INLINE void acTernarySearchTree::remove(const std::string &word)
+	CCLI_INLINE void AutoComplete::remove(const std::string &word)
 	{
 		removeAux(m_Root, word.c_str());
 	}
 
-	CCLI_INLINE void acTernarySearchTree::suggestions(const char *prefix, std::vector<std::string> &ac_options)
+	CCLI_INLINE void AutoComplete::suggestions(const char *prefix, std::vector<std::string> &ac_options)
 	{
 		acNode *ptr = m_Root;
 		auto temp = prefix;
@@ -147,14 +147,14 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, temp);
 	}
 
-	CCLI_INLINE std::string acTernarySearchTree::suggestions(const std::string &prefix, r_sVector &ac_options)
+	CCLI_INLINE std::string AutoComplete::suggestions(const std::string &prefix, r_sVector &ac_options)
 	{
 		std::string temp = prefix;
 		suggestions(temp, ac_options, true);
 		return temp;
 	}
 
-	CCLI_INLINE void acTernarySearchTree::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
+	CCLI_INLINE void AutoComplete::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
 	{
 		acNode *ptr = m_Root;
 		const char *temp = prefix.data();
@@ -210,7 +210,7 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, prefix.substr(0, prefix_end));
 	}
 
-	CCLI_INLINE acTernarySearchTree::p_sVector acTernarySearchTree::suggestions(const char *prefix)
+	CCLI_INLINE AutoComplete::p_sVector AutoComplete::suggestions(const char *prefix)
 	{
 		auto temp = new sVector();
 		suggestions(prefix, *temp);
@@ -221,7 +221,7 @@ namespace ccli
 	// Private methods ////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE void acTernarySearchTree::suggestionsAux(acTernarySearchTree::acNode *root, r_sVector ac_options, std::string buffer)
+	CCLI_INLINE void AutoComplete::suggestionsAux(AutoComplete::acNode *root, r_sVector ac_options, std::string buffer)
 	{
 		if (!root) return;
 
@@ -249,7 +249,7 @@ namespace ccli
 		}
 	}
 
-	bool acTernarySearchTree::removeAux(acTernarySearchTree::acNode *root, const char *word)
+	bool AutoComplete::removeAux(AutoComplete::acNode *root, const char *word)
 	{
 		if (!root) return false;
 

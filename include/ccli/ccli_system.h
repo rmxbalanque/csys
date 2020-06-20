@@ -15,11 +15,6 @@
 
 namespace ccli
 {
-	// Forward declarations
-	class Script;
-	class ItemLog;
-	class CommandHistory;
-
 	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
 	// TODO: Trim white space for the string both ends.
 	class CCLI_API System
@@ -41,13 +36,13 @@ namespace ccli
 		 * \brief Get console registered command autocomplete tree
 		 * \return Autocomplete Ternary Search Tree
 		 */
-		acTernarySearchTree &cmdAutocomplete();
+		AutoComplete &cmdAutocomplete();
 
 		/*!
 		 * \brief Get console registered variables autocomplete tree
 		 * \return Autocomplete Ternary Search Tree
 		 */
-		acTernarySearchTree &varAutocomplete();
+		AutoComplete &varAutocomplete();
 
 		/*!
 		 * \brief Get command history container
@@ -166,8 +161,8 @@ namespace ccli
 		void parseCommandLine(const String & line);											//!< Parse command line and execute command
 
 		std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;			//!< Registered command container
-		acTernarySearchTree m_CommandSuggestionTree;										//!< Autocomplete Ternary Search Tree for commands
-		acTernarySearchTree m_VariableSuggestionTree;										//!< Autocomplete Ternary Search Tree for registered variables
+		AutoComplete m_CommandSuggestionTree;										//!< Autocomplete Ternary Search Tree for commands
+		AutoComplete m_VariableSuggestionTree;										//!< Autocomplete Ternary Search Tree for registered variables
 		CommandHistory m_CommandHistory;													//!< History of executed commands
 		ItemLog m_CommandData;																//!< Console Items (Logging)
 		std::unordered_map<std::string, std::unique_ptr<Script>> m_Scripts;					//!< Scripts

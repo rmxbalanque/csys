@@ -6,7 +6,6 @@
 #define CCLI_ARGUMENTS_H
 #pragma once
 
-#include "ccli/ccli_pch.h"
 #include "ccli/ccli_api.h"
 #include "ccli/ccli_string.h"
 #include "ccli/ccli_exceptions.h"

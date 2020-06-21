@@ -31,6 +31,15 @@ addons: &gcc7
     sources:
       - ubuntu-toolchain-r-test
 
+addons: &clang7
+  apt:
+    source:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-7
+    packages:
+      - libstdc++-7-dev
+      - clang-7
+
 addons: &clang10
   apt:
     packages:
@@ -63,6 +72,17 @@ matrix:
     - os: linux
       addons: *gcc8
       env: GCC_VERSION=8 BUILD_TYPE=Release BUILD_SHARED=false
+
+    # Test Clang 7, C++17, Build Debug/Release
+    - os: linux
+      dist: bionic
+      addons: *clang7
+      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=false
+
+    - os: linux
+      dist: bionic
+      addons: *clang7
+      env: CLANG_VERSION=7 BUILDT_TYPE=Release BUILD_SHARED=false
 
     # Test Clang 8, C++17, Build Debug/Release
     - os: linux

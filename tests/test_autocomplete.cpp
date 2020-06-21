@@ -22,7 +22,6 @@
 			}\
 		}\
 		CHECK(check);\
-		delete results;\
 	}\
 
 #define SUGGESTION_PARTIAL_CHECK(tree, prefix, partial_ac, ...)\

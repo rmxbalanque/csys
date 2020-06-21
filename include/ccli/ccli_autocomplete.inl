@@ -233,9 +233,9 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, prefix.substr(0, prefix_end));
 	}
 
-	CCLI_INLINE AutoComplete::p_sVector AutoComplete::suggestions(const char *prefix)
+	CCLI_INLINE std::unique_ptr<AutoComplete::sVector> AutoComplete::suggestions(const char *prefix)
 	{
-		auto temp = new sVector();
+		auto temp = std::make_unique<sVector>();
 		suggestions(prefix, *temp);
 		return temp;
 	}

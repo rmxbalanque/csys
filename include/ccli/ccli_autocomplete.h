@@ -4,16 +4,16 @@
 
 #pragma once
 
+#include "ccli/ccli_api.h"
 #include <vector>
 #include <string>
-#include "ccli/ccli_api.h"
+#include <memory>
 
 namespace ccli
 {
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
 	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
-	// TODO: Add test cases for all of the functions.
 	
 	//!< Auto complete ternary search tree.
 	class CCLI_API AutoComplete
@@ -23,7 +23,6 @@ namespace ccli
 		// Type definitions.
 		using r_sVector = std::vector<std::string> &;
 		using sVector = std::vector<std::string>;
-		using p_sVector = std::vector<std::string> *;
 
 		//!< Autocomplete node.
 		struct acNode
@@ -259,9 +258,9 @@ namespace ccli
 		 * \return Vector of found suggestions
 		 */
 		template<typename strType>
-		p_sVector suggestions(const strType &prefix)
+		std::unique_ptr<sVector> suggestions(const strType &prefix)
 		{
-			auto temp = new sVector();
+			auto temp = std::make_unique<sVector>();
 			suggestions(prefix, *temp);
 			return temp;
 		}
@@ -271,7 +270,7 @@ namespace ccli
 		 * \param[in] prefix Prefix to use for suggestion lookup
 		 * \return Vector of found suggestions
 		 */
-		p_sVector suggestions(const char *prefix);
+		std::unique_ptr<sVector> suggestions(const char *prefix);
 
 	private:
 

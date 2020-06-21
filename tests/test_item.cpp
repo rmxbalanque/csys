@@ -42,8 +42,9 @@ TEST_CASE("Autocomplete")
 		CHECK(temp.m_Data.empty());
 	}
 
-	SUBCASE("Testing Command Data")
+	SUBCASE("Testing Item Log")
 	{
+		// Logging an item.
 		ccli::ItemLog temp;
 		temp.log(ccli::LOG);
 		CHECK(temp.items().size() == 1);

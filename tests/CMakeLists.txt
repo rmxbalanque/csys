@@ -20,8 +20,14 @@ set(CCLI_TEST_SOURCES
         test_char_argument.cpp
         test_item.cpp
         test_history.cpp
-        test_script.cpp
         main.cpp)
+
+# Add Script test only if filesystem is found.
+find_package(Filesystem)
+if (Filesystem_FOUND)
+    message(STATUS "Including ccli::Script test")
+    list(APPEND ${CCLI_TEST_SOURCES} test_script.cpp)
+endif()
 
 # Set up testing.
 enable_testing()

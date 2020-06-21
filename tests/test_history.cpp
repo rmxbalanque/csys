@@ -22,6 +22,7 @@ TEST_CASE("Test ccli history ")
 		CHECK(c_history.get_new() == commands.back());
 	}
 
+	// Check looping.
 	SUBCASE("Check history looping")
 	{
 		ccli::CommandHistory c_history(3);
@@ -49,10 +50,9 @@ TEST_CASE("Test ccli history ")
 		CHECK(c_history.get_old_index() == 0);
 		CHECK(c_history.get_new() == "h3");
 	}
-	// Check looping.
 
 	// Check clearing.
-	SUBCASE("CHECK history clearing")
+	SUBCASE("Check history clearing")
 	{
 		ccli::CommandHistory c_history(64);
 		std::vector<std::string> commands({"h1", "h2", "h3", "h4"});

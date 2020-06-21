@@ -6,24 +6,27 @@
 #endif
 
 #include <fstream>
+#include <utility>
 #include "ccli/ccli_exceptions.h"
 
 namespace ccli
 {
 
-	CCLI_INLINE Script::Script(std::string path, bool load_on_init) : m_Path(std::move(path))
+	CCLI_INLINE Script::Script(std::string path, bool load_on_init) : m_Path(std::move(path)), m_FromMemory(false)
 	{
 		// Load file.
 		if (load_on_init)
 			load();
 	}
 
-	CCLI_INLINE Script::Script(const char *path, bool load_on_init) : m_Path(path)
+	CCLI_INLINE Script::Script(const char *path, bool load_on_init) : m_Path(path), m_FromMemory(false)
 	{
 		// Load file.
 		if (load_on_init)
 			load();
 	}
+
+	CCLI_INLINE Script::Script(std::vector<std::string> data) : m_Data(std::move(data)), m_FromMemory(true) {}
 
 	CCLI_INLINE void Script::load()
 	{
@@ -52,6 +55,8 @@ namespace ccli
 
 	CCLI_INLINE void Script::reload()
 	{
+		if (m_FromMemory) return;
+
 		unload();
 		load();
 	}
@@ -59,6 +64,11 @@ namespace ccli
 	CCLI_INLINE void Script::unload()
 	{
 		m_Data.clear();
+	}
+
+	CCLI_INLINE void Script::set_path(std::string path)
+	{
+		m_Path = std::move(path);
 	}
 
 	CCLI_INLINE const std::vector<std::string> &Script::data()

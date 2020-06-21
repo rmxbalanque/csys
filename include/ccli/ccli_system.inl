@@ -13,6 +13,7 @@ namespace ccli
 	// Commands-Error-Warning strings.
 	static constexpr std::string_view s_Set = "set";
 	static constexpr std::string_view s_Get = "get";
+	static constexpr std::string_view s_Help = "Help";
 	static constexpr std::string_view s_ErrorNoVar = "No variable provided";
 	static constexpr std::string_view s_ErrorNoArg = "No argument provided";
 	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
@@ -112,13 +113,17 @@ namespace ccli
 		if (cmd_name.empty()) return;
 
 		// Get command.
-		auto it = m_Commands.find(cmd_name);
+		auto command_it = m_Commands.find(cmd_name);
+		auto help_command_it = m_Commands.find("help " + cmd_name);
 
 		// Erase if found.
-		if (it != m_Commands.end())
+		if (command_it != m_Commands.end() && help_command_it != m_Commands.end())
 		{
 			m_CommandSuggestionTree.remove(cmd_name);
-			m_Commands.erase(it);
+			m_CommandSuggestionTree.remove("help " + cmd_name);
+
+			m_Commands.erase(command_it);
+			m_Commands.erase(help_command_it);
 		}
 	}
 
@@ -202,9 +207,16 @@ namespace ccli
 		// Set or get
 		bool is_cmd_set = command_name == s_Set;
 		bool is_cmd_get = command_name == s_Get;
+		bool is_cmd_help = !(is_cmd_set || is_cmd_get) ? command_name == s_Help : false;
+
+		if (is_cmd_help)
+		{
+			range = line.NextPoi(line_index);
+			command_name += " " + line.m_String.substr(range.first, range.second - range.first);
+		}
 
 		// Its a set or get command
-		if (is_cmd_set || is_cmd_get)
+		else if (is_cmd_set || is_cmd_get)
 		{
 			// Try to get variable name
 			if ((range = line.NextPoi(line_index)).first == line.End())
@@ -217,6 +229,7 @@ namespace ccli
 				command_name += " " + line.m_String.substr(range.first, range.second - range.first);
 		}
 
+//		std::cout << "Command name : |" << command_name << "|" << std::endl;
 		// Get runnable command
 		auto command = m_Commands.find(command_name);
 		if (command == m_Commands.end())
@@ -224,22 +237,12 @@ namespace ccli
 		// Run the command
 		else
 		{
-			// If the command takes arguments and none were provided
-			if (command->second->TakesArguments() && (range = line.NextPoi(line_index)).first == line.End())
-			{
-				log(ERROR) << s_ErrorNoArg << endl;
-				return;
-			}
-
-			// If its the set command, check if only one thing is passed in
-			if (is_cmd_set && line.m_String[range.first] != '"' && line.NextPoi(line_index).first != line.End())
-			{
-				log(ERROR) << s_ErrorMoreArgs << endl;
-				return;
-			}
+//			std::cout << "Command takes args? : " << command->second->ArgumentCount() << std::endl;
 
 			// Get the arguments.
-			String arguments = command->second->TakesArguments() ? line.m_String.substr(range.first, line.m_String.size()) : "";
+			String arguments = command->second->ArgumentCount() ? line.m_String.substr(range.second, line.m_String.size() - range.first) : "";
+
+//			std::cout << "ARGS : " << arguments.m_String << std::endl;
 
 			// Execute command.
 			auto cmd_out = (*command->second)(arguments);

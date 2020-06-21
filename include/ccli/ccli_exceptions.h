@@ -18,7 +18,7 @@ namespace ccli
 	public:
 		explicit Exception(const std::string &message, const std::string &arg) :
 				m_Msg(message + ": '" + arg + "'")
-		{}
+		{ /*std::cout << "EXCEPTION: " << what() << std::endl;*/ }
 
 		explicit Exception(std::string message) :
 				m_Msg(std::move(message))

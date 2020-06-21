@@ -12,6 +12,7 @@
 #include <vector>
 #include <stdexcept>
 
+// TODO: Make argument list null terminating to test if the function has been given more arguments than needed
 namespace ccli
 {
 	namespace
@@ -110,6 +111,7 @@ namespace ccli
 
 	ARG_PARSE_BASE_SPEC(ccli::String)
 	{
+//		size_t sofa = start;
 		static auto GetWord = [](std::string &str, size_t start, size_t end) {
 				// For issues with reserved chars
 				static std::string invalid_chars;
@@ -129,7 +131,7 @@ namespace ccli
 							result.push_back(str[++i]);
 						// reserved char but not being escaped
 						else
-							throw Exception(s_ErrMsgReserved, str);
+							throw Exception(s_ErrMsgReserved, str.substr(start, end - start));
 					}
 
 				return result;
@@ -141,7 +143,9 @@ namespace ccli
 			m_Value = GetWord(input.m_String, range.first, range.second);
 		// Multi word string
 		else
-			while(true)
+		{
+			++range.first;
+			while (true)
 			{
 				// Get a non-escaped "
 				range.second = input.m_String.find('"', range.first);
@@ -150,7 +154,10 @@ namespace ccli
 
 				// Check for closing "
 				if (range.second == std::string::npos)
+				{
+					range.second = input.m_String.size();
 					throw Exception("Could not find closing '\"'", ARG_PARSE_SUBSTR(range));
+				}
 
 				// Add word to already existing string
 				m_Value.m_String += GetWord(input.m_String, range.first, range.second);
@@ -169,9 +176,11 @@ namespace ccli
 					// End of input
 					break;
 			}
+		}
 
 		// Finished parsing
 		start = range.second + 1;
+//		std::cout << "WORKED ON ARG: " << input.m_String.substr(sofa, start - sofa) << std::endl;
 	}
 
 	ARG_PARSE_BASE_SPEC(bool)
@@ -180,6 +189,7 @@ namespace ccli
 		static const char *s_false = "false";
 		static const char *s_true = "true";
 
+		// TODO: TEST THIS OUT AND THE NULL_ARGUMENT STUFF 
 		// Get argument
 		auto range = input.NextPoi(start);
 
@@ -278,6 +288,26 @@ namespace ccli
 	struct CCLI_API ArgumentParser<std::vector<T>>
 	{
 		ArgumentParser(String &input, size_t &start);
+		static inline bool IsEscapeChar(char c) { return c == '\\'; }
+		static inline bool IsReservedChar(char c)
+		{
+			for (auto rc : s_Reserved) if (c == rc) return true;
+			return false;
+		}
+		static inline bool IsEscaping(std::string &input, size_t pos)
+		{
+			return pos < input.size() - 1 && IsEscapeChar(input[pos]) && IsReservedChar(input[pos + 1]);
+		}
+		static inline bool IsEscaped(std::string &input, size_t pos)
+		{
+			bool result = false;
+			for (size_t i = pos; i > 0; --i)
+				if (IsReservedChar(input[i]) && IsEscapeChar(input[i - 1]))
+					result = !result;
+				else
+					break;
+			return result;
+		}
 		std::vector<T> m_Value;
 	};
 
@@ -286,47 +316,52 @@ namespace ccli
 	{
 		// case 1, [something]
 		// case 2, [something something1]
-
+//		std::cout << "INPUT: " << input.m_String << std::endl;
 		auto range = input.NextPoi(start);
-		if (range.first == input.End() - 1) return;
+		if (range.first == input.End()) return;
 		if (input.m_String[range.first] != '[')
-			throw Exception("Invalid vector argument missing [ delimiter before", ARG_PARSE_SUBSTR(range));
+			throw Exception("Invalid vector argument missing opening [", ARG_PARSE_SUBSTR(range));
 
 		input.m_String[range.first] = ' ';
-		range = input.NextPoi(range.first);
-		start = range.first;
-
-//		std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
-		while (range.first < input.End() - 1)
+//		std::cout << "INSIDE : " << input.m_String << std::endl;
+		while (true)
 		{
-			start = range.first;
-//			std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
-
-			if (input.m_String[start] == '[')
+			range = input.NextPoi(range.first);
+			if (range.first == input.End()) return;
+			else if (input.m_String[range.first] == '[')
 			{
-				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
-			}
-			else if (input.m_String[range.second - 1] == ']' && input.m_String[range.second - 2] != '\\')
-			{
-				if (range.first == range.second - 1)
-				{
-					++start;
-					return;
-				}
-				while (input.m_String[range.second - 1] == ']' && range.first != range.second && input.m_String[range.second - 2] != '\\')
-					--range.second;
-				input.m_String[range.second] = ' ';
-
-//			  std::cout << input.m_String << " : [start] = " << input.m_String[start] << std::endl;
-			  if (!std::isspace(input.m_String[start]))
-					m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
-				return;
+				// shits fucked
+				m_Value.push_back(ArgumentParser<T>(input, range.first).m_Value);
 			}
 			else
 			{
-				m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
+				range.second = input.m_String.find(']', range.first);
+				while (range.second != std::string::npos && IsEscaped(input.m_String, range.second))
+					range.second = input.m_String.find(']', range.second + 1);
+
+				if (range.second == std::string::npos)
+				{
+					range.second = input.m_String.size();
+					throw Exception("Invalid vector argument missing closing ]", ARG_PARSE_SUBSTR(range));
+				}
+
+				input.m_String[range.second] = ' ';
+//				std::cout << "BEFORE WORKED: " << input.m_String << std::endl;
+//				size_t end = range.second;
+				start = range.first;
+				while (true)
+				{
+					if ((range.first = input.NextPoi(range.first).first) >= range.second)
+					{
+						start = range.first;
+						return;
+					}
+//					std::cout << "START CHAR : " << input.m_String[start] << std::endl;
+//					std::cout << "RANGE OF ARGS: " << input.m_String.substr(start, end - start) << std::endl;
+					m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
+					range.first = start;
+				}
 			}
-			range = input.NextPoi(start);
 		}
 	}
 }

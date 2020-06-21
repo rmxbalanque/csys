@@ -88,17 +88,43 @@ namespace ccli
 		{
 			// Check if function can be called with the given arguments
 			static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
+			static_assert(!std::is_member_function_pointer_v<Fn>, "Non-static member functions are not allowed");
+
+			size_t name_index = 0;
+			auto range = name.NextPoi(name_index);
 
 			// Error out.
 			if (m_Commands.find(name.m_String) != m_Commands.end())
 				throw ccli::Exception("ERROR: Command already exists");
+			// Check if command is empty
+			else if (range.first == name.End())
+			{
+				log(ERROR) << "Empty command given" << ccli::endl;
+				return;
+			}
+
+			// Get command name
+			std::string command_name = name.m_String.substr(range.first, range.second - range.first);
+
+			// Command is not help and contains more than one word
+			if (name.NextPoi(name_index).first != name.End())
+				throw ccli::Exception("ERROR: Command names can not compose of multiple words");
 
 			// Register for autocomplete.
 			if (m_RegisterCommandSuggestion)
-				m_CommandSuggestionTree.insert(name.m_String);
+			{
+				m_CommandSuggestionTree.insert(command_name);
+//				m_CommandSuggestionTree.insert("help " + command_name); // TODO: Ask roland if I need to add just the name or the help too
+			}
 
 			// Add commands to system here
 			m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
+
+			// Set Help
+			auto help = [this, command_name]() { log(LOG) << m_Commands[command_name]->Help() << ccli::endl; };
+			m_Commands["help " + command_name] = std::make_unique<Command<decltype(help)>>("help " + command_name,
+																																			 "Displays help info about command " + command_name,
+																													 						 help);
 		}
 
 		template<typename T>
@@ -109,26 +135,26 @@ namespace ccli
 
 			// Make sure only one word was passed in
 			size_t name_index = 0;
-			name.NextPoi(name_index);
 			auto range = name.NextPoi(name_index);
-			if (range.first != name.End())
-			{
+			if (name.NextPoi(name_index).first != name.End())
 				throw ccli::Exception("ERROR: Whitespace separated variable names are forbidden");
-			}
 
 			// Register set.
-			ccli::System::registerCommand("set " + name.m_String, "Sets the variable " + name.m_String, [&var](T value)
-			{ var = value; }, ccli::Arg<T>(name));
+			std::string var_name = name.m_String.substr(range.first, range.second - range.first);
 
-			// Register get.
-			ccli::System::registerCommand("get " + name.m_String, "Gets the variable " + name.m_String, [&]()
-			{ m_CommandData.log(LOG) << var << endl; });
+			// TODO: Tell roland to avoid doing & in lambdas
+			// TODO: Write in documentation that the memory passed into this function is assumed with the lifetime of the program
+			const auto SetFunction = [&var](T val){ var = val; };
+			const auto GetFunction = [this, &var](){ m_CommandData.log(LOG) << var << endl; };
+
+			m_Commands["set " + var_name] = std::make_unique<Command<decltype(SetFunction), Arg<T>>>("set " + var_name, "Sets the variable " + var_name, SetFunction, Arg<T>(var_name));
+			m_Commands["get " + var_name] = std::make_unique<Command<decltype(GetFunction)>>("get " + var_name, "Gets the variable " + var_name, GetFunction);
 
 			// Enable again.
 			m_RegisterCommandSuggestion = true;
 
 			// Register variable
-			m_VariableSuggestionTree.insert(name.m_String);
+			m_VariableSuggestionTree.insert(var_name); // TODO: Ask roland if I need to add the "set name" and "get name"
 		}
 
 		/*!

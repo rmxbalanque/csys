@@ -19,9 +19,16 @@ set(CCLI_VERSION
 project(ccli VERSION ${CCLI_VERSION} LANGUAGES CXX)
 message(STATUS "Build CCLI: ${PROJECT_VERSION}")
 
+# Configure ccli_version.h
+configure_file(
+        "${PROJECT_SOURCE_DIR}/cmake/ccli_version.h.in"
+        "${PROJECT_BINARY_DIR}/include/ccli/version.h"
+)
+
 # Setup module subdirectory.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
+# For installation.
 include(GNUInstallDirs)
 
 # -----------------------------------------------------------------------------
@@ -210,6 +217,7 @@ if (CCLI_INSTALL)
             COMPATIBILITY AnyNewerVersion
     )
     install(FILES "${VERSION_CONFIG_FILE}" DESTINATION "${EXPORT_DEST_DIR}")
+    install(FILES "${PROJECT_BINARY_DIR}/include/ccli/version.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ccli/)
 
     # Install CCLI Targets.
     install(EXPORT ccli_targets

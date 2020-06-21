@@ -2,6 +2,7 @@
 #include "ccli/ccli_autocomplete.h"
 #include <algorithm>
 #include <string>
+#include <vector>
 
 #define SEARCH_CHECK(word){\
 	CHECK(tree.search(word));}\

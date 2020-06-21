@@ -1,3 +1,4 @@
+#include <sstream> // Fix for VS2019
 #include "doctest.h"
 #include "ccli/ccli_autocomplete.h"
 #include <algorithm>

@@ -41,12 +41,6 @@ addons: &clang10
       - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
         key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
 
-# Setup compilers.
-#compiler:
-#  - clang
-#  - gcc
-
-
  #TODO: Add build matrix to test different compilers and different libraries types (Shared, Static, Header Only)
  #Build matrix
 matrix:

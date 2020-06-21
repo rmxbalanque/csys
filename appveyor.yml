@@ -1,8 +1,5 @@
 # Adapted from:
 # https://github.com/gabime/spdlog
-image:
-  - Visual Studio 2019
-
 clone_folder: c:\projects\source
 
 branches:
@@ -15,21 +12,27 @@ environment:
     - GENERATOR: '"Visual Studio 15 2017 Win64"'
       BUILD_TYPE: Debug
       BUILD_SHARED: 'OFF'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - GENERATOR: '"Visual Studio 15 2017 Win64"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'OFF'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - GENERATOR: '"Visual Studio 15 2017 Win64"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'ON'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'OFF'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'OFF'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'ON'
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 #    - GENERATOR: '"Visual Studio 14 2015"'
 #      BUILD_TYPE: Debug
 #      BUILD_SHARED: 'OFF'

@@ -23,6 +23,24 @@ addons: &clang8
       - libstdc++-8-dev
       - clang-8
 
+# gcc 7.0
+addons: &gcc7
+  apt:
+    packages:
+      - g++-7
+    sources:
+      - ubuntu-toolchain-r-test
+
+addons: &clang10
+  apt:
+    packages:
+      - clang-10
+      - lldb-10
+      - lld-10
+    sources:
+      - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
+        key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+
 # Setup compilers.
 #compiler:
 #  - clang
@@ -34,6 +52,15 @@ addons: &clang8
 matrix:
   fast_finish: true
   include:
+    # Test GCC 7, C++17, Build Debug/Release
+    - os: linux
+      addons: *gcc7
+      env: GCC_VERSION=7 BUILD_TYPE=Debug BUILD_SHARED=false
+
+    - os: linux
+      addons: *gcc7
+      env: GCC_VERSION=7 BUILD_TYPE=Release BUILD_SHARED=false
+
     # Test GCC 8, C++17, Build Debug/Release
     - os: linux
       addons: *gcc8
@@ -41,19 +68,29 @@ matrix:
 
     - os: linux
       addons: *gcc8
-      env: GCC_VERSION=8 BUILD_TYPE=Debug BUILD_SHARED=true
+      env: GCC_VERSION=8 BUILD_TYPE=Release BUILD_SHARED=false
 
-    # Test GCC 8, C++17, Build Debug/Release
-    - os: linux
-      dist: bionic
-      addons: *clang8
-      env: CLANG_VERSION=8 BUILDT_TYPE=Debug BUILD_SHARED=true
-
+    # Test Clang 8, C++17, Build Debug/Release
     - os: linux
       dist: bionic
       addons: *clang8
       env: CLANG_VERSION=8 BUILDT_TYPE=Debug BUILD_SHARED=false
 
+    - os: linux
+      dist: bionic
+      addons: *clang8
+      env: CLANG_VERSION=8 BUILDT_TYPE=Release BUILD_SHARED=false
+
+    # Test Clang 10, C++17, Build Debug/Release
+    - os: linux
+      dist: bionic
+      addons: *clang10
+      env: CLANG_VERSION=10 BUILDT_TYPE=Debug BUILD_SHARED=false
+
+    - os: linux
+      dist: bionic
+      addons: *clang10
+      env: CLANG_VERSION=10 BUILDT_TYPE=Release BUILD_SHARED=false
 
 # Setup cmake.
 before_script:

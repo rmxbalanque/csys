@@ -21,13 +21,13 @@ environment:
     - GENERATOR: '"Visual Studio 15 2017 Win64"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'ON'
-    - GENERATOR: '"Visual Studio 16 2019 Win64"'
+    - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'OFF'
-    - GENERATOR: '"Visual Studio 16 2019 Win64"'
+    - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'OFF'
-    - GENERATOR: '"Visual Studio 16 2019 Win64"'
+    - GENERATOR: '"Visual Studio 16 2019"'
       BUILD_TYPE: Release
       BUILD_SHARED: 'ON'
 #    - GENERATOR: '"Visual Studio 14 2015"'

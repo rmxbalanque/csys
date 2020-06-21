@@ -22,6 +22,7 @@
 			}\
 		}\
 		CHECK(check);\
+		delete results;\
 	}\
 
 #define SUGGESTION_PARTIAL_CHECK(tree, prefix, partial_ac, ...)\
@@ -107,9 +108,28 @@ TEST_CASE("Autocomplete")
 		SUGGESTION_PARTIAL_CHECK(tree2, "r", "rol", "rolipoli", "rolling");
 	}
 
-	// ADD MORE TESTS
-	// Tree duplication.
-	// Move operator.
-	// Tree deletion.
+	// Copying tree.
+	SUBCASE("Copying trees")
+	{
+		auto cTree(tree);
+		CHECK(cTree.search("roland"));
+		CHECK(cTree.search("munguia"));
+		CHECK(cTree.search("12345"));
+		CHECK(cTree.search("michael"));
+		CHECK(cTree.search("rino"));
+		CHECK(cTree.search("muchos"));
+
+		cTree.remove("roland");
+		cTree.remove("munguia");
+
+		ccli::AutoComplete aTree;
+		aTree = cTree;
+		CHECK(!aTree.search("roland"));
+		CHECK(!aTree.search("munguia"));
+		CHECK(aTree.search("12345"));
+		CHECK(aTree.search("michael"));
+		CHECK(aTree.search("rino"));
+		CHECK(aTree.search("muchos"));
+	}
 }
 

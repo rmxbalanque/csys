@@ -48,12 +48,23 @@ namespace ccli
 			acNode *m_Greater; 	//!< Right pointer.
 		};
 
-		// Default constructor.
+		/*!
+		 * \brief Default Constructor
+		 */
 		AutoComplete() = default;
 
-		// No copy allowed
-		AutoComplete(const AutoComplete &tree) = default;
-		AutoComplete(AutoComplete &&tree) noexcept = default;
+		/*!
+		 * \brief Copy constructor
+		 * \param tree Source tree
+		 */
+		AutoComplete(const AutoComplete &tree);
+
+		/*!
+		 * \brief Assignment operator
+		 * \param rhs Source tree
+		 * \return Self
+		 */
+		AutoComplete & operator=(const AutoComplete& rhs);
 
 		/*!
 		 *
@@ -278,6 +289,8 @@ namespace ccli
 		 * \return If node is word
 		 */
 		bool removeAux(acNode *root, const char * word);
+
+		void deepClone(acNode* src, acNode*& dest);
 
 		acNode *m_Root = nullptr;  	//!< Ternary Search Tree Root node
 		size_t m_Size = 0;			//!< Node count

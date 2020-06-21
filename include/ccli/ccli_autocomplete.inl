@@ -2,7 +2,9 @@
 #pragma once
 
 #ifndef CCLI_HEADER_ONLY
+
 #include "ccli/ccli_autocomplete.h"
+
 #endif
 
 namespace ccli
@@ -14,6 +16,27 @@ namespace ccli
 	CCLI_INLINE AutoComplete::~AutoComplete()
 	{
 		delete m_Root;
+	}
+
+	CCLI_INLINE AutoComplete::AutoComplete(const AutoComplete &tree) : m_Size(tree.m_Size), m_Count(tree.m_Count)
+	{
+		deepClone(tree.m_Root, m_Root);
+	}
+
+	CCLI_INLINE AutoComplete &AutoComplete::operator=(const AutoComplete &rhs)
+	{
+		// Prevent self assignment.
+		if (&rhs == this) return *this;
+
+		// Clean.
+		delete m_Root;
+
+		// Copy from source tree.
+		deepClone(rhs.m_Root, m_Root);
+		m_Size = rhs.m_Size;
+		m_Count = rhs.m_Count;
+
+		return *this;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -262,7 +285,7 @@ namespace ccli
 				root->m_IsWord = false;
 				return (!root->m_Equal && !root->m_Less && !root->m_Greater);
 			}
-			// String is a prefix.
+				// String is a prefix.
 			else
 				return false;
 		}
@@ -274,7 +297,7 @@ namespace ccli
 			else if (*word > root->m_Data)
 				removeAux(root->m_Greater, word);
 
-			// String is in TST.
+				// String is in TST.
 			else if (*word == root->m_Data)
 			{
 				// Char is unique.
@@ -288,5 +311,15 @@ namespace ccli
 		}
 
 		return false;
+	}
+
+	void AutoComplete::deepClone(AutoComplete::acNode *src, AutoComplete::acNode *&dest)
+	{
+		if (!src) return;
+
+		dest = new acNode(*src);
+		deepClone(src->m_Less, dest->m_Less);
+		deepClone(src->m_Equal, dest->m_Equal);
+		deepClone(src->m_Greater, dest->m_Greater);
 	}
 }

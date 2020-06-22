@@ -1,40 +1,40 @@
 
 #pragma once
 
-#ifndef CCLI_HEADER_ONLY
-#include "ccli/ccli_script.h"
+#ifndef CSYS_HEADER_ONLY
+#include "csys/script.h"
 #endif
 
 #include <fstream>
 #include <utility>
-#include "ccli/ccli_exceptions.h"
+#include "csys/exceptions.h"
 
-namespace ccli
+namespace csys
 {
 
-	CCLI_INLINE Script::Script(std::string path, bool load_on_init) : m_Path(std::move(path)), m_FromMemory(false)
+	CSYS_INLINE Script::Script(std::string path, bool load_on_init) : m_Path(std::move(path)), m_FromMemory(false)
 	{
 		// Load file.
 		if (load_on_init)
 			load();
 	}
 
-	CCLI_INLINE Script::Script(const char *path, bool load_on_init) : m_Path(path), m_FromMemory(false)
+	CSYS_INLINE Script::Script(const char *path, bool load_on_init) : m_Path(path), m_FromMemory(false)
 	{
 		// Load file.
 		if (load_on_init)
 			load();
 	}
 
-	CCLI_INLINE Script::Script(std::vector<std::string> data) : m_Data(std::move(data)), m_FromMemory(true) {}
+	CSYS_INLINE Script::Script(std::vector<std::string> data) : m_Data(std::move(data)), m_FromMemory(true) {}
 
-	CCLI_INLINE void Script::load()
+	CSYS_INLINE void Script::load()
 	{
 		std::ifstream script_fstream(m_Path);
 
 		// Error check.
 		if (!script_fstream.good())
-			throw ccli::Exception("Failed to load script", m_Path);
+			throw csys::Exception("Failed to load script", m_Path);
 
 		// Check and open file.
 		if (script_fstream.good() && script_fstream.is_open())
@@ -53,7 +53,7 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void Script::reload()
+	CSYS_INLINE void Script::reload()
 	{
 		if (m_FromMemory) return;
 
@@ -61,17 +61,17 @@ namespace ccli
 		load();
 	}
 
-	CCLI_INLINE void Script::unload()
+	CSYS_INLINE void Script::unload()
 	{
 		m_Data.clear();
 	}
 
-	CCLI_INLINE void Script::set_path(std::string path)
+	CSYS_INLINE void Script::set_path(std::string path)
 	{
 		m_Path = std::move(path);
 	}
 
-	CCLI_INLINE const std::vector<std::string> &Script::data()
+	CSYS_INLINE const std::vector<std::string> &Script::data()
 	{
 		return m_Data;
 	}

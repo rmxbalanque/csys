@@ -1,14 +1,14 @@
-#ifndef CCLI_HISTORY_H
-#define CCLI_HISTORY_H
+#ifndef CSYS_HISTORY_H
+#define CSYS_HISTORY_H
 #pragma once
 
 #include <string>
 #include <vector>
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 
-namespace ccli
+namespace csys
 {
-	class CCLI_API CommandHistory
+	class CSYS_API CommandHistory
 	{
 	public:
 
@@ -88,8 +88,8 @@ namespace ccli
 	};
 }
 
-#ifdef CCLI_HEADER_ONLY
-#include "ccli/ccli_history.inl"
+#ifdef CSYS_HEADER_ONLY
+#include "csys/history.inl"
 #endif
 
-#endif //CCLI_HISTORY_H
+#endif //CSYS_HISTORY_H

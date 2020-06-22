@@ -2,18 +2,18 @@
 // Created by antimatter on 5/26/20.
 //
 
-#ifndef CCLI_COMMAND_H
-#define CCLI_COMMAND_H
+#ifndef CSYS_COMMAND_H
+#define CSYS_COMMAND_H
 #pragma once
 
 #include <functional>
 #include <type_traits>
 #include <utility>
-#include "ccli/ccli_arguments.h"
-#include "ccli/ccli_exceptions.h"
-#include "ccli/ccli_item.h"
+#include "csys/arguments.h"
+#include "csys/exceptions.h"
+#include "csys/item.h"
 
-namespace ccli
+namespace csys
 {
 	// TODO: Fix flipping issue and same setting issue
 	// TODO: Fix parse command with ranges and stuff
@@ -27,7 +27,7 @@ namespace ccli
   };
 
   template<typename Fn, typename ...Args>
-  class CCLI_API Command : public CommandBase
+  class CSYS_API Command : public CommandBase
   {
 	public:
     Command(String name, String description, Fn function, Args... args)
@@ -79,7 +79,7 @@ namespace ccli
   };
 
 	template<typename Fn>
-	class CCLI_API Command<Fn> : public CommandBase
+	class CSYS_API Command<Fn> : public CommandBase
 	{
 	public:
 		Command(String name, String description, Fn function)
@@ -113,4 +113,4 @@ namespace ccli
 	};
 }
 
-#endif //CCLI_COMMAND_H
+#endif //CSYS_COMMAND_H

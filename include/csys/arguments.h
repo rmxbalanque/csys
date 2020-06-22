@@ -2,20 +2,20 @@
 // Created by antimatter on 5/26/20.
 //
 
-#ifndef CCLI_ARGUMENTS_H
-#define CCLI_ARGUMENTS_H
+#ifndef CSYS_ARGUMENTS_H
+#define CSYS_ARGUMENTS_H
 #pragma once
 
-#include "ccli/ccli_api.h"
-#include "ccli/ccli_string.h"
-#include "ccli/ccli_exceptions.h"
-#include "ccli/ccli_argument_parser.h"
+#include "csys/api.h"
+#include "csys/string.h"
+#include "csys/exceptions.h"
+#include "csys/argument_parser.h"
 #include <vector>
 
-namespace ccli
+namespace csys
 {
 	template<typename T>
-	struct CCLI_API ArgData
+	struct CSYS_API ArgData
 	{
 		explicit ArgData(String name) : m_Name(std::move(name)), m_Value() {}
 		const String m_Name = "";
@@ -24,7 +24,7 @@ namespace ccli
 	};
 
   template<typename T>
-  struct CCLI_API Arg
+  struct CSYS_API Arg
   {
     using ValueType = T;
     explicit Arg(const String &name) : m_Arg(name) {}
@@ -49,7 +49,7 @@ namespace ccli
 
   // TODO: ADD TO ENDING ARGUMENT
 	template<>
-	struct CCLI_API Arg<NULL_ARGUMENT>
+	struct CSYS_API Arg<NULL_ARGUMENT>
 	{
 		Arg<NULL_ARGUMENT> &Parse(String &input, size_t &start)
 		{
@@ -61,7 +61,7 @@ namespace ccli
 
 #define ARG_BASE_SPEC(TYPE, TYPE_NAME) \
   template<>\
-	struct CCLI_API ArgData<TYPE> \
+	struct CSYS_API ArgData<TYPE> \
 	{ \
 		explicit ArgData(String name) : m_Name(std::move(name)), m_Value() {} \
 		const String m_Name; \
@@ -86,7 +86,7 @@ namespace ccli
 	ARG_BASE_SPEC(long double,        "Long_Double")
 
 	template<typename T>
-	struct CCLI_API ArgData<std::vector<T>>
+	struct CSYS_API ArgData<std::vector<T>>
 	{
 		explicit ArgData(String name) : m_Name(std::move(name)) {}
 		const String m_Name;
@@ -97,4 +97,4 @@ namespace ccli
   // TODO: Give better feedback and errors when they mess up
 }
 
-#endif //CCLI_ARGUMENTS_H
+#endif //CSYS_ARGUMENTS_H

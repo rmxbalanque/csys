@@ -1,23 +1,23 @@
-#ifndef CCLI_SYSTEM_H
-#define CCLI_SYSTEM_H
+#ifndef CSYS_SYSTEM_H
+#define CSYS_SYSTEM_H
 
 #pragma once
 
 // TODO: Forward declare as much as possible
-#include "ccli/ccli_command.h"
-#include "ccli/ccli_autocomplete.h"
-#include "ccli/ccli_history.h"
-#include "ccli/ccli_item.h"
-#include "ccli/ccli_script.h"
+#include "csys/command.h"
+#include "csys/autocomplete.h"
+#include "csys/history.h"
+#include "csys/item.h"
+#include "csys/script.h"
 #include <memory>
 #include <unordered_map>
 #include <string>
 
-namespace ccli
+namespace csys
 {
-	// TODO: Add move, copy, assignment operators to all classes in ccli. Or delete if thats the intended purpose.
+	// TODO: Add move, copy, assignment operators to all classes in csys. Or delete if thats the intended purpose.
 	// TODO: Trim white space for the string both ends.
-	class CCLI_API System
+	class CSYS_API System
 	{
 	public:
 
@@ -95,11 +95,11 @@ namespace ccli
 
 			// Error out.
 			if (m_Commands.find(name.m_String) != m_Commands.end())
-				throw ccli::Exception("ERROR: Command already exists");
+				throw csys::Exception("ERROR: Command already exists");
 			// Check if command is empty
 			else if (range.first == name.End())
 			{
-				log(ERROR) << "Empty command given" << ccli::endl;
+				log(ERROR) << "Empty command given" << csys::endl;
 				return;
 			}
 
@@ -108,7 +108,7 @@ namespace ccli
 
 			// Command is not help and contains more than one word
 			if (name.NextPoi(name_index).first != name.End())
-				throw ccli::Exception("ERROR: Command names can not compose of multiple words");
+				throw csys::Exception("ERROR: Command names can not compose of multiple words");
 
 			// Register for autocomplete.
 			if (m_RegisterCommandSuggestion)
@@ -121,7 +121,7 @@ namespace ccli
 			m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
 
 			// Set Help
-			auto help = [this, command_name]() { log(LOG) << m_Commands[command_name]->Help() << ccli::endl; };
+			auto help = [this, command_name]() { log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
 			m_Commands["help " + command_name] = std::make_unique<Command<decltype(help)>>("help " + command_name,
 																																			 "Displays help info about command " + command_name,
 																													 						 help);
@@ -137,7 +137,7 @@ namespace ccli
 			size_t name_index = 0;
 			auto range = name.NextPoi(name_index);
 			if (name.NextPoi(name_index).first != name.End())
-				throw ccli::Exception("ERROR: Whitespace separated variable names are forbidden");
+				throw csys::Exception("ERROR: Whitespace separated variable names are forbidden");
 
 			// Register set.
 			std::string var_name = name.m_String.substr(range.first, range.second - range.first);
@@ -196,8 +196,8 @@ namespace ccli
 	};
 }
 
-#ifdef CCLI_HEADER_ONLY
-#include "ccli/ccli_system.inl"
+#ifdef CSYS_HEADER_ONLY
+#include "csys/system.inl"
 #endif
 
 #endif

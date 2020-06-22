@@ -3,10 +3,10 @@
 //
 
 #include "doctest.h"
-#include "ccli/ccli_system.h"
+#include "csys/system.h"
 
 TEST_CASE("Char argument")
 {
-	using namespace ccli;
+	using namespace csys;
 	CHECK(true);
 }

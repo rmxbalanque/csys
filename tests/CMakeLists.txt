@@ -2,18 +2,18 @@
 cmake_minimum_required(VERSION 3.1...3.16)
 
 # Start test project.
-project(ccli_tests LANGUAGES CXX)
+project(csys_tests LANGUAGES CXX)
 
 # Stand alone build (TODO: Read more about this.
-if(NOT TARGET ccli)
-    find_package(ccli REQUIRED)
+if(NOT TARGET csys)
+    find_package(csys REQUIRED)
 endif()
 
 # Utilities.
-include(../cmake/ccli_utils.cmake)
+include(../cmake/csys_utils.cmake)
 
 # Sources.
-set(CCLI_TEST_SOURCES
+set(CSYS_TEST_SOURCES
         test_autocomplete.cpp
         test_system.cpp
         test_string_argument.cpp
@@ -25,8 +25,8 @@ set(CCLI_TEST_SOURCES
 # Add Script test only if filesystem is found.
 find_package(Filesystem)
 if (Filesystem_FOUND)
-    message(STATUS "Including ccli::Script test")
-    list(APPEND ${CCLI_TEST_SOURCES} test_script.cpp)
+    message(STATUS "Including csys::Script test")
+    list(APPEND ${CSYS_TEST_SOURCES} test_script.cpp)
 endif()
 
 # Set up testing.
@@ -35,18 +35,18 @@ enable_testing()
 set(IWYU_PATH "${CMAKE_SOURCE_DIR}/thirdparty/include-what-you-use/build/bin/include-what-you-use")
 
 # Helper func.
-function(ccli_prepare_test test_target ccli_lib)
-    add_executable(${test_target} ${CCLI_TEST_SOURCES})
-    ccli_enable_warnings(${test_target})
-    target_link_libraries(${test_target} PRIVATE ${ccli_lib})
-    if (CCLI_ENABLE_IWYU)
+function(csys_prepare_test test_target csys_lib)
+    add_executable(${test_target} ${CSYS_TEST_SOURCES})
+    csys_enable_warnings(${test_target})
+    target_link_libraries(${test_target} PRIVATE ${csys_lib})
+    if (CSYS_ENABLE_IWYU)
         set_target_properties(${test_target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
     endif()
     add_test(NAME ${test_target} COMMAND ${test_target})
     #set_tests_properties(${test_target} PROPERTIES RUN_SERIAL ON)
 endfunction()
 
-# Build tests with ccli library.
-if (CCLI_BUILD_TESTS)
-    ccli_prepare_test(ccli_tests ccli::ccli)
+# Build tests with csys library.
+if (CSYS_BUILD_TESTS)
+    csys_prepare_test(csys_tests csys::csys)
 endif()

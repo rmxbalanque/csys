@@ -40,7 +40,7 @@ build_script:
 
       cd build
 
-      cmake c:\projects\source -G %GENERATOR% -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCCLI_BUILD_SHARED=%BUILD_SHARED% -DCCLI_BUILD_EXAMPLES=ON -DCCLI_BUILD_TESTS=ON -DCCLI_BUILD_WARNINGS=ON
+      cmake c:\projects\source -G %GENERATOR% -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCSYS_BUILD_SHARED=%BUILD_SHARED% -DCSYS_BUILD_EXAMPLES=ON -DCSYS_BUILD_TESTS=ON -DCSYS_BUILD_WARNINGS=ON
 
       cmake --build . --config %BUILD_TYPE%
 
@@ -52,4 +52,4 @@ before_test:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 test_script:
-  - C:\projects\source\build\tests\%BUILD_TYPE%\ccli_tests.exe
+  - C:\projects\source\build\tests\%BUILD_TYPE%\csys_tests.exe

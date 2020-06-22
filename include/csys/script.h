@@ -1,14 +1,14 @@
-#ifndef CCLI_SCRIPT_H
-#define CCLI_SCRIPT_H
+#ifndef CSYS_SCRIPT_H
+#define CSYS_SCRIPT_H
 #pragma once
 
 #include <string>
 #include <vector>
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 
-namespace ccli
+namespace csys
 {
-	class CCLI_API Script
+	class CSYS_API Script
 	{
 	public:
 
@@ -66,8 +66,8 @@ namespace ccli
 	};
 }
 
-#ifdef CCLI_HEADER_ONLY
-#include "ccli/ccli_script.inl"
+#ifdef CSYS_HEADER_ONLY
+#include "csys/script.inl"
 #endif
 
 #endif

@@ -1,13 +1,13 @@
 #include "doctest.h"
-#include "ccli/ccli_script.h"
+#include "csys/script.h"
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <filesystem>
 
-TEST_CASE("Test CCLI System Class")
+TEST_CASE("Test CSYS System Class")
 {
-	using namespace ccli;
+	using namespace csys;
 
 	// Data.
 	std::vector<std::string> script_expected_data = {"help", "run for help", "set time 10", "get time"};

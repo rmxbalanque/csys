@@ -4,25 +4,25 @@
 cmake_minimum_required(VERSION 3.1...3.16)
 
 # -----------------------------------------------------------------------------
-# Start CCLI project.
+# Start CSYS project.
 # -----------------------------------------------------------------------------
-include(cmake/ccli_utils.cmake)
+include(cmake/csys_utils.cmake)
 
 # Configure library version
-set(CCLI_MAJOR_VERSION 0)
-set(CCLI_MINOR_VERSION 1)
-set(CCLI_PATCH_VERSION 0)
-set(CCLI_VERSION
-        ${CCLI_MAJOR_VERSION}.${CCLI_MINOR_VERSION}.${CCLI_PATCH_VERSION})
+set(CSYS_MAJOR_VERSION 0)
+set(CSYS_MINOR_VERSION 1)
+set(CSYS_PATCH_VERSION 0)
+set(CSYS_VERSION
+        ${CSYS_MAJOR_VERSION}.${CSYS_MINOR_VERSION}.${CSYS_PATCH_VERSION})
 
 # Add Custom In-Game CLI Project.
-project(ccli VERSION ${CCLI_VERSION} LANGUAGES CXX)
-message(STATUS "Build CCLI: ${PROJECT_VERSION}")
+project(csys VERSION ${CSYS_VERSION} LANGUAGES CXX)
+message(STATUS "Build CSYS: ${PROJECT_VERSION}")
 
-# Configure ccli_version.h
+# Configure csys_version.h
 configure_file(
-        "${PROJECT_SOURCE_DIR}/cmake/ccli_version.h.in"
-        "${PROJECT_BINARY_DIR}/include/ccli/version.h"
+        "${PROJECT_SOURCE_DIR}/cmake/csys_version.h.in"
+        "${PROJECT_BINARY_DIR}/include/csys/version.h"
 )
 
 # Setup module subdirectory.
@@ -57,28 +57,28 @@ endif ()
 # -----------------------------------------------------------------------------
 
 # Include tests.
-option(CCLI_BUILD_EXAMPLES "Include and build CCLI examples targets" OFF) # ON
+option(CSYS_BUILD_EXAMPLES "Include and build CSYS examples targets" OFF) # ON
 
 # Build shared option
-option(CCLI_BUILD_SHARED "Build shared library" OFF) # ON
+option(CSYS_BUILD_SHARED "Build shared library" OFF) # ON
 
 # Precompiled headers option
-option(CCLI_ENABLE_PCH "Build library using precompiled headers to improve compilation times" OFF) # ON
+option(CSYS_ENABLE_PCH "Build library using precompiled headers to improve compilation times" OFF) # ON
 
 # Testing options.
-option(CCLI_BUILD_TESTS "Build tests" OFF) # ON
+option(CSYS_BUILD_TESTS "Build tests" OFF) # ON
 
-# CCLI compiler warnings
-option(CCLI_BUILD_WARNINGS "Enable compiler warnings" OFF) # ON
+# CSYS compiler warnings
+option(CSYS_BUILD_WARNINGS "Enable compiler warnings" OFF) # ON
 
 # Install options
-option(CCLI_INSTALL "Generate the install target" OFF)
+option(CSYS_INSTALL "Generate the install target" OFF)
 
 # - Tools -
 
 # Include-What-You-Use
-option(CCLI_ENABLE_IWYU "Enables the usage of include what you use" OFF) # ON
-set(CCLI_IWYU_CLANG_VERSION "9" CACHE STRING "Clang version that include-what-you-use will use") # 9
+option(CSYS_ENABLE_IWYU "Enables the usage of include what you use" OFF) # ON
+set(CSYS_IWYU_CLANG_VERSION "9" CACHE STRING "Clang version that include-what-you-use will use") # 9
 
 # Notify build type.
 message(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
@@ -87,47 +87,47 @@ message(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
 # Build Static/Shared Library
 # -----------------------------------------------------------------------------
 
-# ccli files
-set(CCLI_SOURCES ${ccli_SOURCE_DIR}/src/ccli.cpp)
-set(CCLI_HEADER_PATH "${ccli_SOURCE_DIR}/include/ccli")
-set(CCLI_HEADERS
-        "${CCLI_HEADER_PATH}/ccli.h"
-        "${CCLI_HEADER_PATH}/ccli_autocomplete.h"
-        "${CCLI_HEADER_PATH}/ccli_arguments.h"
-        "${CCLI_HEADER_PATH}/ccli_command.h"
-        "${CCLI_HEADER_PATH}/ccli_string.h"
-        "${CCLI_HEADER_PATH}/ccli_system.h"
-        "${CCLI_HEADER_PATH}/ccli_exceptions.h"
-        "${CCLI_HEADER_PATH}/ccli_item.h"
-        "${CCLI_HEADER_PATH}/ccli_argument_parser.h"
-        "${CCLI_HEADER_PATH}/ccli_system.h")
+# csys files
+set(CSYS_SOURCES ${csys_SOURCE_DIR}/src/csys.cpp)
+set(CSYS_HEADER_PATH "${csys_SOURCE_DIR}/include/csys")
+set(CSYS_HEADERS
+        "${CSYS_HEADER_PATH}/csys.h"
+        "${CSYS_HEADER_PATH}/autocomplete.h"
+        "${CSYS_HEADER_PATH}/arguments.h"
+        "${CSYS_HEADER_PATH}/command.h"
+        "${CSYS_HEADER_PATH}/string.h"
+        "${CSYS_HEADER_PATH}/system.h"
+        "${CSYS_HEADER_PATH}/exceptions.h"
+        "${CSYS_HEADER_PATH}/item.h"
+        "${CSYS_HEADER_PATH}/argument_parser.h"
+        "${CSYS_HEADER_PATH}/system.h")
 
-# Add core ccli target.
-if (CCLI_BUILD_SHARED)
-    add_library(ccli SHARED ${CCLI_SOURCES} ${CCLI_HEADERS})
-    target_compile_definitions(ccli PUBLIC CCLI_SHARED_LIB)
+# Add core csys target.
+if (CSYS_BUILD_SHARED)
+    add_library(csys SHARED ${CSYS_SOURCES} ${CSYS_HEADERS})
+    target_compile_definitions(csys PUBLIC CSYS_SHARED_LIB)
 else ()
-    add_library(ccli STATIC ${CCLI_SOURCES} ${CCLI_HEADERS})
-    target_compile_definitions(ccli PUBLIC CCLI_STATIC_LIB)  # Used for export macros.
+    add_library(csys STATIC ${CSYS_SOURCES} ${CSYS_HEADERS})
+    target_compile_definitions(csys PUBLIC CSYS_STATIC_LIB)  # Used for export macros.
 endif ()
 
 # Enable warnings.
-ccli_enable_warnings(ccli)
+csys_enable_warnings(csys)
 
-# Define ccli namespace
-add_library(ccli::ccli ALIAS ccli)
+# Define csys namespace
+add_library(csys::csys ALIAS csys)
 
 # By default we are compiling this library.
-target_compile_definitions(ccli PUBLIC CCLI_COMPILED_LIB)
+target_compile_definitions(csys PUBLIC CSYS_COMPILED_LIB)
 
 # Library public include directories
-target_include_directories(ccli PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+target_include_directories(csys PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
                                                       "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
 # Set precompiled headers if supported and enabled
-if (COMMAND target_precompile_headers AND CCLI_ENABLE_PCH)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ccli_pch.h.in ${PROJECT_BINARY_DIR}/ccli_pch.h @ONLY)
-    target_precompile_headers(ccli PRIVATE ${PROJECT_BINARY_DIR}/ccli_pch.h)
+if (COMMAND target_precompile_headers AND CSYS_ENABLE_PCH)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/csys_pch.h.in ${PROJECT_BINARY_DIR}/csys_pch.h @ONLY)
+    target_precompile_headers(csys PRIVATE ${PROJECT_BINARY_DIR}/csys_pch.h)
 endif ()
 
 # Export no symbols by default. (To ensure cross-compiler consistent behaviour)
@@ -138,15 +138,15 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 # Header only version
 # -----------------------------------------------------------------------------
 
-# Add header version ccli
-add_library(ccli_header_only INTERFACE)
-add_library(ccli::ccli_header_only ALIAS ccli_header_only)
+# Add header version csys
+add_library(csys_header_only INTERFACE)
+add_library(csys::csys_header_only ALIAS csys_header_only)
 
 # Set sources/includes
-target_include_directories(ccli_header_only INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+target_include_directories(csys_header_only INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
                                                           "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 
-# Link ccli private dependencies
+# Link csys private dependencies
 
 # -----------------------------------------------------------------------------
 # Development tools
@@ -155,14 +155,14 @@ target_include_directories(ccli_header_only INTERFACE "$<BUILD_INTERFACE:${CMAKE
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
 
     # Enable include-what-you-use
-    if (CCLI_ENABLE_IWYU)
+    if (CSYS_ENABLE_IWYU)
         # Setup repo and build binaries.
-        include(cmake/ccli_configure_iwyu.cmake)
-        ccli_setup_include_what_you_use(${CCLI_IWYU_CLANG_VERSION})
+        include(cmake/csys_configure_iwyu.cmake)
+        csys_setup_include_what_you_use(${CSYS_IWYU_CLANG_VERSION})
 
         # Enable include-what-you-use built in CMake support.
         set(IWYU_PATH "${CMAKE_SOURCE_DIR}/thirdparty/include-what-you-use/build/bin/include-what-you-use")
-        set_target_properties(ccli PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
+        set_target_properties(csys PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
     endif ()
 
 endif ()
@@ -171,36 +171,36 @@ endif ()
 # Build binaries
 # -----------------------------------------------------------------------------
 
-if (CCLI_BUILD_EXAMPLES)
+if (CSYS_BUILD_EXAMPLES)
     message(STATUS "Generating Example(s)")
     add_subdirectory(examples)
 endif ()
 
-if (CCLI_BUILD_TESTS)
+if (CSYS_BUILD_TESTS)
     message(STATUS "Generating tests")
     enable_testing()
     add_subdirectory(tests)
 endif ()
 
 # -----------------------------------------------------------------------------
-# Install CCLI
+# Install CSYS
 # -----------------------------------------------------------------------------
 
-if (CCLI_INSTALL)
+if (CSYS_INSTALL)
 
     message(STATUS "Generating install")
 
     # Install paths
-    set(CONFIG_TARGETS_FILE "ccliConfig.cmake")
-    set(VERSION_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/ccliConfigVersion.cmake")
-    set(EXPORT_DEST_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/ccli")
+    set(CONFIG_TARGETS_FILE "csysConfig.cmake")
+    set(VERSION_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/csysConfigVersion.cmake")
+    set(EXPORT_DEST_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/csys")
 
     # -------------------------------------------------------------------------
     # Install targets
     # -------------------------------------------------------------------------
     install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-    install(TARGETS ccli ccli_header_only
-            EXPORT ccli_targets
+    install(TARGETS csys csys_header_only
+            EXPORT csys_targets
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -209,19 +209,19 @@ if (CCLI_INSTALL)
     # Install Config files and Export targets
     # --------------------------------------------------------------------------
 
-    # Install CCLI Version config.
+    # Install CSYS Version config.
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
             ${VERSION_CONFIG_FILE}
-            VERSION ${CCLI_VERSION}
+            VERSION ${CSYS_VERSION}
             COMPATIBILITY AnyNewerVersion
     )
     install(FILES "${VERSION_CONFIG_FILE}" DESTINATION "${EXPORT_DEST_DIR}")
-    install(FILES "${PROJECT_BINARY_DIR}/include/ccli/version.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ccli/)
+    install(FILES "${PROJECT_BINARY_DIR}/include/csys/version.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/csys/)
 
-    # Install CCLI Targets.
-    install(EXPORT ccli_targets
-            NAMESPACE ccli::
+    # Install CSYS Targets.
+    install(EXPORT csys_targets
+            NAMESPACE csys::
             FILE ${CONFIG_TARGETS_FILE}
             DESTINATION ${EXPORT_DEST_DIR})
 

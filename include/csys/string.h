@@ -2,18 +2,18 @@
 // Created by antimatter on 5/28/20.
 //
 
-#ifndef CCLI_STRING_H
-#define CCLI_STRING_H
+#ifndef CSYS_STRING_H
+#define CSYS_STRING_H
 
 #pragma once
 
 #include <string>
 #include <cctype>
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 
-namespace ccli
+namespace csys
 {
-	struct CCLI_API String
+	struct CSYS_API String
 	{
 		String() = default;
 		String(const char *str [[maybe_unused]]) : m_String(str ? str:"") {}
@@ -50,4 +50,4 @@ namespace ccli
 	};
 }
 
-#endif //CCLI_CCLI_STRING_H
+#endif //CSYS_CSYS_STRING_H

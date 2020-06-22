@@ -1,7 +1,7 @@
 # Reference: https://github.com/gabime/spdlog/blob/v1.x/cmake/utils.cmake
 
-function(ccli_enable_warnings target_name)
-    if (CCLI_BUILD_WARNINGS)
+function(csys_enable_warnings target_name)
+    if (CSYS_BUILD_WARNINGS)
         message(STATUS "Enabled warnings for target: ${target_name}")
 
         # Get MSVC compiler options.
@@ -14,7 +14,7 @@ function(ccli_enable_warnings target_name)
         endif ()
 
         # Set compiler options.
-        # TODO: This will need to be changed to PRIVATE and enable warnings on tests or targets that depend on ccli.
+        # TODO: This will need to be changed to PRIVATE and enable warnings on tests or targets that depend on csys.
         target_compile_options(
                 ${target_name}
                 PUBLIC $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:

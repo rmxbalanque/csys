@@ -5,7 +5,7 @@ if (NOT Git_FOUND)
 	message(FATAL_ERROR "Git not found!")
 endif ()
 
-function(ccli_setup_include_what_you_use CLANG_VERSION)
+function(csys_setup_include_what_you_use CLANG_VERSION)
 
     if(NOT EXISTS "${PROJECT_SOURCE_DIR}/thirdparty/include-what-you-use")
         # Info.

@@ -1,12 +1,12 @@
-#ifndef CCLI_ITEM_H
-#define CCLI_ITEM_H
+#ifndef CSYS_ITEM_H
+#define CSYS_ITEM_H
 #pragma once
 
 #include <vector>
 #include <string>
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 
-namespace ccli
+namespace csys
 {
 	static const char endl = '\n';
 
@@ -29,7 +29,7 @@ namespace ccli
 		NONE
 	};
 
-	struct CCLI_API Item
+	struct CSYS_API Item
 	{
 		/*!
 		 * \brief Create console item type
@@ -57,7 +57,7 @@ namespace ccli
 
 #define LOG_BASIC_TYPE_DECL(type) ItemLog& operator<<(type data)
 
-	class CCLI_API ItemLog
+	class CSYS_API ItemLog
 	{
 	public:
 
@@ -106,9 +106,9 @@ namespace ccli
 	};
 }
 
-#ifdef CCLI_HEADER_ONLY
+#ifdef CSYS_HEADER_ONLY
 
-#include "ccli/ccli_item.inl"
+#include "csys/item.inl"
 
 #endif
 

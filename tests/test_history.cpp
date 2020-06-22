@@ -1,12 +1,12 @@
 #include "doctest.h"
-#include "ccli/ccli_history.h"
+#include "csys/history.h"
 
-TEST_CASE("Test ccli history ")
+TEST_CASE("Test csys history ")
 {
 	// Check insertion.
 	SUBCASE("Testing command history insertion")
 	{
-		ccli::CommandHistory c_history;
+		csys::CommandHistory c_history;
 		std::vector<std::string> commands({"h1", "h2", "h3", "h4"});
 
 		for (const auto & cmd : commands)
@@ -25,7 +25,7 @@ TEST_CASE("Test ccli history ")
 	// Check looping.
 	SUBCASE("Check history looping")
 	{
-		ccli::CommandHistory c_history(3);
+		csys::CommandHistory c_history(3);
 		std::vector<std::string> commands({"h1", "h2", "h3", "h4"});
 
 		for (const auto & cmd : commands)
@@ -54,7 +54,7 @@ TEST_CASE("Test ccli history ")
 	// Check clearing.
 	SUBCASE("Check history clearing")
 	{
-		ccli::CommandHistory c_history(64);
+		csys::CommandHistory c_history(64);
 		std::vector<std::string> commands({"h1", "h2", "h3", "h4"});
 
 		for (const auto & cmd : commands)

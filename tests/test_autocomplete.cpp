@@ -1,6 +1,6 @@
 #include <sstream> // Fix for VS2019
 #include "doctest.h"
-#include "ccli/ccli_autocomplete.h"
+#include "csys/autocomplete.h"
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -43,7 +43,7 @@
 
 TEST_CASE("Autocomplete")
 {
-	ccli::AutoComplete tree({"roland", "munguia", "12345", "michael", "rino", "muchos"});
+	csys::AutoComplete tree({"roland", "munguia", "12345", "michael", "rino", "muchos"});
 
 	// Word search.
 	SUBCASE("Searching for word completion")
@@ -85,7 +85,7 @@ TEST_CASE("Autocomplete")
 	}
 
 	// Partial completion
-	ccli::AutoComplete tree2({"roland", "munguia", "12345", "michael", "rolling", "muchos", "rolipoli"});
+	csys::AutoComplete tree2({"roland", "munguia", "12345", "michael", "rolling", "muchos", "rolipoli"});
 	SUBCASE("Searching for partial complete + suggestions")
 	{
 		SUGGESTION_PARTIAL_CHECK(tree2, "r", "rol", "roland", "rolipoli", "rolling")
@@ -121,7 +121,7 @@ TEST_CASE("Autocomplete")
 		cTree.remove("roland");
 		cTree.remove("munguia");
 
-		ccli::AutoComplete aTree;
+		csys::AutoComplete aTree;
 		aTree = cTree;
 		CHECK(!aTree.search("roland"));
 		CHECK(!aTree.search("munguia"));

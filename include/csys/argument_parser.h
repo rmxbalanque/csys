@@ -2,18 +2,18 @@
 // Created by antimatter on 6/10/20.
 //
 
-#ifndef CCLI_ARGUMENT_PARSER_H
-#define CCLI_ARGUMENT_PARSER_H
+#ifndef CSYS_ARGUMENT_PARSER_H
+#define CSYS_ARGUMENT_PARSER_H
 #pragma once
 
-#include "ccli/ccli_api.h"
-#include "ccli/ccli_string.h"
-#include "ccli/ccli_exceptions.h"
+#include "csys/api.h"
+#include "csys/string.h"
+#include "csys/exceptions.h"
 #include <vector>
 #include <stdexcept>
 
 // TODO: Make argument list null terminating to test if the function has been given more arguments than needed
-namespace ccli
+namespace csys
 {
 	namespace
 	{
@@ -23,7 +23,7 @@ namespace ccli
 
 	// unary argument
 	template<typename T>
-	struct CCLI_API ArgumentParser
+	struct CSYS_API ArgumentParser
 	{
 		inline ArgumentParser(String &input, size_t &start);
 		static inline bool IsEscapeChar(char c) { return c == '\\'; }
@@ -61,7 +61,7 @@ namespace ccli
 
 #define ARG_PARSE_BASE_SPEC(TYPE) \
   template<> \
-  struct CCLI_API ArgumentParser<TYPE> \
+  struct CSYS_API ArgumentParser<TYPE> \
   { \
     inline ArgumentParser(String &input, size_t &start); \
 		static inline bool IsEscapeChar(char c) { return c == '\\'; } \
@@ -109,7 +109,7 @@ namespace ccli
     													input.m_String.substr(range.first, range.second)); } \
   }
 
-	ARG_PARSE_BASE_SPEC(ccli::String)
+	ARG_PARSE_BASE_SPEC(csys::String)
 	{
 		static auto GetWord = [](std::string &str, size_t start, size_t end) {
 				// For issues with reserved chars
@@ -283,7 +283,7 @@ namespace ccli
 	ARG_PARSE_GENERAL_SPEC(long double, "long double", std::stold)
 
 	template<typename T>
-	struct CCLI_API ArgumentParser<std::vector<T>>
+	struct CSYS_API ArgumentParser<std::vector<T>>
 	{
 		ArgumentParser(String &input, size_t &start);
 		static inline bool IsEscapeChar(char c) { return c == '\\'; }
@@ -356,4 +356,4 @@ namespace ccli
 	}
 }
 
-#endif //CCLI_ARGUMENT_PARSER_H
+#endif //CSYS_ARGUMENT_PARSER_H

@@ -2,18 +2,18 @@
 // Created by antimatter on 6/1/20.
 //
 
-#ifndef CCLI_EXCEPTIONS_H
-#define CCLI_EXCEPTIONS_H
+#ifndef CSYS_EXCEPTIONS_H
+#define CSYS_EXCEPTIONS_H
 #pragma once
 
 #include <string>
 #include <exception>
 #include <utility>
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 
-namespace ccli
+namespace csys
 {
-	class CCLI_API Exception : public std::exception
+	class CSYS_API Exception : public std::exception
 	{
 	public:
 		explicit Exception(const std::string &message, const std::string &arg) :
@@ -36,4 +36,4 @@ namespace ccli
 	};
 }
 
-#endif //CCLI_CCLI_EXCEPTIONS_H
+#endif //CSYS_CSYS_EXCEPTIONS_H

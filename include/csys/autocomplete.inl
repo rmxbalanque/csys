@@ -1,29 +1,29 @@
 
 #pragma once
 
-#ifndef CCLI_HEADER_ONLY
+#ifndef CSYS_HEADER_ONLY
 
-#include "ccli/ccli_autocomplete.h"
+#include "csys/autocomplete.h"
 
 #endif
 
-namespace ccli
+namespace csys
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Constructor/Destructors ////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE AutoComplete::~AutoComplete()
+	CSYS_INLINE AutoComplete::~AutoComplete()
 	{
 		delete m_Root;
 	}
 
-	CCLI_INLINE AutoComplete::AutoComplete(const AutoComplete &tree) : m_Size(tree.m_Size), m_Count(tree.m_Count)
+	CSYS_INLINE AutoComplete::AutoComplete(const AutoComplete &tree) : m_Size(tree.m_Size), m_Count(tree.m_Count)
 	{
 		deepClone(tree.m_Root, m_Root);
 	}
 
-	CCLI_INLINE AutoComplete &AutoComplete::operator=(const AutoComplete &rhs)
+	CSYS_INLINE AutoComplete &AutoComplete::operator=(const AutoComplete &rhs)
 	{
 		// Prevent self assignment.
 		if (&rhs == this) return *this;
@@ -43,17 +43,17 @@ namespace ccli
 	// Public methods /////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE size_t AutoComplete::size() const
+	CSYS_INLINE size_t AutoComplete::size() const
 	{
 		return m_Size;
 	}
 
-	CCLI_INLINE size_t AutoComplete::count() const
+	CSYS_INLINE size_t AutoComplete::count() const
 	{
 		return m_Count;
 	}
 
-	CCLI_INLINE bool AutoComplete::search(const char *string)
+	CSYS_INLINE bool AutoComplete::search(const char *string)
 	{
 		acNode *ptr = m_Root;
 
@@ -82,7 +82,7 @@ namespace ccli
 		return false;
 	}
 
-	CCLI_INLINE void AutoComplete::insert(const char *str)
+	CSYS_INLINE void AutoComplete::insert(const char *str)
 	{
 		acNode **ptr = &m_Root;
 		++m_Count;
@@ -123,17 +123,17 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void AutoComplete::insert(const std::string &str)
+	CSYS_INLINE void AutoComplete::insert(const std::string &str)
 	{
 		insert(str.c_str());
 	}
 
-	CCLI_INLINE void AutoComplete::remove(const std::string &word)
+	CSYS_INLINE void AutoComplete::remove(const std::string &word)
 	{
 		removeAux(m_Root, word.c_str());
 	}
 
-	CCLI_INLINE void AutoComplete::suggestions(const char *prefix, std::vector<std::string> &ac_options)
+	CSYS_INLINE void AutoComplete::suggestions(const char *prefix, std::vector<std::string> &ac_options)
 	{
 		acNode *ptr = m_Root;
 		auto temp = prefix;
@@ -170,14 +170,14 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, temp);
 	}
 
-	CCLI_INLINE std::string AutoComplete::suggestions(const std::string &prefix, r_sVector &ac_options)
+	CSYS_INLINE std::string AutoComplete::suggestions(const std::string &prefix, r_sVector &ac_options)
 	{
 		std::string temp = prefix;
 		suggestions(temp, ac_options, true);
 		return temp;
 	}
 
-	CCLI_INLINE void AutoComplete::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
+	CSYS_INLINE void AutoComplete::suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete)
 	{
 		acNode *ptr = m_Root;
 		const char *temp = prefix.data();
@@ -233,7 +233,7 @@ namespace ccli
 		suggestionsAux(ptr->m_Equal, ac_options, prefix.substr(0, prefix_end));
 	}
 
-	CCLI_INLINE std::unique_ptr<AutoComplete::sVector> AutoComplete::suggestions(const char *prefix)
+	CSYS_INLINE std::unique_ptr<AutoComplete::sVector> AutoComplete::suggestions(const char *prefix)
 	{
 		auto temp = std::make_unique<sVector>();
 		suggestions(prefix, *temp);
@@ -244,7 +244,7 @@ namespace ccli
 	// Private methods ////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE void AutoComplete::suggestionsAux(AutoComplete::acNode *root, r_sVector ac_options, std::string buffer)
+	CSYS_INLINE void AutoComplete::suggestionsAux(AutoComplete::acNode *root, r_sVector ac_options, std::string buffer)
 	{
 		if (!root) return;
 

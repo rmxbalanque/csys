@@ -1,10 +1,10 @@
 #pragma once
 
-#ifndef CCLI_HEADER_ONLY
-#include "ccli/ccli_system.h"
+#ifndef CSYS_HEADER_ONLY
+#include "csys/system.h"
 #endif
 
-namespace ccli
+namespace csys
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Public methods /////////////////////////////////////////////////////////
@@ -19,15 +19,15 @@ namespace ccli
 	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
 	static constexpr std::string_view s_ErrorSetGetNotFound = "Command doesn't exist and/or variable is not registered";
 
-	CCLI_INLINE System::System()
+	CSYS_INLINE System::System()
 	{
 		// Register help command.
 		registerCommand(s_Help.data(), "Display commands information", [&]()
 		{
 			// Custom command information display
-			log() << "help [command_name:String] (Optional)\n\t\t- Display command(s) information\n" << ccli::endl;
-			log() << "set [variable_name:String] [data]\n\t\t- Assign data to given variable\n" << ccli::endl;
-			log() << "get [variable_name:String]\n\t\t- Display data of given variable\n" << ccli::endl;
+			log() << "help [command_name:String] (Optional)\n\t\t- Display command(s) information\n" << csys::endl;
+			log() << "set [variable_name:String] [data]\n\t\t- Assign data to given variable\n" << csys::endl;
+			log() << "get [variable_name:String]\n\t\t- Display data of given variable\n" << csys::endl;
 
 			for (const auto &tuple : commands())
 			{
@@ -49,20 +49,20 @@ namespace ccli
 		m_CommandSuggestionTree.insert(s_Get.data());
 	}
 
-	CCLI_INLINE void System::runCommand(const std::string &line)
+	CSYS_INLINE void System::runCommand(const std::string &line)
 	{
 		// Error checking.
 		if (line.empty())
 			return;
 
 		// Log command.
-		log(ccli::ItemType::COMMAND) << line << ccli::endl;
+		log(csys::ItemType::COMMAND) << line << csys::endl;
 
 		// Parse command line.
 		parseCommandLine(line);
 	}
 
-	CCLI_INLINE void System::runScript(const std::string &script_name)
+	CSYS_INLINE void System::runScript(const std::string &script_name)
 	{
 		// Attempt to find script.
 		auto script_pair = m_Scripts.find(script_name);
@@ -70,12 +70,12 @@ namespace ccli
 		// Exit if not found.
 		if (script_pair == m_Scripts.end())
 		{
-			m_CommandData.log(ERROR) << "Script \"" << script_name << "\" not found" << ccli::endl;
+			m_CommandData.log(ERROR) << "Script \"" << script_name << "\" not found" << csys::endl;
 			return;
 		}
 
 		// About to run script.
-		m_CommandData.log(INFO) << "Running \"" << script_name << "\"" << ccli::endl;
+		m_CommandData.log(INFO) << "Running \"" << script_name << "\"" << csys::endl;
 
 		// Load if script is empty.
 		if (script_pair->second->data().empty())
@@ -84,9 +84,9 @@ namespace ccli
 			{
 				script_pair->second->load();
 			}
-			catch (ccli::Exception & e)
+			catch (csys::Exception & e)
 			{
-				log(ERROR) << e.what() << ccli::endl;
+				log(ERROR) << e.what() << csys::endl;
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void System::registerScript(const std::string &name, const std::string &path)
+	CSYS_INLINE void System::registerScript(const std::string &name, const std::string &path)
 	{
 		// Attempt to find scripts.
 		auto script = m_Scripts.find(name);
@@ -110,10 +110,10 @@ namespace ccli
 			m_VariableSuggestionTree.insert(name);
 		}
 		else
-			throw ccli::Exception("ERROR: Script \"" + name + "\" already registered");
+			throw csys::Exception("ERROR: Script \"" + name + "\" already registered");
 	}
 
-	CCLI_INLINE void System::unregisterCommand(const std::string &cmd_name)
+	CSYS_INLINE void System::unregisterCommand(const std::string &cmd_name)
 	{
 		// Exit if non existent.
 		if (cmd_name.empty()) return;
@@ -133,7 +133,7 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void System::unregisterVariable(const std::string &var_name)
+	CSYS_INLINE void System::unregisterVariable(const std::string &var_name)
 	{
 		// Exit if non existent.
 		if (var_name.empty()) return;
@@ -151,7 +151,7 @@ namespace ccli
 		}
 	}
 
-	CCLI_INLINE void System::unregisterScript(const std::string &script_name)
+	CSYS_INLINE void System::unregisterScript(const std::string &script_name)
 	{
 		// Exit if non existent.
 		if (script_name.empty()) return;
@@ -169,32 +169,32 @@ namespace ccli
 
 	// Getters ////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE AutoComplete &System::cmdAutocomplete()
+	CSYS_INLINE AutoComplete &System::cmdAutocomplete()
 	{ return m_CommandSuggestionTree; }
 
-	CCLI_INLINE AutoComplete &System::varAutocomplete()
+	CSYS_INLINE AutoComplete &System::varAutocomplete()
 	{ return m_VariableSuggestionTree; }
 
-	CCLI_INLINE CommandHistory &System::history()
+	CSYS_INLINE CommandHistory &System::history()
 	{ return m_CommandHistory; }
 
-	CCLI_INLINE std::vector<Item> &System::items()
+	CSYS_INLINE std::vector<Item> &System::items()
 	{ return m_CommandData.items(); }
 
-	CCLI_INLINE ItemLog &System::log(ItemType type)
+	CSYS_INLINE ItemLog &System::log(ItemType type)
 	{ return m_CommandData.log(type); }
 
-	CCLI_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> & System::commands()
+	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> & System::commands()
 	{ return m_Commands; }
 
-	CCLI_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> & System::scripts()
+	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> & System::scripts()
 	{ return m_Scripts; }
 
 	///////////////////////////////////////////////////////////////////////////
 	// Private methods ////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CCLI_INLINE void System::parseCommandLine(const String &line)
+	CSYS_INLINE void System::parseCommandLine(const String &line)
 	{
 		// Get first non-whitespace char.
 		size_t line_index = 0;

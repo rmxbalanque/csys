@@ -3,12 +3,12 @@
 //
 
 #include "doctest.h"
-#include "ccli/ccli_system.h"
+#include "csys/system.h"
 #include <cstring>
 
 TEST_CASE("String Argument")
 {
-	using namespace ccli;
+	using namespace csys;
 	System s;
 
 // CORRECT USAGE SINGLE WORD

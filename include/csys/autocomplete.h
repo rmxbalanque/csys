@@ -1,22 +1,22 @@
 
-#ifndef CCLI_CCLI_AUTOCOMPLETE_H
-#define CCLI_CCLI_AUTOCOMPLETE_H
+#ifndef CSYS_AUTOCOMPLETE_H
+#define CSYS_AUTOCOMPLETE_H
 
 #pragma once
 
-#include "ccli/ccli_api.h"
+#include "csys/api.h"
 #include <vector>
 #include <string>
 #include <memory>
 
-namespace ccli
+namespace csys
 {
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
-	// TODO: Only use "const char *" or "std::string" in ccli. (On stl containers use iterators - SLOW). (Need to add std::string version)
+	// TODO: Only use "const char *" or "std::string" in csys. (On stl containers use iterators - SLOW). (Need to add std::string version)
 	
 	//!< Auto complete ternary search tree.
-	class CCLI_API AutoComplete
+	class CSYS_API AutoComplete
 	{
 	public:
 
@@ -297,8 +297,8 @@ namespace ccli
 	};
 }
 
-#ifdef CCLI_HEADER_ONLY
-#include "ccli/ccli_autocomplete.inl"
+#ifdef CSYS_HEADER_ONLY
+#include "csys/autocomplete.inl"
 #endif
 
-#endif //CCLI_CCLI_AUTOCOMPLETE_H
+#endif //CSYS_AUTOCOMPLETE_H

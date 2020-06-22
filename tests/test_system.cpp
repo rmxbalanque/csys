@@ -1,9 +1,9 @@
 #include "doctest.h"
-#include "ccli/ccli_system.h"
+#include "csys/system.h"
 
-TEST_CASE("Test CCLI System Class")
+TEST_CASE("Test CSYS System Class")
 {
-	ccli::System temp;
+	csys::System temp;
 
 	bool test_flag = false;
 	auto fn = [&](bool flag){ test_flag = flag;};
@@ -11,7 +11,7 @@ TEST_CASE("Test CCLI System Class")
 	int temp_var = 0;
 
 	// Test Command registration.
-	temp.registerCommand("test", "Simple description", fn, ccli::Arg<bool>("Test_Argument"));
+	temp.registerCommand("test", "Simple description", fn, csys::Arg<bool>("Test_Argument"));
 	temp.runCommand("test true");
 	CHECK(test_flag);
 

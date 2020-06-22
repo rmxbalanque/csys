@@ -44,9 +44,7 @@ namespace ccli
 
 		[[nodiscard]] std::string Help() override
     {
-			return "COMMAND: " + m_Name.m_String + "\n"
-			     + "     Description - " + m_Description.m_String + "\n\n"
-					 + "     Usage - " + m_Name.m_String + DisplayArguments(std::make_index_sequence<sizeof ...(Args)>{}) + "\n\n";
+			return m_Name.m_String + DisplayArguments(std::make_index_sequence<sizeof ...(Args)>{}) + "\n\t- " + m_Description.m_String + "\n\n";
     }
 
 		[[nodiscard]] size_t ArgumentCount() const override
@@ -99,9 +97,7 @@ namespace ccli
 
 		[[nodiscard]] std::string Help() override
 		{
-			return "COMMAND: " + m_Name.m_String + "\n"
-			     + "     Description - " + m_Description.m_String + "\n\n"
-					 + "     Usage - " + m_Name.m_String + "\n\n";
+			return m_Name.m_String + "\n\t- " + m_Description.m_String + "\n\n";
 		}
 
 		[[nodiscard]] size_t ArgumentCount() const override

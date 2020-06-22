@@ -213,7 +213,8 @@ namespace ccli
 		if (is_cmd_help)
 		{
 			range = line.NextPoi(line_index);
-			command_name += " " + line.m_String.substr(range.first, range.second - range.first);
+			if (range.first != line.End())
+				command_name += " " + line.m_String.substr(range.first, range.second - range.first);
 		}
 
 		// Its a set or get command

@@ -22,16 +22,22 @@ namespace ccli
 	CCLI_INLINE System::System()
 	{
 		// Register help command.
-		registerCommand("help", "Display commands information", [&]()
+		registerCommand(s_Help.data(), "Display commands information", [&]()
 		{
+			// Custom command information display
+			log() << "help [command_name:String] (Optional)\n\t\t- Display command(s) information\n" << ccli::endl;
+			log() << "set [variable_name:String] [data]\n\t\t- Assign data to given variable\n" << ccli::endl;
+			log() << "get [variable_name:String]\n\t\t- Display data of given variable\n" << ccli::endl;
+
 			for (const auto &tuple : commands())
 			{
 				// Filter set and get.
-				if (tuple.first.size() >= 3 && (tuple.first[0] == 's' || tuple.first[0] == 'g') && tuple.first[1] == 'e' && tuple.first[2] == 't' && tuple.first[3] == ' ')
+				if (tuple.first.size() >= 5 && (tuple.first[3] == ' ' || tuple.first[4] == ' '))
 					continue;
 
-				// Print set and get.
-				// TODO: Print set and get.
+				// Skip help command.
+				if (tuple.first.size() == 4 && (tuple.first == "help"))
+					continue;
 
 				// Print the rest of commands
 				log() << tuple.second->Help();

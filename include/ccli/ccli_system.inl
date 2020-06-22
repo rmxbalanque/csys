@@ -120,7 +120,7 @@ namespace ccli
 		if (command_it != m_Commands.end() && help_command_it != m_Commands.end())
 		{
 			m_CommandSuggestionTree.remove(cmd_name);
-			m_CommandSuggestionTree.remove("help " + cmd_name);
+			m_VariableSuggestionTree.remove(cmd_name);
 
 			m_Commands.erase(command_it);
 			m_Commands.erase(help_command_it);

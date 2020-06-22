@@ -114,7 +114,7 @@ namespace ccli
 			if (m_RegisterCommandSuggestion)
 			{
 				m_CommandSuggestionTree.insert(command_name);
-//				m_CommandSuggestionTree.insert("help " + command_name); // TODO: Ask roland if I need to add just the name or the help too
+				m_VariableSuggestionTree.insert(command_name); // TODO: Ask roland if I need to add just the name or the help too
 			}
 
 			// Add commands to system here

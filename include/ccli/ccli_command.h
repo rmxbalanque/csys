@@ -61,7 +61,7 @@ namespace ccli
 			size_t start = 0;
 
     	// parse arguments
-    	int _[] = { 0, (void(std::get<Is_p>(m_Arguments).Parse(input, start)), 0)...};
+    	int _[]{ 0, (void(std::get<Is_p>(m_Arguments).Parse(input, start)), 0)...};
 			(void)(_);
 
       // call function with unpacked tuple

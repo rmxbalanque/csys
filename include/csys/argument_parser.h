@@ -1,6 +1,5 @@
-//
-// Created by antimatter on 6/10/20.
-//
+// Copyright (c) 2020-present, Roland Munguia & Tristan Florian Bouchard.
+// Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 #ifndef CSYS_ARGUMENT_PARSER_H
 #define CSYS_ARGUMENT_PARSER_H

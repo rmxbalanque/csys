@@ -1,6 +1,5 @@
-//
-// Created by antimatter on 5/26/20.
-//
+// Copyright (c) 2020-present, Roland Munguia & Tristan Florian Bouchard.
+// Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 #ifndef CSYS_COMMAND_H
 #define CSYS_COMMAND_H

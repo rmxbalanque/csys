@@ -29,19 +29,6 @@ namespace ccli
   template<typename Fn, typename ...Args>
   class CCLI_API Command : public CommandBase
   {
-
-#ifdef __clang__
-		template<size_t N>
-		using m_MakeEvalIndexSequence = std::make_index_sequence<N>;
-#else
-		template <size_t ...Is>
-		constexpr auto static inline ReverseIndexSequence(std::index_sequence<Is...> const &)
-		->decltype(std::index_sequence<sizeof...(Is) - 1U - Is...>{}){}
-
-		template <size_t N>
-		using m_MakeEvalIndexSequence = decltype(ReverseIndexSequence(std::make_index_sequence<N>{}));
-#endif
-
 	public:
     Command(String name, String description, Fn function, Args... args)
             : m_Name(std::move(name)), m_Description(std::move(description)),
@@ -50,7 +37,7 @@ namespace ccli
 		Item operator()(String &input) override
     {
       // try to parse and call the function
-			try { Call(input, m_MakeEvalIndexSequence<sizeof ...(Args) + 1>{}, std::make_index_sequence<(sizeof ...(Args))>{}); }
+			try { Call(input, std::make_index_sequence<sizeof ...(Args) + 1>{}, std::make_index_sequence<(sizeof ...(Args))>{}); }
 			catch (Exception& ae) { return Item(ERROR) << (m_Name.m_String + ": " + ae.what()); }
 			return Item(NONE);
     }
@@ -74,14 +61,12 @@ namespace ccli
 			size_t start = 0;
 
     	// parse arguments
-  		Parse((std::get<Is_p>(m_Arguments).Parse(input, start))...);
+    	int _[] = { 0, (void(std::get<Is_p>(m_Arguments).Parse(input, start)), 0)...};
+			(void)(_);
 
       // call function with unpacked tuple
       m_Function((std::get<Is_c>(m_Arguments).m_Arg.m_Value)...);
     }
-
-		// Used for the expansion of a tuple for parsing
-		template<typename ...Ts> void Parse(Ts&...) {}
 
     template<size_t ...Is>
     std::string DisplayArguments(const std::index_sequence<Is...> &)

@@ -111,7 +111,6 @@ namespace ccli
 
 	ARG_PARSE_BASE_SPEC(ccli::String)
 	{
-//		size_t sofa = start;
 		static auto GetWord = [](std::string &str, size_t start, size_t end) {
 				// For issues with reserved chars
 				static std::string invalid_chars;
@@ -180,7 +179,6 @@ namespace ccli
 
 		// Finished parsing
 		start = range.second + 1;
-//		std::cout << "WORKED ON ARG: " << input.m_String.substr(sofa, start - sofa) << std::endl;
 	}
 
 	ARG_PARSE_BASE_SPEC(bool)
@@ -314,16 +312,12 @@ namespace ccli
 	template<typename T>
 	ArgumentParser<std::vector<T>>::ArgumentParser(String &input, size_t &start)
 	{
-		// case 1, [something]
-		// case 2, [something something1]
-//		std::cout << "INPUT: " << input.m_String << std::endl;
 		auto range = input.NextPoi(start);
 		if (range.first == input.End()) return;
 		if (input.m_String[range.first] != '[')
 			throw Exception("Invalid vector argument missing opening [", ARG_PARSE_SUBSTR(range));
 
 		input.m_String[range.first] = ' ';
-//		std::cout << "INSIDE : " << input.m_String << std::endl;
 		while (true)
 		{
 			range = input.NextPoi(range.first);
@@ -346,8 +340,6 @@ namespace ccli
 				}
 
 				input.m_String[range.second] = ' ';
-//				std::cout << "BEFORE WORKED: " << input.m_String << std::endl;
-//				size_t end = range.second;
 				start = range.first;
 				while (true)
 				{
@@ -356,8 +348,6 @@ namespace ccli
 						start = range.first;
 						return;
 					}
-//					std::cout << "START CHAR : " << input.m_String[start] << std::endl;
-//					std::cout << "RANGE OF ARGS: " << input.m_String.substr(start, end - start) << std::endl;
 					m_Value.push_back(ArgumentParser<T>(input, start).m_Value);
 					range.first = start;
 				}

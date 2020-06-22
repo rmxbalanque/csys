@@ -13,7 +13,7 @@ namespace ccli
 	// Commands-Error-Warning strings.
 	static constexpr std::string_view s_Set = "set";
 	static constexpr std::string_view s_Get = "get";
-	static constexpr std::string_view s_Help = "Help";
+	static constexpr std::string_view s_Help = "help";
 	static constexpr std::string_view s_ErrorNoVar = "No variable provided";
 	static constexpr std::string_view s_ErrorNoArg = "No argument provided";
 	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
@@ -209,6 +209,7 @@ namespace ccli
 		bool is_cmd_get = command_name == s_Get;
 		bool is_cmd_help = !(is_cmd_set || is_cmd_get) ? command_name == s_Help : false;
 
+		// Edge case for if user is just runs "help" command
 		if (is_cmd_help)
 		{
 			range = line.NextPoi(line_index);
@@ -229,7 +230,6 @@ namespace ccli
 				command_name += " " + line.m_String.substr(range.first, range.second - range.first);
 		}
 
-//		std::cout << "Command name : |" << command_name << "|" << std::endl;
 		// Get runnable command
 		auto command = m_Commands.find(command_name);
 		if (command == m_Commands.end())
@@ -237,12 +237,8 @@ namespace ccli
 		// Run the command
 		else
 		{
-//			std::cout << "Command takes args? : " << command->second->ArgumentCount() << std::endl;
-
 			// Get the arguments.
-			String arguments = command->second->ArgumentCount() ? line.m_String.substr(range.second, line.m_String.size() - range.first) : "";
-
-//			std::cout << "ARGS : " << arguments.m_String << std::endl;
+			String arguments = line.m_String.substr(range.second, line.m_String.size() - range.first);
 
 			// Execute command.
 			auto cmd_out = (*command->second)(arguments);

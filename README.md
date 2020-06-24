@@ -45,12 +45,13 @@ Modern C++, header-only/compiled, custom console system library.
     - __Windows__: Tested on Windows 10 Professional 64-bit. (__Static/Header-only__)
     - __Linux__: Tested on Ubuntu 18.04.4 LTS (__Static/Shared/Header-only__)
     
-##__Requirements:__
+## Requirements:
 - C++17 capable compiler:
     - Visual C++ 15 (Visual Studio 2017)
     - Clang 5
     - GCC 7
 - CMake 3.10+
+
 ## Integration
 If you wish to use the _csys library_ without CMake you can copy the [source folder](https://github.com/rmxbalanque/csys/tree/master/include/csys) and proceed to build with C++17 capable compiler. (_Header only version_)
       

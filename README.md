@@ -8,7 +8,7 @@
             Linux/OSX <a href="https://travis-ci.com/rmxbalanque/csys"><img src="https://travis-ci.com/rmxbalanque/csys.svg?branch=master"></a>
         </td>
         <td> 
-            Windows <a href="https://ci.appveyor.com/project/rmxbalanque/csys"><img src="https://ci.appveyor.com/api/projects/status/52oek3ypfkpamay5?svg=true"></a>
+            Windows <a href="https://ci.appveyor.com/project/rmxbalanque/csys"><img src="https://ci.appveyor.com/api/projects/status/p5e3c6rdysatd6v9/branch/master?svg=true"></a>
         </td>
     </tr>
     <tr>
@@ -19,7 +19,7 @@
             Linux/OSX <a href="https://travis-ci.com/rmxbalanque/csys"><img src="https://travis-ci.com/rmxbalanque/csys.svg?branch=development"></a>
         </td>
         <td>
-            Windows <a href="https://ci.appveyor.com/project/rmxbalanque/csys"><img src="https://ci.appveyor.com/api/projects/status/p5e3c6rdysatd6v9?svg=true"></a>
+            Windows <a href="https://ci.appveyor.com/project/rmxbalanque/csys"><img src="https://ci.appveyor.com/api/projects/status/p5e3c6rdysatd6v9/branch/development?svg=true"></a>
         </td>
     </tr>
 </table>

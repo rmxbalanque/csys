@@ -35,8 +35,10 @@ addons: &clang5
   apt:
     source:
       - llvm-toolchain-trusty-5.0
+      - ubuntu-toolchain-r-test
     packages:
       - clang-5.0
+      - libstdc++-5.0-dev
 
 addons: &clang7
   apt:

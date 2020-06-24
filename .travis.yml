@@ -35,7 +35,7 @@ addons: &clang5
   apt:
     source:
       - ubuntu-toolchain-r-test
-      - - llvm-toolchain-5
+      - llvm-toolchain-5
     packages:
       - clang-5
       - libstdc++-5-dev
@@ -86,12 +86,12 @@ matrix:
     - os: linux
       dist: bionic
       addons: *clang5
-      env: CLANG_VERSION=7 BUILDT_TYPE=Debug BUILD_SHARED=false
+      env: CLANG_VERSION=5 BUILDT_TYPE=Debug BUILD_SHARED=false
 
     - os: linux
       dist: bionic
       addons: *clang5
-      env: CLANG_VERSION=7 BUILDT_TYPE=Release BUILD_SHARED=false
+      env: CLANG_VERSION=5 BUILDT_TYPE=Release BUILD_SHARED=false
 
     # Test Clang 7, C++17, Build Debug/Release
     - os: linux

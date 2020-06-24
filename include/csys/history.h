@@ -25,7 +25,7 @@ namespace csys
 		 * \brief Record command string. (Start at the beginning once end is reached).
 		 * \param line Command string to be recorded.
 		 */
-		void push_back(const std::string & line);
+		void push_back(const std::string &line);
 
 		/*!
 		 * \brief Get newest register command entry index
@@ -37,7 +37,7 @@ namespace csys
 		 * \brief Get newest register command entry
 		 * \return Newest command entry
 		 */
-		const std::string & get_new();
+		const std::string &get_new();
 
 		/*!
 		 * \brief Get oldest register command entry index
@@ -49,7 +49,7 @@ namespace csys
 		 * \brief Get oldest register command entry
 		 * \return Oldest command entry string
 		 */
-		const std::string & get_old();
+		const std::string &get_old();
 
 		/*!
 		 * \brief Clear command history
@@ -85,8 +85,8 @@ namespace csys
 		size_t capacity();
 
 	private:
-		unsigned int m_Record;				//!< Amount of commands recorded
-		unsigned int m_MaxRecord;			//!< Maximum command record to keep track of
+		unsigned int m_Record;        //!< Amount of commands recorded
+		unsigned int m_MaxRecord;      //!< Maximum command record to keep track of
 		std::vector<std::string> m_History; //!< Console command history
 	};
 }

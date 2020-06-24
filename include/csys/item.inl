@@ -4,7 +4,9 @@
 #pragma once
 
 #ifndef CSYS_HEADER_ONLY
+
 #include "csys/item.h"
+
 #endif
 
 #include <chrono>
@@ -16,9 +18,9 @@ namespace csys
 	// Command Item ///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
-	CSYS_INLINE static constexpr std::string_view s_Command = "> ";
-	CSYS_INLINE static constexpr std::string_view s_Warning = "\t[WARNING]: ";
-	CSYS_INLINE static constexpr std::string_view s_Error = "[ERROR]: ";
+	CSYS_INLINE static const std::string_view s_Command = "> ";
+	CSYS_INLINE static const std::string_view s_Warning = "\t[WARNING]: ";
+	CSYS_INLINE static const std::string_view s_Error = "[ERROR]: ";
 	CSYS_INLINE static const auto s_TimeBegin = std::chrono::steady_clock::now();
 
 	CSYS_INLINE Item::Item(ItemType type) : m_Type(type)

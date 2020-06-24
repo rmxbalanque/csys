@@ -15,10 +15,18 @@ namespace csys
 	struct CSYS_API String
 	{
 		String() = default;
-		String(const char *str [[maybe_unused]]) : m_String(str ? str:"") {}
-		String(std::string str) : m_String(std::move(str)) {}
-		operator const char*() { return m_String.c_str(); }
-		operator std::string() { return m_String; }
+
+		String(const char *str [[maybe_unused]]) : m_String(str ? str : "")
+		{}
+
+		String(std::string str) : m_String(std::move(str))
+		{}
+
+		operator const char *()
+		{ return m_String.c_str(); }
+
+		operator std::string()
+		{ return m_String; }
 
 		// Moves until first non-whitespace char, returns the index at that spot
 		std::pair<size_t, size_t> NextPoi(size_t &start) const
@@ -43,7 +51,8 @@ namespace csys
 			return range;
 		}
 
-		[[nodiscard]] size_t End() const { return m_String.size() + 1; }
+		[[nodiscard]] size_t End() const
+		{ return m_String.size() + 1; }
 
 		std::string m_String;
 	};

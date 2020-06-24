@@ -65,8 +65,7 @@ namespace csys
 			if (*string < ptr->m_Data)
 			{
 				ptr = ptr->m_Less;
-			}
-			else if (*string == ptr->m_Data)
+			} else if (*string == ptr->m_Data)
 			{
 				// Word was found.
 				if (*(string + 1) == '\0' && ptr->m_IsWord)
@@ -74,8 +73,7 @@ namespace csys
 
 				ptr = ptr->m_Equal;
 				++string;
-			}
-			else
+			} else
 			{
 				ptr = ptr->m_Greater;
 			}
@@ -102,8 +100,7 @@ namespace csys
 			if (*str < (*ptr)->m_Data)
 			{
 				ptr = &(*ptr)->m_Less;
-			}
-			else if (*str == (*ptr)->m_Data)
+			} else if (*str == (*ptr)->m_Data)
 			{
 				// String is already in tree, therefore only mark as word.
 				if (*(str + 1) == '\0')
@@ -117,8 +114,7 @@ namespace csys
 				// Advance.
 				ptr = &(*ptr)->m_Equal;
 				++str;
-			}
-			else
+			} else
 			{
 				ptr = &(*ptr)->m_Greater;
 			}
@@ -146,8 +142,7 @@ namespace csys
 			if (*prefix < ptr->m_Data)
 			{
 				ptr = ptr->m_Less;
-			}
-			else if (*prefix == ptr->m_Data)
+			} else if (*prefix == ptr->m_Data)
 			{
 				// Prefix exists in tree.
 				if (*(prefix + 1) == '\0')
@@ -155,8 +150,7 @@ namespace csys
 
 				ptr = ptr->m_Equal;
 				++prefix;
-			}
-			else
+			} else
 			{
 				ptr = ptr->m_Greater;
 			}
@@ -191,8 +185,7 @@ namespace csys
 			if (*temp < ptr->m_Data)
 			{
 				ptr = ptr->m_Less;
-			}
-			else if (*temp == ptr->m_Data)
+			} else if (*temp == ptr->m_Data)
 			{
 				// Prefix exists in tree.
 				if (*(temp + 1) == '\0')
@@ -218,8 +211,7 @@ namespace csys
 
 				ptr = ptr->m_Equal;
 				++temp;
-			}
-			else
+			} else
 			{
 				ptr = ptr->m_Greater;
 			}
@@ -290,8 +282,7 @@ namespace csys
 				// String is a prefix.
 			else
 				return false;
-		}
-		else
+		} else
 		{
 			// String is a prefix.
 			if (*word < root->m_Data)

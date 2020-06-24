@@ -78,13 +78,13 @@ namespace csys
 		 * \brief Get registered command container
 		 * \return Commands container
 		 */
-		std::unordered_map<std::string, std::unique_ptr<CommandBase>> & commands();
+		std::unordered_map<std::string, std::unique_ptr<CommandBase>> &commands();
 
 		/*!
 		 * \brief Get registered scripts container
 		 * \return Scripts container
 		 */
-		std::unordered_map<std::string, std::unique_ptr<Script>> & scripts();
+		std::unordered_map<std::string, std::unique_ptr<Script>> &scripts();
 
 		template<typename Fn, typename ...Args>
 		void registerCommand(const String &name, const String &description, Fn function, Args... args)
@@ -99,7 +99,7 @@ namespace csys
 			// Error out.
 			if (m_Commands.find(name.m_String) != m_Commands.end())
 				throw csys::Exception("ERROR: Command already exists");
-			// Check if command is empty
+				// Check if command is empty
 			else if (range.first == name.End())
 			{
 				log(ERROR) << "Empty command given" << csys::endl;
@@ -124,10 +124,11 @@ namespace csys
 			m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
 
 			// Set Help
-			auto help = [this, command_name]() { log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
+			auto help = [this, command_name]()
+			{ log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
 			m_Commands["help " + command_name] = std::make_unique<Command<decltype(help)>>("help " + command_name,
-																																			 "Displays help info about command " + command_name,
-																													 						 help);
+																																										 "Displays help info about command " + command_name,
+																																										 help);
 		}
 
 		template<typename T>
@@ -147,11 +148,15 @@ namespace csys
 
 			// TODO: Tell roland to avoid doing & in lambdas
 			// TODO: Write in documentation that the memory passed into this function is assumed with the lifetime of the program
-			const auto SetFunction = [&var](T val){ var = val; };
-			const auto GetFunction = [this, &var](){ m_CommandData.log(LOG) << var << endl; };
+			const auto SetFunction = [&var](T val)
+			{ var = val; };
+			const auto GetFunction = [this, &var]()
+			{ m_CommandData.log(LOG) << var << endl; };
 
-			m_Commands["set " + var_name] = std::make_unique<Command<decltype(SetFunction), Arg<T>>>("set " + var_name, "Sets the variable " + var_name, SetFunction, Arg<T>(var_name));
-			m_Commands["get " + var_name] = std::make_unique<Command<decltype(GetFunction)>>("get " + var_name, "Gets the variable " + var_name, GetFunction);
+			m_Commands["set " + var_name] = std::make_unique<Command<decltype(SetFunction), Arg<T>>>("set " + var_name, "Sets the variable " + var_name,
+																																															 SetFunction, Arg<T>(var_name));
+			m_Commands["get " + var_name] = std::make_unique<Command<decltype(GetFunction)>>("get " + var_name, "Gets the variable " + var_name,
+																																											 GetFunction);
 
 			// Enable again.
 			m_RegisterCommandSuggestion = true;
@@ -187,15 +192,15 @@ namespace csys
 
 	private:
 
-		void parseCommandLine(const String & line);											//!< Parse command line and execute command
+		void parseCommandLine(const String &line);                      //!< Parse command line and execute command
 
-		std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;			//!< Registered command container
-		AutoComplete m_CommandSuggestionTree;										//!< Autocomplete Ternary Search Tree for commands
-		AutoComplete m_VariableSuggestionTree;										//!< Autocomplete Ternary Search Tree for registered variables
-		CommandHistory m_CommandHistory;													//!< History of executed commands
-		ItemLog m_CommandData;																//!< Console Items (Logging)
-		std::unordered_map<std::string, std::unique_ptr<Script>> m_Scripts;					//!< Scripts
-		bool m_RegisterCommandSuggestion = true;											//!< Flag that determines if commands will be registered for autocomplete.
+		std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;      //!< Registered command container
+		AutoComplete m_CommandSuggestionTree;                    //!< Autocomplete Ternary Search Tree for commands
+		AutoComplete m_VariableSuggestionTree;                    //!< Autocomplete Ternary Search Tree for registered variables
+		CommandHistory m_CommandHistory;                          //!< History of executed commands
+		ItemLog m_CommandData;                                //!< Console Items (Logging)
+		std::unordered_map<std::string, std::unique_ptr<Script>> m_Scripts;          //!< Scripts
+		bool m_RegisterCommandSuggestion = true;                      //!< Flag that determines if commands will be registered for autocomplete.
 	};
 }
 

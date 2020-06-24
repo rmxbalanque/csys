@@ -16,7 +16,7 @@ namespace csys
 {
 	namespace
 	{
-		inline constexpr std::string_view s_Reserved("\\[]\"");
+		inline const std::string_view s_Reserved("\\[]\"");
 		inline constexpr char s_ErrMsgReserved[] = "Reserved chars '\\, [, ], \"' must be escaped with \\";
 	}
 
@@ -25,16 +25,21 @@ namespace csys
 	struct CSYS_API ArgumentParser
 	{
 		inline ArgumentParser(String &input, size_t &start);
-		static inline bool IsEscapeChar(char c) { return c == '\\'; }
+
+		static inline bool IsEscapeChar(char c)
+		{ return c == '\\'; }
+
 		static inline bool IsReservedChar(char c)
 		{
 			for (auto rc : s_Reserved) if (c == rc) return true;
 			return false;
 		}
+
 		static inline bool IsEscaping(std::string &input, size_t pos)
 		{
 			return pos < input.size() - 1 && IsEscapeChar(input[pos]) && IsReservedChar(input[pos + 1]);
 		}
+
 		static inline bool IsEscaped(std::string &input, size_t pos)
 		{
 			bool result = false;
@@ -45,6 +50,7 @@ namespace csys
 					break;
 			return result;
 		}
+
 		T m_Value;
 	};
 
@@ -52,7 +58,8 @@ namespace csys
 	inline ArgumentParser<T>::ArgumentParser(String &input, size_t &start)
 	{
 		// getting rid of warnings
-		if (input.End() == start) {}
+		if (input.End() == start)
+		{}
 
 		// TYPE T NOT SUPPORTED
 		throw Exception("Unsupported type: " + std::string(typeid(T).name()));
@@ -63,26 +70,26 @@ namespace csys
   struct CSYS_API ArgumentParser<TYPE> \
   { \
     inline ArgumentParser(String &input, size_t &start); \
-		static inline bool IsEscapeChar(char c) { return c == '\\'; } \
-	  static inline bool IsReservedChar(char c) \
-	  { \
-	  	for (auto rc : s_Reserved) if (c == rc) return true; \
-			return false; \
-		} \
-		static inline bool IsEscaping(std::string &input, size_t pos) \
-		{ \
-			return pos < input.size() - 1 && IsEscapeChar(input[pos]) && IsReservedChar(input[pos + 1]); \
-		} \
-		static inline bool IsEscaped(std::string &input, size_t pos) \
-		{ \
-			bool result = false; \
-			for (size_t i = pos; i > 0; --i) \
-				if (IsReservedChar(input[i]) && IsEscapeChar(input[i - 1])) \
-					result = !result; \
-				else \
-					break; \
-			return result; \
-		} \
+    static inline bool IsEscapeChar(char c) { return c == '\\'; } \
+    static inline bool IsReservedChar(char c) \
+    { \
+      for (auto rc : s_Reserved) if (c == rc) return true; \
+      return false; \
+    } \
+    static inline bool IsEscaping(std::string &input, size_t pos) \
+    { \
+      return pos < input.size() - 1 && IsEscapeChar(input[pos]) && IsReservedChar(input[pos + 1]); \
+    } \
+    static inline bool IsEscaped(std::string &input, size_t pos) \
+    { \
+      bool result = false; \
+      for (size_t i = pos; i > 0; --i) \
+        if (IsReservedChar(input[i]) && IsEscapeChar(input[i - 1])) \
+          result = !result; \
+        else \
+          break; \
+      return result; \
+    } \
     TYPE m_Value = 0; \
   }; \
   inline ArgumentParser<TYPE>::ArgumentParser(String &input, size_t &start)
@@ -99,47 +106,48 @@ namespace csys
     } \
     catch (const std::out_of_range&) \
     { \
-			throw Exception(std::string("Argument too large for ") + TYPE_NAME, \
-    													input.m_String.substr(range.first, range.second));  \
-		} \
+      throw Exception(std::string("Argument too large for ") + TYPE_NAME, \
+                              input.m_String.substr(range.first, range.second));  \
+    } \
     catch (const std::invalid_argument&) \
     { \
-    	throw Exception(std::string("Missing or invalid ") + TYPE_NAME + " argument", \
-    													input.m_String.substr(range.first, range.second)); } \
+      throw Exception(std::string("Missing or invalid ") + TYPE_NAME + " argument", \
+                              input.m_String.substr(range.first, range.second)); } \
   }
 
 	ARG_PARSE_BASE_SPEC(csys::String)
 	{
-		static auto GetWord = [](std::string &str, size_t start, size_t end) {
-				// For issues with reserved chars
-				static std::string invalid_chars;
-				invalid_chars.clear();
+		static auto GetWord = [](std::string &str, size_t start, size_t end)
+		{
+			// For issues with reserved chars
+			static std::string invalid_chars;
+			invalid_chars.clear();
 
-			  std::string result;
+			std::string result;
 
-				for (size_t i = start; i < end; ++i)
-					// general case, not reserved char
-					if (!IsReservedChar(str[i]))
-						result.push_back(str[i]);
+			for (size_t i = start; i < end; ++i)
+				// general case, not reserved char
+				if (!IsReservedChar(str[i]))
+					result.push_back(str[i]);
 					// is a reserved char
-					else
-					{
-						// check for \ char and if its escaping
-						if (IsEscapeChar(str[i]) && IsEscaping(str, i))
-							result.push_back(str[++i]);
+				else
+				{
+					// check for \ char and if its escaping
+					if (IsEscapeChar(str[i]) && IsEscaping(str, i))
+						result.push_back(str[++i]);
 						// reserved char but not being escaped
-						else
-							throw Exception(s_ErrMsgReserved, str.substr(start, end - start));
-					}
+					else
+						throw Exception(s_ErrMsgReserved, str.substr(start, end - start));
+				}
 
-				return result;
+			return result;
 		};
 		auto range = input.NextPoi(start);
 
 		// If its a single string
 		if (input.m_String[range.first] != '"')
 			m_Value = GetWord(input.m_String, range.first, range.second);
-		// Multi word string
+			// Multi word string
 		else
 		{
 			++range.first;
@@ -169,8 +177,7 @@ namespace csys
 					// joining two strings together
 					if (input.m_String[range.first] == '"')
 						++range.first;
-				}
-				else
+				} else
 					// End of input
 					break;
 			}
@@ -201,7 +208,7 @@ namespace csys
 					throw Exception(s_err_msg + std::string(", expected true"), ARG_PARSE_SUBSTR(range));
 			m_Value = true;
 		}
-		// false branch
+			// false branch
 		else if (range.second - range.first == 5 && input.m_String[range.first] == 'f')
 		{
 			for (size_t i = range.first + 1; i < range.second; ++i)
@@ -209,7 +216,7 @@ namespace csys
 					throw Exception(s_err_msg + std::string(", expected false"), ARG_PARSE_SUBSTR(range));
 			m_Value = false;
 		}
-		// anything else
+			// anything else
 		else
 			throw Exception(s_err_msg, ARG_PARSE_SUBSTR(range));
 	}
@@ -285,16 +292,21 @@ namespace csys
 	struct CSYS_API ArgumentParser<std::vector<T>>
 	{
 		ArgumentParser(String &input, size_t &start);
-		static inline bool IsEscapeChar(char c) { return c == '\\'; }
+
+		static inline bool IsEscapeChar(char c)
+		{ return c == '\\'; }
+
 		static inline bool IsReservedChar(char c)
 		{
 			for (auto rc : s_Reserved) if (c == rc) return true;
 			return false;
 		}
+
 		static inline bool IsEscaping(std::string &input, size_t pos)
 		{
 			return pos < input.size() - 1 && IsEscapeChar(input[pos]) && IsReservedChar(input[pos + 1]);
 		}
+
 		static inline bool IsEscaped(std::string &input, size_t pos)
 		{
 			bool result = false;
@@ -305,6 +317,7 @@ namespace csys
 					break;
 			return result;
 		}
+
 		std::vector<T> m_Value;
 	};
 
@@ -325,8 +338,7 @@ namespace csys
 			{
 				// shits fucked
 				m_Value.push_back(ArgumentParser<T>(input, range.first).m_Value);
-			}
-			else
+			} else
 			{
 				range.second = input.m_String.find(']', range.first);
 				while (range.second != std::string::npos && IsEscaped(input.m_String, range.second))

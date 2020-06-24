@@ -16,7 +16,7 @@ namespace csys
 	// TODO: Check how to add support for UTF Encoding.
 	// TODO: Todo add max word suggestion depth.
 	// TODO: Only use "const char *" or "std::string" in csys. (On stl containers use iterators - SLOW). (Need to add std::string version)
-	
+
 	//!< Auto complete ternary search tree.
 	class CSYS_API AutoComplete
 	{
@@ -42,11 +42,11 @@ namespace csys
 				delete m_Greater;
 			};
 
-			char m_Data;		//!< Node data.
-			bool m_IsWord;		//!< Flag to determine if node is the end of a word.
-			acNode *m_Less;		//!< Left pointer.
-			acNode *m_Equal;	//!< Middle pointer.
-			acNode *m_Greater; 	//!< Right pointer.
+			char m_Data;    //!< Node data.
+			bool m_IsWord;    //!< Flag to determine if node is the end of a word.
+			acNode *m_Less;    //!< Left pointer.
+			acNode *m_Equal;  //!< Middle pointer.
+			acNode *m_Greater;  //!< Right pointer.
 		};
 
 		/*!
@@ -65,7 +65,7 @@ namespace csys
 		 * \param rhs Source tree
 		 * \return Self
 		 */
-		AutoComplete & operator=(const AutoComplete& rhs);
+		AutoComplete &operator=(const AutoComplete &rhs);
 
 		/*!
 		 *
@@ -155,8 +155,7 @@ namespace csys
 				if (*word < (*ptr)->m_Data)
 				{
 					ptr = &(*ptr)->m_Less;
-				}
-				else if (*word == (*ptr)->m_Data)
+				} else if (*word == (*ptr)->m_Data)
 				{
 					// String is already in tree, therefore only mark as word.
 					if (*(word + 1) == '\0')
@@ -170,8 +169,7 @@ namespace csys
 					// Advance.
 					ptr = &(*ptr)->m_Equal;
 					++word;
-				}
-				else
+				} else
 				{
 					ptr = &(*ptr)->m_Greater;
 				}
@@ -202,8 +200,7 @@ namespace csys
 				if (*prefix < ptr->m_Data)
 				{
 					ptr = ptr->m_Less;
-				}
-				else if (*prefix == ptr->m_Data)
+				} else if (*prefix == ptr->m_Data)
 				{
 					// Prefix exists in tree.
 					if (*(prefix + 1) == '\0')
@@ -211,8 +208,7 @@ namespace csys
 
 					ptr = ptr->m_Equal;
 					++prefix;
-				}
-				else
+				} else
 				{
 					ptr = ptr->m_Greater;
 				}
@@ -251,7 +247,7 @@ namespace csys
 		 * \param[out] ac_options Vector of found suggestions
 		 * \param[in] partial_complete Flag to determine if prefix string will be partially completed
 		 */
-		void suggestions(std::string & prefix, r_sVector ac_options, bool partial_complete);
+		void suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete);
 
 		/*!
 		 * \brief Retrieve suggestions that match the given prefix
@@ -266,7 +262,7 @@ namespace csys
 			suggestions(prefix, *temp);
 			return temp;
 		}
-		
+
 		/*!
 		 * \brief Retrieve suggestions that match the given prefix
 		 * \param[in] prefix Prefix to use for suggestion lookup
@@ -289,13 +285,13 @@ namespace csys
 		 * \param[in] word String to look for and remove
 		 * \return If node is word
 		 */
-		bool removeAux(acNode *root, const char * word);
+		bool removeAux(acNode *root, const char *word);
 
-		void deepClone(acNode* src, acNode*& dest);
+		void deepClone(acNode *src, acNode *&dest);
 
-		acNode *m_Root = nullptr;  	//!< Ternary Search Tree Root node
-		size_t m_Size = 0;			//!< Node count
-		size_t m_Count = 0;			//!< Word count
+		acNode *m_Root = nullptr;    //!< Ternary Search Tree Root node
+		size_t m_Size = 0;      //!< Node count
+		size_t m_Count = 0;      //!< Word count
 	};
 }
 

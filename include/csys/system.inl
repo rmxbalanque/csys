@@ -4,7 +4,9 @@
 #pragma once
 
 #ifndef CSYS_HEADER_ONLY
+
 #include "csys/system.h"
+
 #endif
 
 namespace csys
@@ -14,13 +16,13 @@ namespace csys
 	///////////////////////////////////////////////////////////////////////////
 
 	// Commands-Error-Warning strings.
-	static constexpr std::string_view s_Set = "set";
-	static constexpr std::string_view s_Get = "get";
-	static constexpr std::string_view s_Help = "help";
-	static constexpr std::string_view s_ErrorNoVar = "No variable provided";
-	static constexpr std::string_view s_ErrorNoArg = "No argument provided";
-	static constexpr std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
-	static constexpr std::string_view s_ErrorSetGetNotFound = "Command doesn't exist and/or variable is not registered";
+	static const std::string_view s_Set = "set";
+	static const std::string_view s_Get = "get";
+	static const std::string_view s_Help = "help";
+	static const std::string_view s_ErrorNoVar = "No variable provided";
+	static const std::string_view s_ErrorNoArg = "No argument provided";
+	static const std::string_view s_ErrorMoreArgs = "More arguments than required were specified";
+	static const std::string_view s_ErrorSetGetNotFound = "Command doesn't exist and/or variable is not registered";
 
 	CSYS_INLINE System::System()
 	{
@@ -87,7 +89,7 @@ namespace csys
 			{
 				script_pair->second->load();
 			}
-			catch (csys::Exception & e)
+			catch (csys::Exception &e)
 			{
 				log(ERROR) << e.what() << csys::endl;
 			}
@@ -111,9 +113,8 @@ namespace csys
 		{
 			m_Scripts[name] = std::make_unique<Script>(path, true);
 			m_VariableSuggestionTree.insert(name);
-		}
-		else
-			throw csys::Exception("ERROR: Script \"" + name + "\" already registered");
+		} else
+			throw csys::Exception("ERROR: Script \'" + name + "\' already registered");
 	}
 
 	CSYS_INLINE void System::unregisterCommand(const std::string &cmd_name)
@@ -187,10 +188,10 @@ namespace csys
 	CSYS_INLINE ItemLog &System::log(ItemType type)
 	{ return m_CommandData.log(type); }
 
-	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> & System::commands()
+	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> &System::commands()
 	{ return m_Commands; }
 
-	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> & System::scripts()
+	CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> &System::scripts()
 	{ return m_Scripts; }
 
 	///////////////////////////////////////////////////////////////////////////
@@ -226,7 +227,7 @@ namespace csys
 				command_name += " " + line.m_String.substr(range.first, range.second - range.first);
 		}
 
-		// Its a set or get command
+			// Its a set or get command
 		else if (is_cmd_set || is_cmd_get)
 		{
 			// Try to get variable name
@@ -234,8 +235,7 @@ namespace csys
 			{
 				log(ERROR) << s_ErrorNoVar << endl;
 				return;
-			}
-			else
+			} else
 				// Append variable name.
 				command_name += " " + line.m_String.substr(range.first, range.second - range.first);
 		}
@@ -244,7 +244,7 @@ namespace csys
 		auto command = m_Commands.find(command_name);
 		if (command == m_Commands.end())
 			log(ERROR) << s_ErrorSetGetNotFound << endl;
-		// Run the command
+			// Run the command
 		else
 		{
 			// Get the arguments.

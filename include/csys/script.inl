@@ -4,7 +4,9 @@
 #pragma once
 
 #ifndef CSYS_HEADER_ONLY
+
 #include "csys/script.h"
+
 #endif
 
 #include <fstream>
@@ -28,7 +30,8 @@ namespace csys
 			load();
 	}
 
-	CSYS_INLINE Script::Script(std::vector<std::string> data) : m_Data(std::move(data)), m_FromMemory(true) {}
+	CSYS_INLINE Script::Script(std::vector<std::string> data) : m_Data(std::move(data)), m_FromMemory(true)
+	{}
 
 	CSYS_INLINE void Script::load()
 	{

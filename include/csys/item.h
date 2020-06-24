@@ -53,9 +53,9 @@ namespace csys
 		 */
 		[[nodiscard]] std::string get() const;
 
-		ItemType m_Type;			//!< Console item type
-		std::string m_Data;			//!< Item string data
-		unsigned int m_TimeStamp;	//!< Record timestamp
+		ItemType m_Type;      //!< Console item type
+		std::string m_Data;      //!< Item string data
+		unsigned int m_TimeStamp;  //!< Record timestamp
 	};
 
 #define LOG_BASIC_TYPE_DECL(type) ItemLog& operator<<(type data)

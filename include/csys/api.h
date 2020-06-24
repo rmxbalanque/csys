@@ -9,14 +9,14 @@
 #  define CSYS_INLINE
 
 #  ifdef CSYS_SHARED_LIB
-	 // Windows Shared Library.
+// Windows Shared Library.
 #    if defined(_WIN32)
 #    	ifdef csys_EXPORTS
 #    	  define CSYS_API __declspec(dllexport)
 #    	else
 #    	  define CSYS_API __declspec(dllimport)
 #    	endif
-	  // Linux shared library.
+ // Linux shared library.
 #	 else
 #      ifdef csys_EXPORTS
 #        define CSYS_API __attribute__((visibility("default")))
@@ -28,7 +28,7 @@
 #    define CSYS_API
 #  endif
 
-	// No export.
+// No export.
 #  ifndef CSYS_NO_EXPORT
 #    if defined(_WIN32)
 #      define CSYS_NO_EXPORT

@@ -1,7 +1,9 @@
+# Configure simple example executable
+if (NOT TARGET csys)
+    # External integration
+    find_package(csys REQUIRED)
+endif()
 
-# Configure example excutable.
-find_package(csys REQUIRED)
+# Examples of using pre-compiled library
 add_executable(simple_example simple_example_main.cpp)
-
-# Link with csys library.
 target_link_libraries(simple_example csys::csys)

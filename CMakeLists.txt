@@ -228,4 +228,3 @@ if (CSYS_INSTALL)
 endif()
 
 # TODO: Add IDE support for headers. (source_group)
-# TODO: Header comments

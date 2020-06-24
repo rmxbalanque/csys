@@ -37,27 +37,54 @@ Modern C++, header-only/compiled, custom console system library.
 - Simple command scripts support.
 - Custom data types console logging support. (overload << operator)
 - Custom functions with arbitrary arguments registration support. 
+- Header only or compiled.
+- No external dependencies.
 
 ## Platforms
 - The following platforms are supported:
-    - __Windows__: Tested on Windows 10 Professional 64-bit. (Static/Header)
-    - __Linux__: Tested on Ubuntu 18.04.4 LTS (Static/Shared/Header)
+    - __Windows__: Tested on Windows 10 Professional 64-bit. (__Static/Header-only__)
+    - __Linux__: Tested on Ubuntu 18.04.4 LTS (__Static/Shared/Header-only__)
     
-## Install
-- __Requirements:__
-    - C++17 capable compiler:
-        - Visual C++ 15 (Visual Studio 2017)
-        - Clang 5
-        - GCC 7
-    - CMake 3.10+
-  
-- __Setup:__
-    - Header Only
-        - Copy source folder and build with C++17 capable compiler. _(CMake not required)_
-        
-    - Static/Shared Library
-        ```console
-        $ git clone https://github.com/rmxbalanque/csys.git
-        $ cd csys && mkdir build && cd build
-        $ cmake .. && make -j
-        ```   
+##__Requirements:__
+- C++17 capable compiler:
+    - Visual C++ 15 (Visual Studio 2017)
+    - Clang 5
+    - GCC 7
+- CMake 3.10+
+## Integration
+If you wish to use the _csys library_ without CMake you can copy the [source folder](https://github.com/rmxbalanque/csys/tree/master/include/csys) and proceed to build with C++17 capable compiler. (_Header only version_)
+      
+### CMake
+Targets:
+
+- _Header-only_: Use the `csys::csys_header_only` interface library target.
+- _Static/Shared_: Use the `csys::csys` library target together with the `-DCSYS_BUILD_SHARED=ON/OFF` cmake variable. 
+
+#### External
+To use this library from a CMake project, you can locate it by using the `find_package()` command and use the imported targets defined above.
+```CMake
+# CMakeLists.txt
+
+find_package(csys 0.1.0 REQUIRED)
+...
+add_library(your_library ...)
+...
+target_link_libraries(your_library PRIVATE csys::csys)
+```
+#### Embedded
+To embed the library into an existing CMake project, clone source and place it in a subdirectory and call `add_subdirectory()` in your `CMakeLists.txt`.
+```CMake
+# CMakeLists.txt
+
+# By adding the subdirectory the csys::csys and csys::csys_header_only targets will be defined. 
+# Note that the csys::csys target will be a static library by default.
+add_subdirectory(csys)
+...
+add_library(your_library ...)
+...
+target_link_libraries(your_library PRIVATE csys::csys)
+```
+
+See example [CMakeLists.txt]() on how to use.
+
+## Documentation

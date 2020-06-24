@@ -14,10 +14,9 @@ function(csys_enable_warnings target_name)
         endif ()
 
         # Set compiler options.
-        # TODO: This will need to be changed to PRIVATE and enable warnings on tests or targets that depend on csys.
         target_compile_options(
                 ${target_name}
-                PUBLIC $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+                PRIVATE $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
                 -Wall
                 -Wextra
                 -Wconversion

@@ -43,3 +43,4 @@ Thumbs.db
 /cmake-build-relwithdebinfo/
 /.idea/
 /thirdparty/include-what-you-use
+/Default.xml

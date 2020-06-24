@@ -13,56 +13,113 @@
 
 namespace csys
 {
-	template<typename T>
-	struct CSYS_API ArgData
-	{
-		explicit ArgData(String name) : m_Name(std::move(name)), m_Value()
-		{}
+    /*!
+     * \brief
+     *
+     * \tparam T
+     *
+     */
+    template<typename T>
+    struct CSYS_API ArgData
+    {
+        /*!
+         * \brief
+         *
+         * \param name
+         *
+         */
+        explicit ArgData(String name) : m_Name(std::move(name)), m_Value()
+        {}
 
-		const String m_Name = "";
-		String m_TypeName = "Unsupported Type";
-		T m_Value;
-	};
+        const String m_Name = "";                  //!<
+        String m_TypeName = "Unsupported Type";    //!<
+        T m_Value;                                 //!<
+    };
 
-	template<typename T>
-	struct CSYS_API Arg
-	{
-		using ValueType = T;
+    /*!
+     * \brief
+     *
+     * \tparam T
+     *
+     */
+    template<typename T>
+    struct CSYS_API Arg
+    {
+        using ValueType = T;    //!<
 
-		explicit Arg(const String &name) : m_Arg(name)
-		{}
+        /*!
+         * \brief
+         *
+         * \param name
+         *
+         */
+        explicit Arg(const String &name) : m_Arg(name)
+        {}
 
-		Arg<T> &Parse(String &input, size_t &start)
-		{
-			size_t index = start;
-			if (input.NextPoi(index).first == input.End())
-				throw Exception("Not enough arguments were given", input.m_String);
-			m_Arg.m_Value = ArgumentParser<ValueType>(input, start).m_Value;
-			return *this;
-		}
+        /*!
+         * \brief
+         *
+         * \param input
+         *
+         * \param start
+         *
+         * \return
+         *
+         */
+        Arg<T> &Parse(String &input, size_t &start)
+        {
+            size_t index = start;
+            if (input.NextPoi(index).first == input.End())
+                throw Exception("Not enough arguments were given", input.m_String);
+            m_Arg.m_Value = ArgumentParser<ValueType>(input, start).m_Value;
+            return *this;
+        }
 
-		std::string Info()
-		{
-			return std::string(" [") + m_Arg.m_Name.m_String + ":" + m_Arg.m_TypeName.m_String + "]";
-		}
+        /*!
+         * \brief
+         *
+         * \return
+         *
+         */
+        std::string Info()
+        {
+            return std::string(" [") + m_Arg.m_Name.m_String + ":" + m_Arg.m_TypeName.m_String + "]";
+        }
 
-		ArgData<ValueType> m_Arg;
-	};
+        ArgData<ValueType> m_Arg;    //!<
+    };
 
-	using NULL_ARGUMENT = void (*)();
+    using NULL_ARGUMENT = void (*)();    //!<
 
-	// TODO: ADD TO ENDING ARGUMENT
-	template<>
-	struct CSYS_API Arg<NULL_ARGUMENT>
-	{
-		Arg<NULL_ARGUMENT> &Parse(String &input, size_t &start)
-		{
-			if (input.NextPoi(start).first != input.End())
-				throw Exception("Too many arguments were given", input.m_String);
-			return *this;
-		}
-	};
+    /*!
+     * \brief
+     *
+     */
+    template<>
+    struct CSYS_API Arg<NULL_ARGUMENT>
+    {
+        /*!
+         * \brief
+         *
+         * \param input
+         *
+         * \param start
+         *
+         * \return
+         *
+         */
+        Arg<NULL_ARGUMENT> &Parse(String &input, size_t &start)
+        {
+            if (input.NextPoi(start).first != input.End())
+                throw Exception("Too many arguments were given", input.m_String);
+            return *this;
+        }
+    };
 
+    /*!
+     * \brief
+     *
+     */
 #define ARG_BASE_SPEC(TYPE, TYPE_NAME) \
   template<>\
   struct CSYS_API ArgData<TYPE> \
@@ -73,48 +130,118 @@ namespace csys
     TYPE m_Value; \
   };
 
-	ARG_BASE_SPEC(String, "String")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(String, "String")
 
-	ARG_BASE_SPEC(bool, "Boolean")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(bool, "Boolean")
 
-	ARG_BASE_SPEC(char, "Char")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(char, "Char")
 
-	ARG_BASE_SPEC(unsigned char, "Unsigned_Char")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(unsigned char, "Unsigned_Char")
 
-	ARG_BASE_SPEC(short, "Signed_Short")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(short, "Signed_Short")
 
-	ARG_BASE_SPEC(unsigned short, "Unsigned_Short")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(unsigned short, "Unsigned_Short")
 
-	ARG_BASE_SPEC(int, "Signed_Int")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(int, "Signed_Int")
 
-	ARG_BASE_SPEC(unsigned int, "Unsigned_Int")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(unsigned int, "Unsigned_Int")
 
-	ARG_BASE_SPEC(long, "Signed_Long")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(long, "Signed_Long")
 
-	ARG_BASE_SPEC(unsigned long, "Unsigned_Long")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(unsigned long, "Unsigned_Long")
 
-	ARG_BASE_SPEC(long long, "Signed_Long_Long")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(long long, "Signed_Long_Long")
 
-	ARG_BASE_SPEC(unsigned long long, "Unsigned_Long_Long")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(unsigned long long, "Unsigned_Long_Long")
 
-	ARG_BASE_SPEC(float, "Float")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(float, "Float")
 
-	ARG_BASE_SPEC(double, "Double")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(double, "Double")
 
-	ARG_BASE_SPEC(long double, "Long_Double")
+    /*!
+     * \brief
+     *
+     */
+    ARG_BASE_SPEC(long double, "Long_Double")
 
-	template<typename T>
-	struct CSYS_API ArgData<std::vector<T>>
-	{
-		explicit ArgData(String name) : m_Name(std::move(name))
-		{}
+    /*!
+     * \brief
+     *
+     * \tparam T
+     *
+     */
+    template<typename T>
+    struct CSYS_API ArgData<std::vector<T>>
+    {
+        /*!
+         * \brief
+         *
+         * \param name
+         *
+         */
+        explicit ArgData(String name) : m_Name(std::move(name))
+        {}
 
-		const String m_Name;
-		String m_TypeName = std::string("Vector_Of_") + ArgData<T>("").m_TypeName.m_String;
-		std::vector<T> m_Value;
-	};
-
-	// TODO: Give better feedback and errors when they mess up
+        const String m_Name;                                                                   //!<
+        String m_TypeName = std::string("Vector_Of_") + ArgData<T>("").m_TypeName.m_String;    //!<
+        std::vector<T> m_Value;                                                                //!<
+    };
 }
 
 #endif //CSYS_ARGUMENTS_H

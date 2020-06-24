@@ -35,8 +35,12 @@ addons: &clang5
   apt:
     source:
       - llvm-toolchain-trusty-5.0
+      - ubuntu-toolchain-r-test
+      - sourceline: 'deb https://apt.llvm.org/trusty/ llvm-toolchain-trusty-7 main'
+        key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
     packages:
       - clang-5.0
+      - libstdc++-7-dev
 
 addons: &clang7
   apt:

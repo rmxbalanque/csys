@@ -23,6 +23,7 @@ set(CSYS_TEST_SOURCES
         main.cpp)
 
 # Add Script test only if filesystem is found.
+cmake_policy(SET CMP0057 NEW)
 find_package(Filesystem)
 if (Filesystem_FOUND)
     message(STATUS "Including csys::Script test")

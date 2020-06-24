@@ -10,6 +10,7 @@
 #include "csys/exceptions.h"
 #include <vector>
 #include <stdexcept>
+#include <string_view>
 
 // TODO: Make argument list null terminating to test if the function has been given more arguments than needed
 namespace csys

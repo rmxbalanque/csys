@@ -38,7 +38,7 @@ addons: &clang5
       - ubuntu-toolchain-r-test
     packages:
       - clang-5.0
-      - libstdc++-5-dev
+      - libc++-5-dev
       - llvm-5.0-dev
 
 addons: &clang7

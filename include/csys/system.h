@@ -105,46 +105,49 @@ namespace csys
         std::unordered_map<std::string, std::unique_ptr<Script>> &Scripts();
 
         /*!
-         *
+         * \brief
+         *      Registers a command within the system to be invokable
          * \tparam Fn
-         *
+         *      Decltype of the function to invoke when command is ran
          * \tparam Args
-         *
+         *      List of arguments that match that of the argument list within the function Fn of type csys::Arg<T>
          * \param name
-         *
+         *      Non-whitespace separating name of the command. Whitespace will be dropped
          * \param description
-         *
+         *      Description describing what the command does
          * \param function
-         *
+         *      A non-member function to run when command is called
          * \param args
-         *
+         *      List of csys::Arg<T>s that matches that of the argument list of 'function'
          */
         template<typename Fn, typename ...Args>
         void RegisterCommand(const String &name, const String &description, Fn function, Args... args)
         {
-            // Check if function can be called with the given arguments
+            // Check if function can be called with the given arguments and is not part of a class
             static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
             static_assert(!std::is_member_function_pointer_v<Fn>, "Non-static member functions are not allowed");
 
+            // Move to command
             size_t name_index = 0;
             auto range = name.NextPoi(name_index);
 
-            // Error out.
+            // Command already registered
             if (m_Commands.find(name.m_String) != m_Commands.end())
                 throw csys::Exception("ERROR: Command already exists");
-                // Check if command is empty
+
+            // Check if command has a name
             else if (range.first == name.End())
             {
-                Log(ERROR) << "Empty command given" << csys::endl;
+                Log(ERROR) << "Empty command name given" << csys::endl;
                 return;
             }
 
             // Get command name
             std::string command_name = name.m_String.substr(range.first, range.second - range.first);
 
-            // Command is not help and contains more than one word
+            // Command contains more than one word
             if (name.NextPoi(name_index).first != name.End())
-                throw csys::Exception("ERROR: Command names can not compose of multiple words");
+                throw csys::Exception("ERROR: Whitespace separated command names are forbidden");
 
             // Register for autocomplete.
             if (m_RegisterCommandSuggestion)
@@ -153,15 +156,17 @@ namespace csys
                 m_VariableSuggestionTree.Insert(command_name);
             }
 
-            // Add commands to system here
+            // Add commands to system
             m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
 
-            // Set Help
-            auto help = [this, command_name]()
-            { Log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
+            // Make help command for command just added
+            auto help = [this, command_name]() {
+                Log(LOG) << m_Commands[command_name]->Help() << csys::endl;
+            };
+
             m_Commands["help " + command_name] = std::make_unique<Command<decltype(help)>>("help " + command_name,
-                                                                                           "Displays help info about command " + command_name,
-                                                                                           help);
+                                                                                           "Displays help info about command " +
+                                                                                           command_name, help);
         }
 
         /*!
@@ -187,19 +192,29 @@ namespace csys
             if (name.NextPoi(name_index).first != name.End())
                 throw csys::Exception("ERROR: Whitespace separated variable names are forbidden");
 
-            // Register set.
+            // Get variable name
             std::string var_name = name.m_String.substr(range.first, range.second - range.first);
 
-            // TODO: Write in documentation that the memory passed into this function is assumed with the lifetime of the program
-            const auto SetFunction = [&var](T val)
-            { var = val; };
-            const auto GetFunction = [this, &var]()
-            { m_CommandData.log(LOG) << var << endl; };
+            // Set command
+            const auto SetFunction = [&var](T val) {
+                var = val;
+            };
 
-            m_Commands["set " + var_name] = std::make_unique<Command<decltype(SetFunction), Arg<T>>>("set " + var_name, "Sets the variable " + var_name,
-                                                                                                     SetFunction, Arg<T>(var_name));
-            m_Commands["get " + var_name] = std::make_unique<Command<decltype(GetFunction)>>("get " + var_name, "Gets the variable " + var_name,
-                                                                                             GetFunction);
+            // Get Command
+            const auto GetFunction = [this, &var]() {
+                m_CommandData.log(LOG) << var << endl;
+            };
+
+            // Register set command
+            m_Commands["set " + var_name] = std::make_unique<Command<decltype(SetFunction), Arg<T>>>("set " + var_name,
+                                                                                                     "Sets the variable " +
+                                                                                                     var_name,
+                                                                                                     SetFunction,
+                                                                                                     Arg<T>(var_name));
+            // Register get command
+            m_Commands["get " + var_name] = std::make_unique<Command<decltype(GetFunction)>>("get " + var_name,
+                                                                                             "Gets the variable " +
+                                                                                             var_name, GetFunction);
 
             // Enable again.
             m_RegisterCommandSuggestion = true;

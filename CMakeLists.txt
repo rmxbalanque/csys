@@ -9,8 +9,8 @@ cmake_minimum_required(VERSION 3.1...3.16)
 include(cmake/csys_utils.cmake)
 
 # Configure library version
-set(CSYS_MAJOR_VERSION 0)
-set(CSYS_MINOR_VERSION 1)
+set(CSYS_MAJOR_VERSION 1)
+set(CSYS_MINOR_VERSION 0)
 set(CSYS_PATCH_VERSION 0)
 set(CSYS_VERSION
         ${CSYS_MAJOR_VERSION}.${CSYS_MINOR_VERSION}.${CSYS_PATCH_VERSION})

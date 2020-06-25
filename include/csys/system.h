@@ -114,8 +114,8 @@ namespace csys
             // Register for autocomplete.
             if (m_RegisterCommandSuggestion)
             {
-                m_CommandSuggestionTree.insert(command_name);
-                m_VariableSuggestionTree.insert(command_name);
+                m_CommandSuggestionTree.Insert(command_name);
+                m_VariableSuggestionTree.Insert(command_name);
             }
 
             // Add commands to system here
@@ -159,7 +159,7 @@ namespace csys
             m_RegisterCommandSuggestion = true;
 
             // Register variable
-            m_VariableSuggestionTree.insert(var_name);
+            m_VariableSuggestionTree.Insert(var_name);
         }
 
         /*!

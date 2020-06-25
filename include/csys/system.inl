@@ -25,14 +25,14 @@ namespace csys
     CSYS_INLINE System::System()
     {
         // Register help command.
-        registerCommand(s_Help.data(), "Display commands information", [this]()
+        RegisterCommand(s_Help.data(), "Display commands information", [this]()
         {
             // Custom command information display
-            log() << "help [command_name:String] (Optional)\n\t\t- Display command(s) information\n" << csys::endl;
-            log() << "set [variable_name:String] [data]\n\t\t- Assign data to given variable\n" << csys::endl;
-            log() << "get [variable_name:String]\n\t\t- Display data of given variable\n" << csys::endl;
+            Log() << "help [command_name:String] (Optional)\n\t\t- Display command(s) information\n" << csys::endl;
+            Log() << "set [variable_name:String] [data]\n\t\t- Assign data to given variable\n" << csys::endl;
+            Log() << "get [variable_name:String]\n\t\t- Display data of given variable\n" << csys::endl;
 
-            for (const auto &tuple : commands())
+            for (const auto &tuple : Commands())
             {
                 // Filter set and get.
                 if (tuple.first.size() >= 5 && (tuple.first[3] == ' ' || tuple.first[4] == ' '))
@@ -43,7 +43,7 @@ namespace csys
                     continue;
 
                 // Print the rest of commands
-                log() << tuple.second->Help();
+                Log() << tuple.second->Help();
             }
         });
 
@@ -52,20 +52,20 @@ namespace csys
         m_CommandSuggestionTree.Insert(s_Get.data());
     }
 
-    CSYS_INLINE void System::runCommand(const std::string &line)
+    CSYS_INLINE void System::RunCommand(const std::string &line)
     {
         // Error checking.
         if (line.empty())
             return;
 
         // Log command.
-        log(csys::ItemType::COMMAND) << line << csys::endl;
+        Log(csys::ItemType::COMMAND) << line << csys::endl;
 
         // Parse command line.
-        parseCommandLine(line);
+        ParseCommandLine(line);
     }
 
-    CSYS_INLINE void System::runScript(const std::string &script_name)
+    CSYS_INLINE void System::RunScript(const std::string &script_name)
     {
         // Attempt to find script.
         auto script_pair = m_Scripts.find(script_name);
@@ -89,7 +89,7 @@ namespace csys
             }
             catch (csys::Exception &e)
             {
-                log(ERROR) << e.what() << csys::endl;
+                Log(ERROR) << e.what() << csys::endl;
             }
         }
 
@@ -97,11 +97,11 @@ namespace csys
         for (const auto &cmd : script_pair->second->Data())
         {
             // Parse command.
-            runCommand(cmd);
+            RunCommand(cmd);
         }
     }
 
-    CSYS_INLINE void System::registerScript(const std::string &name, const std::string &path)
+    CSYS_INLINE void System::RegisterScript(const std::string &name, const std::string &path)
     {
         // Attempt to find scripts.
         auto script = m_Scripts.find(name);
@@ -116,7 +116,7 @@ namespace csys
             throw csys::Exception("ERROR: Script \'" + name + "\' already registered");
     }
 
-    CSYS_INLINE void System::unregisterCommand(const std::string &cmd_name)
+    CSYS_INLINE void System::UnregisterCommand(const std::string &cmd_name)
     {
         // Exit if non existent.
         if (cmd_name.empty()) return;
@@ -136,7 +136,7 @@ namespace csys
         }
     }
 
-    CSYS_INLINE void System::unregisterVariable(const std::string &var_name)
+    CSYS_INLINE void System::UnregisterVariable(const std::string &var_name)
     {
         // Exit if non existent.
         if (var_name.empty()) return;
@@ -154,7 +154,7 @@ namespace csys
         }
     }
 
-    CSYS_INLINE void System::unregisterScript(const std::string &script_name)
+    CSYS_INLINE void System::UnregisterScript(const std::string &script_name)
     {
         // Exit if non existent.
         if (script_name.empty()) return;
@@ -172,32 +172,32 @@ namespace csys
 
     // Getters ////////////////////////////////////////////////////////////////
 
-    CSYS_INLINE AutoComplete &System::cmdAutocomplete()
+    CSYS_INLINE AutoComplete &System::CmdAutocomplete()
     { return m_CommandSuggestionTree; }
 
-    CSYS_INLINE AutoComplete &System::varAutocomplete()
+    CSYS_INLINE AutoComplete &System::VarAutocomplete()
     { return m_VariableSuggestionTree; }
 
-    CSYS_INLINE CommandHistory &System::history()
+    CSYS_INLINE CommandHistory &System::History()
     { return m_CommandHistory; }
 
-    CSYS_INLINE std::vector<Item> &System::items()
+    CSYS_INLINE std::vector<Item> &System::Items()
     { return m_CommandData.Items(); }
 
-    CSYS_INLINE ItemLog &System::log(ItemType type)
+    CSYS_INLINE ItemLog &System::Log(ItemType type)
     { return m_CommandData.log(type); }
 
-    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> &System::commands()
+    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> &System::Commands()
     { return m_Commands; }
 
-    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> &System::scripts()
+    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> &System::Scripts()
     { return m_Scripts; }
 
     ///////////////////////////////////////////////////////////////////////////
     // Private methods ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
-    CSYS_INLINE void System::parseCommandLine(const String &line)
+    CSYS_INLINE void System::ParseCommandLine(const String &line)
     {
         // Get first non-whitespace char.
         size_t line_index = 0;
@@ -232,7 +232,7 @@ namespace csys
             // Try to get variable name
             if ((range = line.NextPoi(line_index)).first == line.End())
             {
-                log(ERROR) << s_ErrorNoVar << endl;
+                Log(ERROR) << s_ErrorNoVar << endl;
                 return;
             }
             else
@@ -243,7 +243,7 @@ namespace csys
         // Get runnable command
         auto command = m_Commands.find(command_name);
         if (command == m_Commands.end())
-            log(ERROR) << s_ErrorSetGetNotFound << endl;
+            Log(ERROR) << s_ErrorSetGetNotFound << endl;
             // Run the command
         else
         {

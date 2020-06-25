@@ -33,7 +33,7 @@ namespace csys
          * \param line
          *      Command line string
          */
-        void runCommand(const std::string &line);
+        void RunCommand(const std::string &line);
 
         /*!
          * \brief
@@ -41,7 +41,7 @@ namespace csys
          * \return
          *      Autocomplete Ternary Search Tree
          */
-        AutoComplete &cmdAutocomplete();
+        AutoComplete &CmdAutocomplete();
 
         /*!
          * \brief
@@ -49,7 +49,7 @@ namespace csys
          * \return
          *      Autocomplete Ternary Search Tree
          */
-        AutoComplete &varAutocomplete();
+        AutoComplete &VarAutocomplete();
 
         /*!
          * \brief
@@ -57,7 +57,7 @@ namespace csys
          * \return
          *      Command history vector
          */
-        CommandHistory &history();
+        CommandHistory &History();
 
         /*!
          * \brief
@@ -65,7 +65,7 @@ namespace csys
          * \return
          *      Console items container
          */
-        std::vector<Item> &items();
+        std::vector<Item> &Items();
 
         /*!
          * \brief
@@ -75,7 +75,7 @@ namespace csys
          * \return
          *      Reference to console items obj
          */
-        ItemLog &log(ItemType type = ItemType::LOG);
+        ItemLog &Log(ItemType type = ItemType::LOG);
 
         /*!
          * \brief
@@ -86,7 +86,7 @@ namespace csys
          *  \note
          *      If script exists but its not loaded, this methods will load the script and proceed to run it.
          */
-        void runScript(const std::string &script_name);
+        void RunScript(const std::string &script_name);
 
         /*!
          * \brief
@@ -94,7 +94,7 @@ namespace csys
          * \return
          *      Commands container
          */
-        std::unordered_map<std::string, std::unique_ptr<CommandBase>> &commands();
+        std::unordered_map<std::string, std::unique_ptr<CommandBase>> &Commands();
 
         /*!
          * \brief
@@ -102,7 +102,7 @@ namespace csys
          * \return
          *      Scripts container
          */
-        std::unordered_map<std::string, std::unique_ptr<Script>> &scripts();
+        std::unordered_map<std::string, std::unique_ptr<Script>> &Scripts();
 
         /*!
          *
@@ -120,7 +120,7 @@ namespace csys
          *
          */
         template<typename Fn, typename ...Args>
-        void registerCommand(const String &name, const String &description, Fn function, Args... args)
+        void RegisterCommand(const String &name, const String &description, Fn function, Args... args)
         {
             // Check if function can be called with the given arguments
             static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
@@ -135,7 +135,7 @@ namespace csys
                 // Check if command is empty
             else if (range.first == name.End())
             {
-                log(ERROR) << "Empty command given" << csys::endl;
+                Log(ERROR) << "Empty command given" << csys::endl;
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace csys
 
             // Set Help
             auto help = [this, command_name]()
-            { log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
+            { Log(LOG) << m_Commands[command_name]->Help() << csys::endl; };
             m_Commands["help " + command_name] = std::make_unique<Command<decltype(help)>>("help " + command_name,
                                                                                            "Displays help info about command " + command_name,
                                                                                            help);
@@ -176,7 +176,7 @@ namespace csys
          *      Variable is assumed to be in memory for the life of the program!
          */
         template<typename T>
-        void registerVariable(const String &name, T &var)
+        void RegisterVariable(const String &name, T &var)
         {
             // Disable.
             m_RegisterCommandSuggestion = false;
@@ -216,7 +216,7 @@ namespace csys
          * \param path
          *      Scrip path
          */
-        void registerScript(const std::string &name, const std::string &path);
+        void RegisterScript(const std::string &name, const std::string &path);
 
         /*!
          * \brief
@@ -224,7 +224,7 @@ namespace csys
          * \param cmd_name
          *      Command to unregister
          */
-        void unregisterCommand(const std::string &cmd_name);
+        void UnregisterCommand(const std::string &cmd_name);
 
         /*!
          * \brief
@@ -232,7 +232,7 @@ namespace csys
          * \param var_name
          *      Variable to unregister
          */
-        void unregisterVariable(const std::string &var_name);
+        void UnregisterVariable(const std::string &var_name);
 
         /*!
          * \brief
@@ -240,11 +240,11 @@ namespace csys
          * \param script_name
          *      Script to unregister
          */
-        void unregisterScript(const std::string &script_name);
+        void UnregisterScript(const std::string &script_name);
 
     private:
 
-        void parseCommandLine(const String &line);                                   //!< Parse command line and execute command
+        void ParseCommandLine(const String &line);                                   //!< Parse command line and execute command
 
         std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;    //!< Registered command container
         AutoComplete m_CommandSuggestionTree;                                        //!< Autocomplete Ternary Search Tree for commands

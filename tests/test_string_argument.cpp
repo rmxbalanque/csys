@@ -13,100 +13,115 @@ TEST_CASE("String Argument")
 
 // CORRECT USAGE SINGLE WORD
 	String strt;
-	s.registerCommand("0", "", [&strt](String str) {
-		  strt = str;
+    s.RegisterCommand("0", "", [&strt](String str)
+    {
+        strt = str;
 //			std::cout << "String -> " << str.m_String << std::endl;
-		}, Arg<String>(""));
+    }, Arg<String>(""));
 
-	s.registerCommand("1", "", [](const char *str) {
-			CHECK(!strcmp(str, "One"));
-		}, Arg<String>(""));
+    s.RegisterCommand("1", "", [](const char *str)
+    {
+                CHECK(!strcmp(str, "One"));
+    }, Arg<String>(""));
 
-	s.registerCommand("2", "", [](std::string str) {
-			CHECK(str == "Two");
-		}, Arg<String>(""));
+    s.RegisterCommand("2", "", [](std::string str)
+    {
+                CHECK(str == "Two");
+    }, Arg<String>(""));
 
-	s.registerCommand("3", "", [](std::string str) {
-						CHECK(str == "");
-	}, Arg<String>(""));
+    s.RegisterCommand("3", "", [](std::string str)
+    {
+                CHECK(str == "");
+    }, Arg<String>(""));
 
-	s.runCommand("0 \" \""); // Zero\] -> Zero\]
+    s.RunCommand("0 \" \""); // Zero\] -> Zero\]
 	CHECK((strt.m_String == " "));
 
 	// single word strings
-	s.runCommand("0 Zero\\]"); // Zero\] -> Zero\]
+    s.RunCommand("0 Zero\\]"); // Zero\] -> Zero\]
 	CHECK((strt.m_String == "Zero]"));
 	strt.m_String.clear();
 
-	s.runCommand("0 \"Zero\\\"\""); // Zero\] -> Zero\]
+    s.RunCommand("0 \"Zero\\\"\""); // Zero\] -> Zero\]
   CHECK((strt.m_String == "Zero\""));
 	strt.m_String.clear();
 
-	s.runCommand("0 \"Zero \\\" \\\\\""); // Zero\] -> Zero\]
+    s.RunCommand("0 \"Zero \\\" \\\\\""); // Zero\] -> Zero\]
 					CHECK((strt.m_String == "Zero \" \\"));
 	strt.m_String.clear();
 
-	s.runCommand("0 \"Zero\"\"One\"\"    #    \""); // Zero\] -> Zero\]
+    s.RunCommand("0 \"Zero\"\"One\"\"    #    \""); // Zero\] -> Zero\]
 					CHECK((strt.m_String == "ZeroOne    #    "));
 	strt.m_String.clear();
 
 // CORRECT USAGE MANY WORDS
-	s.registerCommand("0,1", "", [](String str, String str1) {
-		bool zero = str.m_String == "Zero";
-		bool one = str1.m_String == "One";
-		CHECK(zero);
-		CHECK(one);
-	}, Arg<String>(""), Arg<String>(""));
+    s.RegisterCommand("0,1", "", [](String str, String str1)
+    {
+        bool zero = str.m_String == "Zero";
+        bool one = str1.m_String == "One";
+                CHECK(zero);
+                CHECK(one);
+    }, Arg<String>(""), Arg<String>(""));
 
 	// multi word strings
-	s.runCommand("0,1 \"Zero\" \"One\"");
-	s.runCommand("0,1     Zero    One    ");
+    s.RunCommand("0,1 \"Zero\" \"One\"");
+    s.RunCommand("0,1     Zero    One    ");
 
 // CORRECT USAGE VECTOR OF MULTI WORD(S)
-	s.registerCommand("0,1,2", "", [](std::vector<String> strs) {
-		std::string ar[] = { "Zero", "One", "Two"};
+    s.RegisterCommand("0,1,2", "", [](std::vector<String> strs)
+    {
+        std::string ar[] = {"Zero", "One", "Two"};
 //		for(auto &str: strs) std::cout << str << std::endl;
-		for (unsigned i = 0; i < 3; ++i)
-			if (strs[i].m_String != ar[i])
-			{
+        for (unsigned i = 0; i < 3; ++i)
+            if (strs[i].m_String != ar[i])
+            {
 //				std::cout << "CHECK: " << strs[i].m_String << " != " << ar[i] << std::endl;
-				CHECK(false);
-				return;
-			}
-		CHECK(true);
-	}, Arg<std::vector<String>>(""));
+                        CHECK(false);
+                return;
+            }
+                CHECK(true);
+    }, Arg<std::vector<String>>(""));
 
 	// multi word strings
-	s.runCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
+    s.RunCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
 
 // CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
-	s.registerCommand("0,1,2,3", "", [](std::vector<std::vector<String>>) {
-		std::vector<std::vector<std::string>> arr = { {"One", "Two"}, {" |Three| |Yeet|"}, { " Four]", "FIVE?" } };
+    s.RegisterCommand("0,1,2,3", "", [](std::vector<std::vector<String>>)
+    {
+        std::vector<std::vector<std::string>> arr = {{"One",    "Two"},
+                                                     {" |Three| |Yeet|"},
+                                                     {" Four]", "FIVE?"}};
 //		CHECK((strs[0][0].m_String == arr[0][0]));
 //		CHECK((strs[0][1].m_String == arr[0][1]));
 //		CHECK((strs[1][0].m_String == arr[1][0]));
 //		CHECK((strs[2][0].m_String == arr[2][0]));
 //		CHECK((strs[2][1].m_String == arr[2][1]));
-	}, Arg<std::vector<std::vector<String>>>(""));
+    }, Arg<std::vector<std::vector<String>>>(""));
 
 	// multi word strings
-	s.runCommand("0,1,2,3 [ [\"Arg\"] ]");
+    s.RunCommand("0,1,2,3 [ [\"Arg\"] ]");
 
-	s.registerCommand("vecvecvec", "", [](std::vector<std::vector<std::vector<String>>> strs) {
-		bool c = strs[0][0][0].m_String == " " && strs[1][0][0].m_String == "Arg";
-		CHECK(c);
-	}, Arg<std::vector<std::vector<std::vector<String>>>>(""));
+    s.RegisterCommand("vecvecvec", "", [](std::vector<std::vector<std::vector<String>>> strs)
+    {
+        bool c = strs[0][0][0].m_String == " " && strs[1][0][0].m_String == "Arg";
+                CHECK(c);
+    }, Arg<std::vector<std::vector<std::vector<String>>>>(""));
 
-	s.runCommand("vecvecvec  [ \
+    s.RunCommand("vecvecvec  [ \
 														[ \
 															[\" \"] \
 														]     \
 									  				[ [\"Arg\"] ] ]");
-	s.registerCommand("char0", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
-	s.registerCommand("char1", "", [](char c) { CHECK(c == '"'); }, Arg<char>(""));
-	s.registerCommand("char2", "", [](char c) { CHECK(c == '\\'); }, Arg<char>(""));
-	s.registerCommand("char3", "", [](char c) { CHECK(c == 'a'); }, Arg<char>(""));
-	s.registerCommand("char4", "", [](char c) { CHECK(c == 'b'); }, Arg<char>(""));
+    s.RegisterCommand("char0", "", [](char c)
+    { CHECK(c == '"'); }, Arg<char>(""));
+    s.RegisterCommand("char1", "", [](char c)
+    { CHECK(c == '"'); }, Arg<char>(""));
+    s.RegisterCommand("char2", "", [](char c)
+    { CHECK(c == '\\'); }, Arg<char>(""));
+    s.RegisterCommand("char3", "", [](char c)
+    { CHECK(c == 'a'); }, Arg<char>(""));
+    s.RegisterCommand("char4", "", [](char c)
+    { CHECK(c == 'b'); }, Arg<char>(""));
 
 	// multi word strings
 //	s.runCommand("char0 \"");   // \ issue

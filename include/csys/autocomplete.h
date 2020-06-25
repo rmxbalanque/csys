@@ -55,22 +55,29 @@ namespace csys
         AutoComplete() = default;
 
         /*!
-         * \brief Copy constructor
-         * \param tree Source tree
+         * \brief
+         *      Copy constructor
+         * \param tree
+         *      Source tree
          */
         AutoComplete(const AutoComplete &tree);
 
         /*!
-         * \brief Assignment operator
-         * \param rhs Source tree
-         * \return Self
+         * \brief
+         *      Assignment operator
+         * \param rhs
+         *      Source tree
+         * \return
+         *      Self
          */
         AutoComplete &operator=(const AutoComplete &rhs);
 
         /*!
          *
          * \tparam inputType
+         *      String input type
          * \param[in] il
+         *      List of string from which TST will be constructed
          */
         template<typename inputType>
         AutoComplete(std::initializer_list<inputType> il)
@@ -84,7 +91,9 @@ namespace csys
         /*!
          *
          * \tparam T
-         * \param[in] items Container
+         *      Container type
+         * \param[in] items
+         *      Arbitrary container of strings
          */
         template<typename T>
         explicit AutoComplete(const T &items)
@@ -96,45 +105,60 @@ namespace csys
         }
 
         /*!
-         * /brief Destructor
+         * /brief
+         *      Destructor
          */
         ~AutoComplete();
 
         /*!
-         * \brief Get tree node count
-         * \return Tree node count
+         * \brief
+         *      Get tree node count
+         * \return
+         *      Tree node count
          */
         [[nodiscard]] size_t Size() const;
 
         /*!
-         * \brief Get tree word count
-         * \return Word count
+         * \brief
+         *      Get tree word count
+         * \return
+         *      Word count
          */
         [[nodiscard]] size_t Count() const;
 
         /*!
-         * \brief Search if the given word is in the tree
-         * \param[in] word Word to search
-         * \return Found
+         * \brief
+         *      Search if the given word is in the tree
+         * \param[in] word
+         *      Word to search
+         * \return
+         *      Found word
          */
         bool Search(const char *word);
 
         /*!
-         * \brief Insert word into tree
-         * \param[in] word Word to be inserted
+         * \brief
+         *      Insert word into tree
+         * \param[in] word
+         *      Word to be inserted
          */
         void Insert(const char *word);
 
         /*!
-         * \brief Insert word into tree
-         * \param[in] word Word to be inserted
+         * \brief
+         *      Insert word into tree
+         * \param[in] word
+         *      Word to be inserted
          */
         void Insert(const std::string &word);
 
         /*!
-         * \brief Insert word into tree
-         * \tparam strType String type to be inserted
-         * \param[in] word Word to be inserted
+         * \brief
+         *      Insert word into tree
+         * \tparam strType
+         *      String type to be inserted
+         * \param[in] word
+         *      Word to be inserted
          */
         template<typename strType>
         void Insert(const strType &word)
@@ -179,16 +203,22 @@ namespace csys
         }
 
         /*!
-         * \brief Removes a word from the tree if found
-         * \param[in] word String to be removed
+         * \brief
+         *      Removes a word from the tree if found
+         * \param[in] word
+         *      String to be removed
          */
         void Remove(const std::string &word);
 
         /*!
-         * \brief Retrieve suggestions that match the given prefix
-         * \tparam strType Prefix string type
-         * \param[in] prefix Prefix to use for suggestion lookup
-         * \param[out] ac_options Vector of found suggestions
+         * \brief
+         *      Retrieve suggestions that match the given prefix
+         * \tparam strType
+         *      Prefix string type
+         * \param[in] prefix
+         *      Prefix to use for suggestion lookup
+         * \param[out] ac_options
+         *      Vector of found suggestions
          */
         template<typename strType>
         void Suggestions(const strType &prefix, r_sVector ac_options)
@@ -230,34 +260,48 @@ namespace csys
 
 
         /*!
-         * \brief Retrieve suggestions that match the given prefix
-         * \param[in] prefix Prefix to use for suggestion lookup
-         * \param[out] ac_options Vector of found suggestions
+         * \brief
+         *      Retrieve suggestions that match the given prefix
+         * \param[in] prefix
+         *      Prefix to use for suggestion lookup
+         * \param[out] ac_options
+         *      Vector of found suggestions
          */
         void Suggestions(const char *prefix, r_sVector ac_options);
 
         /*!
-         * \brief Store suggestions that match prefix in ac_options and return partially completed
-         * 	      prefix if possible.
-         * \param[in] prefix Prefix to use for suggestion lookup
-         * \param[out] ac_options Vector of found suggestions
-         * \return Partially completed prefix
+         * \brief
+         *      Store suggestions that match prefix in ac_options and return partially completed prefix if possible.
+         * \param[in] prefix
+         *      Prefix to use for suggestion lookup
+         * \param[out] ac_options
+         *      Vector of found suggestions
+         * \return
+         *      Partially completed prefix
          */
         std::string Suggestions(const std::string &prefix, r_sVector ac_options);
 
         /*!
-         * \brief Retrieve suggestions that match the given prefix
-         * \param[in/out] prefix Prefix to use for suggestion lookup, will be partially completed if flag partial_complete is on
-         * \param[out] ac_options Vector of found suggestions
-         * \param[in] partial_complete Flag to determine if prefix string will be partially completed
+         * \brief
+         *      Retrieve suggestions that match the given prefix
+         * \param[in/out] prefix
+         *      Prefix to use for suggestion lookup, will be partially completed if flag partial_complete is on
+         * \param[out] ac_options
+         *      Vector of found suggestions
+         * \param[in] partial_complete
+         *      Flag to determine if prefix string will be partially completed
          */
         void Suggestions(std::string &prefix, r_sVector ac_options, bool partial_complete);
 
         /*!
-         * \brief Retrieve suggestions that match the given prefix
-         * \tparam strType Prefix string type
-         * \param[in] prefix Prefix to use for suggestion lookup
-         * \return Vector of found suggestions
+         * \brief
+         *      Retrieve suggestions that match the given prefix
+         * \tparam strType
+         *      Prefix string type
+         * \param[in] prefix
+         *      Prefix to use for suggestion lookup
+         * \return
+         *      Vector of found suggestions
          */
         template<typename strType>
         std::unique_ptr<sVector> Suggestions(const strType &prefix)
@@ -268,33 +312,46 @@ namespace csys
         }
 
         /*!
-         * \brief Retrieve suggestions that match the given prefix
-         * \param[in] prefix Prefix to use for suggestion lookup
-         * \return Vector of found suggestions
+         * \brief
+         *      Retrieve suggestions that match the given prefix
+         * \param[in] prefix
+         *      Prefix to use for suggestion lookup
+         * \return
+         *      Vector of found suggestions
          */
         std::unique_ptr<sVector> Suggestions(const char *prefix);
 
     private:
 
         /*!
-         * \param[in] root Permutation root
-         * \param[out] ac_options Vector of found suggestions
-         * \param[in] buffer Prefix buffer
+         * \param[in] root
+         *      Permutation root
+         * \param[out] ac_options
+         *      Vector of found suggestions
+         * \param[in] buffer
+         *      Prefix buffer
          */
         void SuggestionsAux(ACNode *root, r_sVector ac_options, std::string buffer);
 
         /*!
-         * \brief Remove word auxiliary function
-         * \param[in] root Current node to process
-         * \param[in] word String to look for and remove
-         * \return If node is word
+         * \brief
+         *      Remove word auxiliary function
+         * \param[in] root
+         *      Current node to process
+         * \param[in] word
+         *      String to look for and remove
+         * \return
+         *      If node is word
          */
         bool RemoveAux(ACNode *root, const char *word);
 
         /*!
-         * \brief Clone acNode and all its children
-         * \param src Node to copy from
-         * \param dest Where new node will be stored
+         * \brief
+         *      Clone acNode and all its children
+         * \param src
+         *      Node to copy from
+         * \param dest
+         *      Where new node will be stored
          */
         void DeepClone(ACNode *src, ACNode *&dest);
 

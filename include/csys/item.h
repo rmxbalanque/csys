@@ -14,13 +14,14 @@ namespace csys
     static const char endl = '\n';
 
     /*!
-     * \brief Console item type:
-     *      Command: Only used for commands.
-     *      Log: Used to log information inside a command.
-     *      Warning: Warn client through console.
-     *      Error: Display error to client through console.
-     *      Info: Any information wished to display through console.
-     *      None: Empty console item.
+     * \brief
+     *      Console item type:
+     *          - Command: Only used for commands.
+     *          - Log: Used to log information inside a command.
+     *          - Warning: Warn client through console.
+     *          - Error: Display error to client through console.
+     *          - Info: Any information wished to display through console.
+     *          - None: Empty console item.
      */
     enum ItemType
     {
@@ -35,21 +36,28 @@ namespace csys
     struct CSYS_API Item
     {
         /*!
-         * \brief Create console item type
-         * \param type Item type to be stored
+         * \brief
+         *      Create console item type
+         * \param type
+         *      Item type to be stored
          */
         explicit Item(ItemType type = ItemType::LOG);
 
         /*!
-         * \brief Log data to console item
-         * \param str Append string to item data
-         * \return Self (To allow for fluent logging)
+         * \brief
+         *      Log data to console item
+         * \param str
+         *      Append string to item data
+         * \return
+         *      Self (To allow for fluent logging)
          */
         Item &operator<<(std::string_view str);
 
         /*!
-         * \brief Get final/styled string of the item
-         * \return Stylized item string
+         * \brief
+         *      Get final/styled string of the item
+         * \return
+         *      Stylized item string
          */
         [[nodiscard]] std::string Get() const;
 
@@ -65,15 +73,20 @@ namespace csys
     public:
 
         /*!
-         * \brief Log console item
-         * \param type Type of item to log
-         * \return Self (To allow for fluent logging)
+         * \brief
+         *      Log console item
+         * \param type
+         *      Type of item to log
+         * \return
+         *      Self (To allow for fluent logging)
          */
         ItemLog &log(ItemType type);
 
         /*!
-         * \brief Get logged console items
-         * \return Console log
+         * \brief
+         *      Get logged console items
+         * \return
+         *      Console log
          */
         std::vector<Item> &Items();
 

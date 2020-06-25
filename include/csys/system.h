@@ -28,62 +28,97 @@ namespace csys
         System();
 
         /*!
-         * \brief Parse given command and run it
-         * \param line Command line string
+         * \brief
+         *      Parse given command and run it
+         * \param line
+         *      Command line string
          */
         void runCommand(const std::string &line);
 
         /*!
-         * \brief Get console registered command autocomplete tree
-         * \return Autocomplete Ternary Search Tree
+         * \brief
+         *      Get console registered command autocomplete tree
+         * \return
+         *      Autocomplete Ternary Search Tree
          */
         AutoComplete &cmdAutocomplete();
 
         /*!
-         * \brief Get console registered variables autocomplete tree
-         * \return Autocomplete Ternary Search Tree
+         * \brief
+         *      Get console registered variables autocomplete tree
+         * \return
+         *      Autocomplete Ternary Search Tree
          */
         AutoComplete &varAutocomplete();
 
         /*!
-         * \brief Get command history container
-         * \return Command history vector
+         * \brief
+         *      Get command history container
+         * \return
+         *      Command history vector
          */
         CommandHistory &history();
 
         /*!
-         * \brief Get console items
-         * \return Console items container
+         * \brief
+         *      Get console items
+         * \return
+         *      Console items container
          */
         std::vector<Item> &items();
 
         /*!
-         * \brief Creates a new item entry to log information
-         * \param type Log type (COMMAND, LOG, WARNING, ERROR)
-         * \return Reference to console items obj
+         * \brief
+         *      Creates a new item entry to log information
+         * \param type
+         *      Log type (COMMAND, LOG, WARNING, ERROR)
+         * \return
+         *      Reference to console items obj
          */
         ItemLog &log(ItemType type = ItemType::LOG);
 
         /*!
-         * \brief Run the given script
-         * \param script_name Script to be executed
+         * \brief
+         *      Run the given script
+         * \param script_name
+         *      Script to be executed
          *
-         *  \note If script exists but its not loaded, this methods will load the script and proceed to run it.
+         *  \note
+         *      If script exists but its not loaded, this methods will load the script and proceed to run it.
          */
         void runScript(const std::string &script_name);
 
         /*!
-         * \brief Get registered command container
-         * \return Commands container
+         * \brief
+         *      Get registered command container
+         * \return
+         *      Commands container
          */
         std::unordered_map<std::string, std::unique_ptr<CommandBase>> &commands();
 
         /*!
-         * \brief Get registered scripts container
-         * \return Scripts container
+         * \brief
+         *      Get registered scripts container
+         * \return
+         *      Scripts container
          */
         std::unordered_map<std::string, std::unique_ptr<Script>> &scripts();
 
+        /*!
+         *
+         * \tparam Fn
+         *
+         * \tparam Args
+         *
+         * \param name
+         *
+         * \param description
+         *
+         * \param function
+         *
+         * \param args
+         *
+         */
         template<typename Fn, typename ...Args>
         void registerCommand(const String &name, const String &description, Fn function, Args... args)
         {
@@ -129,6 +164,17 @@ namespace csys
                                                                                            help);
         }
 
+        /*!
+         *
+         * \tparam T
+         *      Type of the variable to be registered.
+         * \param name
+         *      Name under which the variable will be registered on.
+         * \param var
+         *      Variable to be registered/exposed to the console.
+         * \note
+         *      Variable is assumed to be in memory for the life of the program!
+         */
         template<typename T>
         void registerVariable(const String &name, T &var)
         {
@@ -163,27 +209,36 @@ namespace csys
         }
 
         /*!
-         * \brief Register script into console system
-         * \param name Script name
-         * \param path Scrip path
+         * \brief
+         *      Register script into console system
+         * \param name
+         *      Script name
+         * \param path
+         *      Scrip path
          */
         void registerScript(const std::string &name, const std::string &path);
 
         /*!
-         * \brief Unregister command from console system
-         * \param cmd_name Command to unregister
+         * \brief
+         *      Unregister command from console system
+         * \param cmd_name
+         *      Command to unregister
          */
         void unregisterCommand(const std::string &cmd_name);
 
         /*!
-         * \brief Unregister variable from console system
-         * \param var_name Variable to unregister
+         * \brief
+         *      Unregister variable from console system
+         * \param var_name
+         *      Variable to unregister
          */
         void unregisterVariable(const std::string &var_name);
 
         /*!
-         * \brief Unregister script from console system
-         * \param script_name Script to unregister
+         * \brief
+         *      Unregister script from console system
+         * \param script_name
+         *      Script to unregister
          */
         void unregisterScript(const std::string &script_name);
 

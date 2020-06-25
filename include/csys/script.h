@@ -16,22 +16,30 @@ namespace csys
     public:
 
         /*!
-         * \brief Create script object from file
-         * \param path Path of script file
-         * \param load_on_init Load script when object is created
+         * \brief
+         *      Create script object from file
+         * \param path
+         *      Path of script file
+         * \param load_on_init
+         *      Load script when object is created
          */
         explicit Script(std::string path, bool load_on_init = true);
 
         /*!
-         * \brief Create script object from file
-         * \param path Path of script file
-         * \param load_on_init Load script when object is created
+         * \brief
+         *      Create script object from file
+         * \param path
+         *      Path of script file
+         * \param load_on_init
+         *      Load script when object is created
          */
         explicit Script(const char *path, bool load_on_init = true);
 
         /*!
-         * \brief Create script object from file already in memory
-         * \param data Script file memory
+         * \brief
+         *      Create script object from file already in memory
+         * \param data
+         *      Script file memory
          */
         explicit Script(std::vector<std::string> data);
 
@@ -51,14 +59,18 @@ namespace csys
         void Unload();
 
         /*!
-         * \brief Set script file path (Will be used when laoding)
-         * \param path Script file path
+         * \brief
+         *      Set script file path (Will be used when laoding)
+         * \param path
+         *      Script file path
          */
         void SetPath(std::string path);
 
         /*!
-         * \brief Retrieve script data (Commands)
-         * \return List of commands in script
+         * \brief
+         *      Retrieve script data (Commands)
+         * \return
+         *      List of commands in script
          */
         const std::vector<std::string> &Data();
 

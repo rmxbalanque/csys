@@ -16,38 +16,50 @@ namespace csys
     public:
 
         /*!
-         * \brief Command history constructor.
-         * \param maxRecord Maximum amount of command strings to keep track at once.
+         * \brief
+         *      Command history constructor.
+         * \param maxRecord
+         *      Maximum amount of command strings to keep track at once.
          */
         explicit CommandHistory(unsigned int maxRecord = 100);
 
         /*!
-         * \brief Record command string. (Start at the beginning once end is reached).
-         * \param line Command string to be recorded.
+         * \brief
+         *      Record command string. (Start at the beginning once end is reached).
+         * \param line
+         *      Command string to be recorded.
          */
         void PushBack(const std::string &line);
 
         /*!
-         * \brief Get newest register command entry index
-         * \return Newest command entry index
+         * \brief
+         *      Get newest register command entry index
+         * \return
+         *      Newest command entry index
          */
         [[nodiscard]] unsigned int GetNewIndex() const;
 
         /*!
-         * \brief Get newest register command entry
-         * \return Newest command entry
+         * \brief
+         *      Get newest register command entry
+         * \return
+         *      Newest command entry
          */
         const std::string &GetNew();
 
         /*!
-         * \brief Get oldest register command entry index
-         * \return Oldest command entry index
+         * \brief
+         *      Get oldest register command entry index
+         * \return
+         *      Oldest command entry index
          */
         [[nodiscard]] unsigned int GetOldIndex() const;
 
         /*!
-         * \brief Get oldest register command entry
-         * \return Oldest command entry string
+         * \brief
+         *      Get oldest register command entry
+         * \return
+         *      Oldest command entry string
          */
         const std::string &GetOld();
 
@@ -57,30 +69,40 @@ namespace csys
         void Clear();
 
         /*!
-         * \brief Retrieve command history at given index
-         * \param index Position to lookup in command history vector
-         * \return Command at given index
+         * \brief
+         *      Retrieve command history at given index
+         * \param index
+         *      Position to lookup in command history vector
+         * \return
+         *      Command at given index
          *
-         * \note No bound checking is performed when accessing with these index operator.
-         *  Use the *index()* method for safe history vector indexing.
+         * \note
+         *      No bound checking is performed when accessing with these index operator.
+         *      Use the *index()* method for safe history vector indexing.
          */
         const std::string &operator[](size_t index);
 
         /*!
-         * \brief Output available command history.
-         * \param os Output stream
-         * \param history Reference to history to be printed
-         * \return Reference to history to be printed
+         * \brief
+         *      Output available command history.
+         * \param os
+         *      Output stream
+         * \param history
+         *      Reference to history to be printed
+         * \return
+         *      Reference to history to be printed
          */
         friend std::ostream &operator<<(std::ostream &os, const CommandHistory &history);
 
         /*!
-         * \return Number of registered commands.
+         * \return
+         *      Number of registered commands.
          */
         size_t Size();
 
         /*!
-         * \return Maximum commands that are able to be recorded
+         * \return
+         *      Maximum commands that are able to be recorded
          */
         size_t Capacity();
 

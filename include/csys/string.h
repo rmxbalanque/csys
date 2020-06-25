@@ -97,14 +97,14 @@ namespace csys
 
         /*!
          * \brief
-         *      Returns a value to be comapred with the .first of the pair returned from NextPoi
+         *      Returns a value to be compared with the .first of the pair returned from NextPoi
          * \return
-         *
+         *      Returns size of string + 1
          */
         [[nodiscard]] size_t End() const
         { return m_String.size() + 1; }
 
-        std::string m_String;    //!<
+        std::string m_String;    //!< String data member
     };
 }
 

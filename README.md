@@ -66,7 +66,7 @@ To use this library from a CMake project, you can locate it by using the `find_p
 ```CMake
 # CMakeLists.txt
 
-find_package(csys 0.1.0 REQUIRED)
+find_package(csys 1.0.0 REQUIRED)
 ...
 add_library(your_library ...)
 ...

@@ -3,7 +3,6 @@
 
 #ifndef CSYS_STRING_H
 #define CSYS_STRING_H
-
 #pragma once
 
 #include <string>

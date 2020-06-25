@@ -89,6 +89,14 @@ namespace csys
                     break;
             return result;
         }
+
+        // Delete unwanted operations
+        Reserved() = delete;
+        ~Reserved() = delete;
+        Reserved(Reserved&&) = delete;
+        Reserved(const Reserved&) = delete;
+        Reserved& operator=(Reserved&&) = delete;
+        Reserved& operator=(const Reserved&) = delete;
     };
 
     /*!

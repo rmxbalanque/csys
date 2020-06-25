@@ -52,6 +52,14 @@ namespace csys
          *      Returns the number of arguments taken by the command
          */
         [[nodiscard]] virtual size_t ArgumentCount() const = 0;
+
+        /*!
+         * \brief
+         *      Deep copies a command
+         * \return
+         *      Pointer to newly copied command
+         */
+        [[nodiscard]] virtual CommandBase* Clone() const = 0;
     };
 
     /*!
@@ -93,7 +101,7 @@ namespace csys
          * \return
          *      Returns item error if the parsing in someway was messed up, and none if there was no issue
          */
-        Item operator()(String &input) override
+        Item operator()(String &input) final
         {
             try
             {
@@ -115,7 +123,7 @@ namespace csys
          * \return
          *      String containing info about the command
          */
-        [[nodiscard]] std::string Help() override
+        [[nodiscard]] std::string Help() final
         {
             return m_Name.m_String + DisplayArguments(std::make_index_sequence<sizeof ...(Args)>{}) + "\n\t\t- " +
                    m_Description.m_String + "\n\n";
@@ -127,11 +135,21 @@ namespace csys
          * \return
          *      Returns the number of arguments taken by the command
          */
-        [[nodiscard]] size_t ArgumentCount() const override
+        [[nodiscard]] size_t ArgumentCount() const final
         {
             return sizeof... (Args);
         }
 
+        /*!
+         * \brief
+         *      Deep copies a command
+         * \return
+         *      Pointer to newly copied command
+         */
+        [[nodiscard]] CommandBase* Clone() const final
+        {
+            return new Command<Fn, Args...>(*this);
+        }
     private:
         /*!
          * \brief
@@ -160,7 +178,7 @@ namespace csys
          * \brief
          *      Displays the usage for running the command successfully
          * \tparam Is
-         *      Index sequence from 0 to Argument Count
+         *      Index sequence from 0 to Argument CountH
          * \return
          *      Returns a string containing the usage of the command
          */
@@ -210,7 +228,7 @@ namespace csys
          * \return
          *      Returns item error if the parsing in someway was messed up, and none if there was no issue
          */
-        Item operator()(String &input) override
+        Item operator()(String &input) final
         {
             // call the function
             size_t start = 0;
@@ -236,7 +254,7 @@ namespace csys
          * \return
          *      String containing info about the command
          */
-        [[nodiscard]] std::string Help() override
+        [[nodiscard]] std::string Help() final
         {
             return m_Name.m_String + "\n\t\t- " + m_Description.m_String + "\n\n";
         }
@@ -247,11 +265,21 @@ namespace csys
          * \return
          *      0
          */
-        [[nodiscard]] size_t ArgumentCount() const override
+        [[nodiscard]] size_t ArgumentCount() const final
         {
             return 0;
         }
 
+        /*!
+         * \brief
+         *      Deep copies a command
+         * \return
+         *      Pointer to newly copied command
+         */
+        [[nodiscard]] CommandBase* Clone() const final
+        {
+            return new Command<Fn>(*this);
+        }
     private:
 
         const String m_Name;                           //!< Name of command

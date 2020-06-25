@@ -44,6 +44,38 @@ namespace csys
         explicit Script(std::vector<std::string> data);
 
         /*!
+         * \brief
+         *      Move constructor
+         * \param rhs
+         *      Script to be copied.
+         */
+        Script(Script &&rhs) = default;
+
+        /*!
+         * \brief
+         *      Copy constructor
+         * \param rhs
+         *      Script to be copied.
+         */
+        Script(const Script &rhs) = default;
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      Script to be copied.
+         */
+        Script &operator=(Script &&rhs) noexcept = default;
+
+        /*!
+         * \brief
+         *      Copy assigment operator.
+         * \param rhs
+         *      Script to be copied.
+         */
+        Script &operator=(const Script &rhs) = default;
+        
+        /*!
          * \brief Load script file
          */
         void Load();

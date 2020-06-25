@@ -52,6 +52,54 @@ namespace csys
         m_CommandSuggestionTree.Insert(s_Get.data());
     }
 
+    CSYS_INLINE System::System(const System &rhs) : m_CommandSuggestionTree(rhs.m_CommandSuggestionTree),
+                                                    m_VariableSuggestionTree(rhs.m_VariableSuggestionTree),
+                                                    m_CommandHistory(rhs.m_CommandHistory),
+                                                    m_CommandData(rhs.m_CommandData),
+                                                    m_RegisterCommandSuggestion(rhs.m_RegisterCommandSuggestion)
+    {
+        // Copy commands.
+        for (const auto &pair : rhs.m_Commands)
+        {
+            m_Commands[pair.first] = std::unique_ptr<CommandBase>(pair.second->Clone());
+        }
+
+        // Copy scripts.
+        for (const auto &pair: rhs.m_Scripts)
+        {
+            m_Scripts[pair.first] = std::make_unique<Script>(*pair.second);
+        }
+    }
+
+    CSYS_INLINE System &System::operator=(const System &rhs)
+    {
+        if (this == &rhs)
+            return *this;
+
+        // Copy commands.
+        for (const auto &pair : rhs.m_Commands)
+        {
+            m_Commands[pair.first] = std::unique_ptr<CommandBase>(pair.second->Clone());
+        }
+
+        // Other data.
+        m_CommandSuggestionTree = rhs.m_CommandSuggestionTree;
+        m_VariableSuggestionTree = rhs.m_VariableSuggestionTree;
+        m_CommandHistory = rhs.m_CommandHistory;
+        m_CommandData = rhs.m_CommandData;
+
+        // Copy scripts.
+        for (const auto &pair: rhs.m_Scripts)
+        {
+            m_Scripts[pair.first] = std::make_unique<Script>(*pair.second);
+        }
+
+        // Rest of data.
+        m_RegisterCommandSuggestion = rhs.m_RegisterCommandSuggestion;
+
+        return *this;
+    }
+
     CSYS_INLINE void System::RunCommand(const std::string &line)
     {
         // Error checking.
@@ -111,8 +159,7 @@ namespace csys
         {
             m_Scripts[name] = std::make_unique<Script>(path, true);
             m_VariableSuggestionTree.Insert(name);
-        }
-        else
+        } else
             throw csys::Exception("ERROR: Script \'" + name + "\' already registered");
     }
 
@@ -172,26 +219,19 @@ namespace csys
 
     // Getters ////////////////////////////////////////////////////////////////
 
-    CSYS_INLINE AutoComplete &System::CmdAutocomplete()
-    { return m_CommandSuggestionTree; }
+    CSYS_INLINE AutoComplete &System::CmdAutocomplete() { return m_CommandSuggestionTree; }
 
-    CSYS_INLINE AutoComplete &System::VarAutocomplete()
-    { return m_VariableSuggestionTree; }
+    CSYS_INLINE AutoComplete &System::VarAutocomplete() { return m_VariableSuggestionTree; }
 
-    CSYS_INLINE CommandHistory &System::History()
-    { return m_CommandHistory; }
+    CSYS_INLINE CommandHistory &System::History() { return m_CommandHistory; }
 
-    CSYS_INLINE std::vector<Item> &System::Items()
-    { return m_CommandData.Items(); }
+    CSYS_INLINE std::vector<Item> &System::Items() { return m_CommandData.Items(); }
 
-    CSYS_INLINE ItemLog &System::Log(ItemType type)
-    { return m_CommandData.log(type); }
+    CSYS_INLINE ItemLog &System::Log(ItemType type) { return m_CommandData.log(type); }
 
-    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> &System::Commands()
-    { return m_Commands; }
+    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<CommandBase>> &System::Commands() { return m_Commands; }
 
-    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> &System::Scripts()
-    { return m_Scripts; }
+    CSYS_INLINE std::unordered_map<std::string, std::unique_ptr<Script>> &System::Scripts() { return m_Scripts; }
 
     ///////////////////////////////////////////////////////////////////////////
     // Private methods ////////////////////////////////////////////////////////
@@ -234,8 +274,7 @@ namespace csys
             {
                 Log(ERROR) << s_ErrorNoVar << endl;
                 return;
-            }
-            else
+            } else
                 // Append variable name.
                 command_name += " " + line.m_String.substr(range.first, range.second - range.first);
         }

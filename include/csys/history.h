@@ -25,6 +25,38 @@ namespace csys
 
         /*!
          * \brief
+         *      Move constructor
+         * \param rhs
+         *      History to be copied.
+         */
+        CommandHistory(CommandHistory &&rhs) = default;
+
+        /*!
+         * \brief
+         *      Copy constructor
+         * \param rhs
+         *      History to be copied.
+         */
+        CommandHistory(const CommandHistory &rhs) = default;
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      History to be copied.
+         */
+        CommandHistory &operator=(CommandHistory &&rhs) noexcept = default;
+
+        /*!
+         * \brief
+         *      Copy assigment operator.
+         * \param rhs
+         *      History to be copied.
+         */
+        CommandHistory &operator=(const CommandHistory &rhs) = default;
+
+        /*!
+         * \brief
          *      Record command string. (Start at the beginning once end is reached).
          * \param line
          *      Command string to be recorded.

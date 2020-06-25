@@ -16,7 +16,7 @@ namespace csys
 {
     namespace
     {
-        inline const std::string_view s_Reserved("\\[]\"");                                                    //!< All the reserved chars
+        inline const std::string_view s_Reserved("\\[]\"");                                             //!< All the reserved chars
         inline constexpr char s_ErrMsgReserved[] = "Reserved chars '\\, [, ], \"' must be escaped with \\";    //!< Error message for reserved chars
     }
 

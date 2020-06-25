@@ -17,7 +17,6 @@
 
 namespace csys
 {
-    // TODO: Add move, copy, assignment operators to all classes in csys. Or delete if thats the intended purpose.
     class CSYS_API System
     {
     public:
@@ -27,6 +26,38 @@ namespace csys
          */
         System();
 
+        /*!
+         * \brief
+         *      Move constructor
+         * \param rhs
+         *      System to be copied.
+         */
+        System(System &&rhs) = default;
+
+        /*!
+         * \brief
+         *      Copy constructor
+         * \param rhs
+         *      System to be copied.
+         */
+        System(const System &rhs);
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      System to be copied.
+         */
+        System &operator=(System &&rhs) noexcept = default;
+
+        /*!
+         * \brief
+         *      Copy assigment operator.
+         * \param rhs
+         *      System to be copied.
+         */
+        System &operator=(const System &rhs);
+        
         /*!
          * \brief
          *      Parse given command and run it

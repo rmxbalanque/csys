@@ -58,9 +58,17 @@ namespace csys
          * \brief
          *      Copy constructor
          * \param tree
-         *      Source tree
+         *      Tree to be copied
          */
         AutoComplete(const AutoComplete &tree);
+
+        /*!
+         * \brief
+         *      Move constructor
+         * \param rhs
+         *      Tree to be copied
+         */
+        AutoComplete(AutoComplete &&rhs) noexcept = default;
 
         /*!
          * \brief
@@ -71,6 +79,16 @@ namespace csys
          *      Self
          */
         AutoComplete &operator=(const AutoComplete &rhs);
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      Source tree
+         * \return
+         *      Self
+         */
+        AutoComplete& operator=(AutoComplete&& rhs) noexcept = default;
 
         /*!
          *

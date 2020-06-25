@@ -44,3 +44,5 @@ Thumbs.db
 /.idea/
 /thirdparty/include-what-you-use
 /Default.xml
+/documentation/
+/build/

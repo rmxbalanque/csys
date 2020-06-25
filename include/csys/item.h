@@ -45,6 +45,38 @@ namespace csys
 
         /*!
          * \brief
+         *      Move constructor
+         * \param rhs
+         *      Item to be copied.
+         */
+        Item(Item &&rhs) = default;
+
+        /*!
+         * \brief
+         *      Copy constructor
+         * \param rhs
+         *      Item to be copied.
+         */
+        Item(const Item &rhs) = default;
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      Item to be copied.
+         */
+        Item &operator=(Item &&rhs) noexcept = default;
+
+        /*!
+         * \brief
+         *      Copy assigment operator.
+         * \param rhs
+         *      Item to be copied.
+         */
+        Item &operator=(const Item &rhs) = default;
+
+        /*!
+         * \brief
          *      Log data to console item
          * \param str
          *      Append string to item data
@@ -66,7 +98,7 @@ namespace csys
         unsigned int m_TimeStamp;    //!< Record timestamp
     };
 
-    #define LOG_BASIC_TYPE_DECL(type) ItemLog& operator<<(type data)
+#define LOG_BASIC_TYPE_DECL(type) ItemLog& operator<<(type data)
 
     class CSYS_API ItemLog
     {
@@ -81,6 +113,40 @@ namespace csys
          *      Self (To allow for fluent logging)
          */
         ItemLog &log(ItemType type);
+
+        ItemLog() = default;
+
+        /*!
+         * \brief
+         *      Move constructor
+         * \param rhs
+         *      ItemLog to be copied.
+         */
+        ItemLog(ItemLog &&rhs) = default;
+
+        /*!
+         * \brief
+         *      Copy constructor
+         * \param rhs
+         *      ItemLog to be copied.
+         */
+        ItemLog(const ItemLog &rhs) = default;
+
+        /*!
+         * \brief
+         *      Move assignment operator
+         * \param rhs
+         *      ItemLog to be copied.
+         */
+        ItemLog &operator=(ItemLog &&rhs) noexcept = default;
+
+        /*!
+         * \brief
+         *      Copy assigment operator.
+         * \param rhs
+         *      ItemLog to be copied.
+         */
+        ItemLog &operator=(const ItemLog &rhs) = default;
 
         /*!
          * \brief

@@ -89,3 +89,4 @@ target_link_libraries(your_library PRIVATE csys::csys)
 See example [CMakeLists.txt](https://github.com/rmxbalanque/csys/blob/master/examples/simple_example/CMakeLists.txt) on how to use.
 
 ## Documentation
+Current documentation available on the [Wiki](https://github.com/rmxbalanque/csys/wiki). (WIP)

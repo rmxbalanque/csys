@@ -68,7 +68,7 @@ namespace csys
          * \param rhs
          *      Tree to be copied
          */
-        AutoComplete(AutoComplete &&rhs) noexcept = default;
+        AutoComplete(AutoComplete &&rhs) = default;
 
         /*!
          * \brief
@@ -88,7 +88,7 @@ namespace csys
          * \return
          *      Self
          */
-        AutoComplete& operator=(AutoComplete&& rhs) noexcept = default;
+        AutoComplete& operator=(AutoComplete&& rhs) = default;
 
         /*!
          *

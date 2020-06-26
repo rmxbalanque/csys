@@ -45,7 +45,7 @@ namespace csys
          * \param rhs
          *      History to be copied.
          */
-        CommandHistory &operator=(CommandHistory &&rhs) noexcept = default;
+        CommandHistory &operator=(CommandHistory &&rhs) = default;
 
         /*!
          * \brief

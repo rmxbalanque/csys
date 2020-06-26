@@ -65,7 +65,7 @@ namespace csys
          * \param rhs
          *      Script to be copied.
          */
-        Script &operator=(Script &&rhs) noexcept = default;
+        Script &operator=(Script &&rhs) = default;
 
         /*!
          * \brief

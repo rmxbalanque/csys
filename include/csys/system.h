@@ -48,7 +48,7 @@ namespace csys
          * \param rhs
          *      System to be copied.
          */
-        System &operator=(System &&rhs) noexcept = default;
+        System &operator=(System &&rhs) = default;
 
         /*!
          * \brief

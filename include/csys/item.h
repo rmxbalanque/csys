@@ -65,7 +65,7 @@ namespace csys
          * \param rhs
          *      Item to be copied.
          */
-        Item &operator=(Item &&rhs) noexcept = default;
+        Item &operator=(Item &&rhs) = default;
 
         /*!
          * \brief
@@ -138,7 +138,7 @@ namespace csys
          * \param rhs
          *      ItemLog to be copied.
          */
-        ItemLog &operator=(ItemLog &&rhs) noexcept = default;
+        ItemLog &operator=(ItemLog &&rhs) = default;
 
         /*!
          * \brief

@@ -266,7 +266,7 @@ namespace csys
         }
     }
 
-    bool AutoComplete::RemoveAux(AutoComplete::ACNode *root, const char *word)
+    CSYS_INLINE bool AutoComplete::RemoveAux(AutoComplete::ACNode *root, const char *word)
     {
         if (!root) return false;
 
@@ -306,7 +306,7 @@ namespace csys
         return false;
     }
 
-    void AutoComplete::DeepClone(AutoComplete::ACNode *src, AutoComplete::ACNode *&dest)
+    CSYS_INLINE void AutoComplete::DeepClone(AutoComplete::ACNode *src, AutoComplete::ACNode *&dest)
     {
         if (!src) return;
 

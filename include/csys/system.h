@@ -60,7 +60,7 @@ namespace csys
         
         /*!
          * \brief
-         *      Parse given command and run it
+         *      Parse given command line input and run it
          * \param line
          *      Command line string
          */
@@ -297,7 +297,7 @@ namespace csys
          */
         void UnregisterScript(const std::string &script_name);
 
-    private:
+    protected:
         template<typename T>
         std::string RegisterVariableAux(const String &name, T &var)
         {
@@ -315,7 +315,7 @@ namespace csys
 
             // Get Command
             const auto GetFunction = [this, &var]() {
-                m_CommandData.log(LOG) << var << endl;
+                m_ItemLog.log(LOG) << var << endl;
             };
 
             // Register get command
@@ -338,7 +338,7 @@ namespace csys
         AutoComplete m_CommandSuggestionTree;                                        //!< Autocomplete Ternary Search Tree for commands
         AutoComplete m_VariableSuggestionTree;                                       //!< Autocomplete Ternary Search Tree for registered variables
         CommandHistory m_CommandHistory;                                             //!< History of executed commands
-        ItemLog m_CommandData;                                                       //!< Console Items (Logging)
+        ItemLog m_ItemLog;                                                           //!< Console Items (Logging)
         std::unordered_map<std::string, std::unique_ptr<Script>> m_Scripts;          //!< Scripts
         bool m_RegisterCommandSuggestion = true;                                     //!< Flag that determines if commands will be registered for autocomplete.
     };

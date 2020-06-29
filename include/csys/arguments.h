@@ -128,7 +128,7 @@ namespace csys
         static constexpr bool is_supported_type_v = is_supported_type<U>::value;
     public:
 
-        using ValueType = T;    //!< Type of this argument
+        using ValueType = std::remove_cv_t<std::remove_reference_t<T>>;    //!< Type of this argument
 
         /*!
          * \brief
@@ -138,7 +138,8 @@ namespace csys
          */
         explicit Arg(const String &name) : m_Arg(name)
         {
-            static_assert(is_supported_type_v<T>, "ValueType 'T' is not supported. if you are using std::string, use csys::String");
+            static_assert(is_supported_type_v<ValueType>,
+                    "ValueType 'T' is not supported, see 'Supported types' for more help");
         }
 
         /*!

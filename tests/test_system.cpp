@@ -1,7 +1,7 @@
 #include "doctest.h"
 #include "csys/system.h"
 
-void setter(float& v, float r) { v = r; }
+void setter(float& v, const float &r) { v = r; }
 
 TEST_CASE ("Test CSYS System Class")
 {

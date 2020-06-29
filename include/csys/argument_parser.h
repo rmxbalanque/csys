@@ -150,7 +150,7 @@ namespace csys
     auto range = input.NextPoi(start); \
     try \
     { \
-      m_Value = (TYPE)FUNCTION(input.m_String, &range.first); \
+      m_Value = (TYPE)FUNCTION(ARG_PARSE_SUBSTR(range), &range.first); \
     } \
     catch (const std::out_of_range&) \
     { \

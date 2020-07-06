@@ -3,6 +3,7 @@
 //
 
 #include "doctest.h"
+#include <iostream>
 #include "csys/system.h"
 
 TEST_CASE("Char argument")

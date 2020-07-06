@@ -1,6 +1,8 @@
 #include "doctest.h"
 #include "csys/system.h"
 
+void setter(float& v, const float &r) { v = r; }
+
 TEST_CASE ("Test CSYS System Class")
 {
     csys::System temp;
@@ -16,9 +18,19 @@ TEST_CASE ("Test CSYS System Class")
     temp.RunCommand("test true");
     CHECK(test_flag);
 
+    bool runs = false;
+    temp.RegisterCommand("empty", "Function that takes no params", [&runs](){ runs = true; });
+    temp.RunCommand("empty");
+    CHECK(runs);
+
     // Registration.
-    temp.RegisterVariable<float>("time", time_variable);
-    temp.RegisterVariable<int>("temp_var", temp_var);
+    temp.RegisterVariable("time", time_variable, csys::Arg<float>(""));
+    temp.RegisterVariable("temp_var", temp_var, csys::Arg<int>(""));
+
+    temp.RegisterVariable("time_set", time_variable, setter);
+
+    temp.RunCommand("set time_set 30");
+    CHECK(time_variable == 30);
 
     // Modification.
     temp.RunCommand("set time 10");

@@ -28,7 +28,7 @@ TEST_CASE ("Test CSYS System Class")
     auto check = [&]()
     {
         for (size_t i = 0; i < script_expected_data.size(); ++i)
-            CHECK_MESSAGE(script_.data()[i] == script_expected_data[i], "Script data mismatch");
+            CHECK_MESSAGE(script_.Data()[i] == script_expected_data[i], "Script data mismatch");
     };
     check();
 
@@ -42,7 +42,7 @@ TEST_CASE ("Test CSYS System Class")
         temp_script_file.close();
     }
     script_expected_data.emplace_back("AFTER_INITIAL_LOAD");
-    script_.reload();
+    script_.Reload();
     check();
 
     // Remove temporal files.

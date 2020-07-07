@@ -43,7 +43,7 @@ function(csys_prepare_test test_target csys_lib)
     if (CSYS_ENABLE_IWYU)
         set_target_properties(${test_target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH})
     endif()
-    add_test(NAME ${test_target} COMMAND ${test_target})
+    add_test(NAME ${test_target} COMMAND ${test_target} -s -fc)
 endfunction()
 
 # Build tests with csys library.

@@ -1,7 +1,7 @@
 # CMake Project configuration was modeled after: https://github.com/gabime/spdlog
 
 # Configure CMAKE Version.
-cmake_minimum_required(VERSION 3.10...3.18)
+cmake_minimum_required(VERSION 3.1...3.18)
 
 # -----------------------------------------------------------------------------
 # Start CSYS project.

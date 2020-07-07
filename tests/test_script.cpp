@@ -5,7 +5,7 @@
 #include <string>
 #include <filesystem>
 
-TEST_CASE ("Test CSYS System Class")
+TEST_CASE ("Test CSYS Script Class")
 {
     using namespace csys;
 
@@ -27,13 +27,15 @@ TEST_CASE ("Test CSYS System Class")
     Script script_(temp_script_path.string());
     auto check = [&]()
     {
+        CHECK_MESSAGE(!script_.Data().empty(), "Script data is empty");
+        CHECK_MESSAGE(script_.Data().size() == script_expected_data.size(), "Script size difference");
         for (size_t i = 0; i < script_expected_data.size(); ++i)
             CHECK_MESSAGE(script_.Data()[i] == script_expected_data[i], "Script data mismatch");
     };
     check();
 
     // Proper reloading.
-    temp_script_file.close();
+    //temp_script_file.close();
     temp_script_file.clear();
     temp_script_file.open(temp_script_path, std::ios_base::app);
     if (temp_script_file.is_open())

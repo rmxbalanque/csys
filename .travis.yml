@@ -143,4 +143,4 @@ before_script:
 # Build.
 script:
   - cmake --build ./ -- -j2
-  - ctest -j2 -V --output-on-failure
+  - ctest -j2 -V --output-on-failure --verbose

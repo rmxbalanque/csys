@@ -27,7 +27,7 @@ cmake_policy(SET CMP0057 NEW)
 find_package(Filesystem)
 if (Filesystem_FOUND)
     message(STATUS "Including csys::Script test")
-    list(APPEND CSYS_TEST_SOURCES test_script.cpp)
+    #list(APPEND CSYS_TEST_SOURCES test_script.cpp)
 endif()
 
 # Set up testing.

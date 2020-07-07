@@ -24,7 +24,7 @@ TEST_CASE ("Test CSYS System Class")
     }
 
     // Proper loading.
-    Script script_(temp_script_path.c_str());
+    Script script_(temp_script_path.string());
     auto check = [&]()
     {
         for (size_t i = 0; i < script_expected_data.size(); ++i)

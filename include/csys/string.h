@@ -76,7 +76,7 @@ namespace csys
 
             // Go to the first non-whitespace char
             for (; pos < end; ++pos)
-                if (!std::isspace(m_String[pos]))
+                if (!std::isspace(m_String[pos]) && m_String[pos] != '\0')
                 {
                     range.first = pos;
                     break;

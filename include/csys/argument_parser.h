@@ -230,7 +230,7 @@ namespace csys
                 range.first = range.second + 1;
 
                 // End of string check
-                if (range.first < input.m_String.size() && !std::isspace(input.m_String[range.first]))
+                if (range.first < input.m_String.size() && !std::isspace(input.m_String[range.first]) && input.m_String[range.first] != '\0')
                 {
                     // joining two strings together
                     if (input.m_String[range.first] == '"')

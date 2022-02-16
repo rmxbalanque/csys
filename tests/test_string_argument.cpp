@@ -12,81 +12,76 @@ TEST_CASE("String Argument")
 	System s;
 
 // CORRECT USAGE SINGLE WORD
-	String strt;
-    s.RegisterCommand("0", "", [&strt](String str)
+	std::string strt;
+    s.RegisterCommand("0", "", [&strt](std::string str)
     {
         strt = str;
 //			std::cout << "String -> " << str.m_String << std::endl;
-    }, Arg<String>(""));
-
-    s.RegisterCommand("1", "", [](const char *str)
-    {
-                CHECK(!strcmp(str, "One"));
-    }, Arg<String>(""));
+    }, Arg<std::string>(""));
 
     s.RegisterCommand("2", "", [](std::string str)
     {
                 CHECK(str == "Two");
-    }, Arg<String>(""));
+    }, Arg<std::string>(""));
 
     s.RegisterCommand("3", "", [](std::string str)
     {
                 CHECK(str == "");
-    }, Arg<String>(""));
+    }, Arg<std::string>(""));
 
     s.RunCommand("0 \" \""); // Zero\] -> Zero\]
-	CHECK((strt.m_String == " "));
+	CHECK((strt == " "));
 
 	// single word strings
     s.RunCommand("0 Zero\\]"); // Zero\] -> Zero\]
-	CHECK((strt.m_String == "Zero]"));
-	strt.m_String.clear();
+	CHECK((strt == "Zero]"));
+	strt.clear();
 
     s.RunCommand("0 \"Zero\\\"\""); // Zero\] -> Zero\]
-  CHECK((strt.m_String == "Zero\""));
-	strt.m_String.clear();
+  CHECK((strt == "Zero\""));
+	strt.clear();
 
     s.RunCommand("0 \"Zero \\\" \\\\\""); // Zero\] -> Zero\]
-					CHECK((strt.m_String == "Zero \" \\"));
-	strt.m_String.clear();
+					CHECK((strt == "Zero \" \\"));
+	strt.clear();
 
     s.RunCommand("0 \"Zero\"\"One\"\"    #    \""); // Zero\] -> Zero\]
-					CHECK((strt.m_String == "ZeroOne    #    "));
-	strt.m_String.clear();
+					CHECK((strt == "ZeroOne    #    "));
+	strt.clear();
 
 // CORRECT USAGE MANY WORDS
-    s.RegisterCommand("0,1", "", [](String str, String str1)
+    s.RegisterCommand("0,1", "", [](std::string str, std::string str1)
     {
-        bool zero = str.m_String == "Zero";
-        bool one = str1.m_String == "One";
+        bool zero = str == "Zero";
+        bool one = str1 == "One";
                 CHECK(zero);
                 CHECK(one);
-    }, Arg<String>(""), Arg<String>(""));
+    }, Arg<std::string>(""), Arg<std::string>(""));
 
 	// multi word strings
     s.RunCommand("0,1 \"Zero\" \"One\"");
     s.RunCommand("0,1     Zero    One    ");
 
 // CORRECT USAGE VECTOR OF MULTI WORD(S)
-    s.RegisterCommand("0,1,2", "", [](std::vector<String> strs)
+    s.RegisterCommand("0,1,2", "", [](std::vector<std::string> strs)
     {
         std::string ar[] = {"Zero", "One", "Two"};
 //		for(auto &str: strs) std::cout << str << std::endl;
         for (unsigned i = 0; i < 3; ++i)
-            if (strs[i].m_String != ar[i])
+            if (strs[i] != ar[i])
             {
 //				std::cout << "CHECK: " << strs[i].m_String << " != " << ar[i] << std::endl;
                         CHECK(false);
                 return;
             }
                 CHECK(true);
-    }, Arg<std::vector<String>>(""));
+    }, Arg<std::vector<std::string>>(""));
 
 	// multi word strings
     s.RunCommand("0,1,2 [  \"Zero\" \"One\" \"Two\"   ]");
 
 // CORRECT USAGE VECTOR OF VECTOR OF MULTI WORD(S)
-    s.RegisterCommand("0,1,2,3", "", [](std::vector<std::vector<String>>)
+    s.RegisterCommand("0,1,2,3", "", [](std::vector<std::vector<std::string>>)
     {
         std::vector<std::vector<std::string>> arr = {{"One",    "Two"},
                                                      {" |Three| |Yeet|"},
@@ -96,16 +91,16 @@ TEST_CASE("String Argument")
 //		CHECK((strs[1][0].m_String == arr[1][0]));
 //		CHECK((strs[2][0].m_String == arr[2][0]));
 //		CHECK((strs[2][1].m_String == arr[2][1]));
-    }, Arg<std::vector<std::vector<String>>>(""));
+    }, Arg<std::vector<std::vector<std::string>>>(""));
 
 	// multi word strings
     s.RunCommand("0,1,2,3 [ [\"Arg\"] ]");
 
-    s.RegisterCommand("vecvecvec", "", [](std::vector<std::vector<std::vector<String>>> strs)
+    s.RegisterCommand("vecvecvec", "", [](std::vector<std::vector<std::vector<std::string>>> strs)
     {
-        bool c = strs[0][0][0].m_String == " " && strs[1][0][0].m_String == "Arg";
+        bool c = strs[0][0][0] == " " && strs[1][0][0] == "Arg";
                 CHECK(c);
-    }, Arg<std::vector<std::vector<std::vector<String>>>>(""));
+    }, Arg<std::vector<std::vector<std::vector<std::string>>>>(""));
 
     s.RunCommand("vecvecvec  [ \
 														[ \

@@ -12,6 +12,7 @@ TEST_CASE ("Test CSYS System Class")
     { test_flag = flag; };
     float time_variable = 0;
     int temp_var = 0;
+    std::string temp_str = "hello";
 
     // Test Command registration.
     temp.RegisterCommand("test", "Simple description", fn, csys::Arg<bool>("Test_Argument"));
@@ -26,7 +27,7 @@ TEST_CASE ("Test CSYS System Class")
     // Registration.
     temp.RegisterVariable("time", time_variable, csys::Arg<float>(""));
     temp.RegisterVariable("temp_var", temp_var, csys::Arg<int>(""));
-
+    temp.RegisterVariable("temp_str", temp_str, csys::Arg<std::string>(""));
     temp.RegisterVariable("time_set", time_variable, setter);
 
     temp.RunCommand("set time_set 30");
@@ -39,6 +40,8 @@ TEST_CASE ("Test CSYS System Class")
     CHECK(time_variable == 15);
     temp.RunCommand("set temp_var 30");
     CHECK(temp_var == 30);
+    temp.RunCommand("set temp_str buffalo");
+    CHECK(temp_str == "buffalo");
 
     // Test system variables.
     temp.UnregisterVariable("time");

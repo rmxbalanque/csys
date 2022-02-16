@@ -22,9 +22,9 @@ namespace csys
     template<> \
     struct CSYS_API ArgData<TYPE> \
     { \
-      explicit ArgData(String name) : m_Name(std::move(name)), m_Value() {} \
-      const String m_Name; \
-      String m_TypeName = TYPE_NAME; \
+      explicit ArgData(std::string name) : m_Name(std::move(name)), m_Value() {} \
+      const std::string m_Name; \
+      std::string m_TypeName = TYPE_NAME; \
       TYPE m_Value; \
     };
 
@@ -51,16 +51,16 @@ namespace csys
          * \param name
          *      Name of the argument
          */
-        explicit ArgData(String name) : m_Name(std::move(name)), m_Value()
+        explicit ArgData(std::string name) : m_Name(std::move(name)), m_Value()
         { }
 
-        const String m_Name = "";                  //!< Name of argument
-        String m_TypeName = "Unsupported Type";    //!< Name of type
+        const std::string m_Name = "";                  //!< Name of argument
+        std::string m_TypeName = "Unsupported Type";    //!< Name of type
         T m_Value;                                 //!< Actual value
     };
 
     //! Supported types
-    SUPPORT_TYPE(String, "String")
+    SUPPORT_TYPE(std::string, "String")
 
     SUPPORT_TYPE(bool, "Boolean")
 
@@ -101,12 +101,12 @@ namespace csys
          * \param name
          *      Name for argument
          */
-        explicit ArgData(String name) : m_Name(std::move(name))
+        explicit ArgData(std::string name) : m_Name(std::move(name))
         {}
 
-        const String m_Name;                                                                   //!< Name of argument
-        String m_TypeName = std::string("Vector_Of_") + ArgData<T>("").m_TypeName.m_String;    //!< Type name
-        std::vector<T> m_Value;                                                                //!< Vector of data
+        const std::string m_Name;                                                                   //!< Name of argument
+        std::string m_TypeName = std::string("Vector_Of_") + ArgData<T>("").m_TypeName;             //!< Type name
+        std::vector<T> m_Value;                                                                     //!< Vector of data
     };
 
     /*!
@@ -136,7 +136,7 @@ namespace csys
          * \param name
          *      Name of the argument
          */
-        explicit Arg(const String &name) : m_Arg(name)
+        explicit Arg(const std::string &name) : m_Arg(name)
         {
             static_assert(is_supported_type_v<ValueType>,
                     "ValueType 'T' is not supported, see 'Supported types' for more help");
@@ -152,13 +152,13 @@ namespace csys
          * \return
          *      Returns this
          */
-        Arg<T> &Parse(String &input, size_t &start)
+        Arg<T> &Parse(std::string &input, size_t &start)
         {
             size_t index = start;
 
             // Check if there are more arguments to be read in
-            if (input.NextPoi(index).first == input.End())
-                throw Exception("Not enough arguments were given", input.m_String);
+            if (NextPoi(input, index).first == EndPoi(input))
+                throw Exception("Not enough arguments were given", input);
             // Set value grabbed from input aka command line argument
             m_Arg.m_Value = ArgumentParser<ValueType>(input, start).m_Value;
             return *this;
@@ -172,7 +172,7 @@ namespace csys
          */
         std::string Info()
         {
-            return std::string(" [") + m_Arg.m_Name.m_String + ":" + m_Arg.m_TypeName.m_String + "]";
+            return std::string(" [") + m_Arg.m_Name + ":" + m_Arg.m_TypeName + "]";
         }
 
         ArgData<ValueType> m_Arg;    //!< Data relating to this argument
@@ -196,10 +196,10 @@ namespace csys
          * \return
          *      Returns this
          */
-        Arg<NULL_ARGUMENT> &Parse(String &input, size_t &start)
+        Arg<NULL_ARGUMENT> &Parse(std::string &input, size_t &start)
         {
-            if (input.NextPoi(start).first != input.End())
-                throw Exception("Too many arguments were given", input.m_String);
+            if (NextPoi(input, start).first != EndPoi(input))
+                throw Exception("Too many arguments were given", input);
             return *this;
         }
     };

@@ -57,7 +57,7 @@ namespace csys
          *      System to be copied.
          */
         System &operator=(const System &rhs);
-        
+
         /*!
          * \brief
          *      Parse given command line input and run it
@@ -152,7 +152,7 @@ namespace csys
          *      List of csys::Arg<T>s that matches that of the argument list of 'function'
          */
         template<typename Fn, typename ...Args>
-        void RegisterCommand(const String &name, const String &description, Fn function, Args... args)
+        void RegisterCommand(const std::string &name, const std::string &description, Fn function, Args... args)
         {
             // Check if function can be called with the given arguments and is not part of a class
             static_assert(std::is_invocable_v<Fn, typename Args::ValueType...>, "Arguments specified do not match that of the function");
@@ -160,24 +160,24 @@ namespace csys
 
             // Move to command
             size_t name_index = 0;
-            auto range = name.NextPoi(name_index);
+            auto range = NextPoi(name, name_index);
 
             // Command already registered
-            if (m_Commands.find(name.m_String) != m_Commands.end())
+            if (m_Commands.find(name) != m_Commands.end())
                 throw csys::Exception("ERROR: Command already exists");
 
             // Check if command has a name
-            else if (range.first == name.End())
+            else if (range.first == EndPoi(name))
             {
                 Log(ERROR) << "Empty command name given" << csys::endl;
                 return;
             }
 
             // Get command name
-            std::string command_name = name.m_String.substr(range.first, range.second - range.first);
+            std::string command_name = name.substr(range.first, range.second - range.first);
 
             // Command contains more than one word
-            if (name.NextPoi(name_index).first != name.End())
+            if (NextPoi(name, name_index).first != EndPoi(name))
                 throw csys::Exception("ERROR: Whitespace separated command names are forbidden");
 
             // Register for autocomplete.
@@ -188,7 +188,7 @@ namespace csys
             }
 
             // Add commands to system
-            m_Commands[name.m_String] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
+            m_Commands[name] = std::make_unique<Command<Fn, Args...>>(name, description, function, args...);
 
             // Make help command for command just added
             auto help = [this, command_name]() {
@@ -218,7 +218,7 @@ namespace csys
          *      Param 'var' is assumed to have a valid life-time up until it is unregistered or the program ends
          */
         template<typename T, typename ...Types>
-        void RegisterVariable(const String &name, T &var, Arg<Types>... args)
+        void RegisterVariable(const std::string &name, T &var, Arg<Types>... args)
         {
             static_assert(std::is_constructible_v<T, Types...>, "Type of var 'T' can not be constructed with types of 'Types'");
             static_assert(sizeof... (Types) != 0, "Empty variadic list");
@@ -251,7 +251,7 @@ namespace csys
          *      Param 'var' is assumed to have a valid life-time up until it is unregistered or the program ends
          */
         template<typename T, typename ...Types>
-        void RegisterVariable(const String &name, T &var, void(*setter)(T&, Types...))
+        void RegisterVariable(const std::string &name, T &var, void(*setter)(T&, Types...))
         {
             // Register get command
             auto var_name = RegisterVariableAux(name, var);
@@ -299,19 +299,19 @@ namespace csys
 
     protected:
         template<typename T>
-        std::string RegisterVariableAux(const String &name, T &var)
+        std::string RegisterVariableAux(const std::string &name, T &var)
         {
             // Disable.
             m_RegisterCommandSuggestion = false;
 
             // Make sure only one word was passed in
             size_t name_index = 0;
-            auto range = name.NextPoi(name_index);
-            if (name.NextPoi(name_index).first != name.End())
+            auto range = NextPoi(name, name_index);
+            if (NextPoi(name, name_index).first != EndPoi(name))
                 throw csys::Exception("ERROR: Whitespace separated variable names are forbidden");
 
             // Get variable name
-            std::string var_name = name.m_String.substr(range.first, range.second - range.first);
+            std::string var_name = name.substr(range.first, range.second - range.first);
 
             // Get Command
             const auto GetFunction = [this, &var]() {
@@ -332,7 +332,7 @@ namespace csys
             return var_name;
         }
 
-        void ParseCommandLine(const String &line);                                   //!< Parse command line and execute command
+        void ParseCommandLine(const std::string &line);                              //!< Parse command line and execute command
 
         std::unordered_map<std::string, std::unique_ptr<CommandBase>> m_Commands;    //!< Registered command container
         AutoComplete m_CommandSuggestionTree;                                        //!< Autocomplete Ternary Search Tree for commands

@@ -35,7 +35,7 @@ namespace csys
          * \return
          *      Returns item error if the parsing in someway was messed up, and none if there was no issue
          */
-        virtual Item operator()(String &input) = 0;
+        virtual Item operator()(std::string &input) = 0;
 
         /*!
          * \brief
@@ -87,10 +87,10 @@ namespace csys
          * \param args
          *      Arguments to be used for parsing and passing into the function. Must be of type "Arg<T>"
          */
-        Command(String name, String description, Fn function, Args... args) : m_Name(std::move(name)),
-                                                                              m_Description(std::move(description)),
-                                                                              m_Function(function),
-                                                                              m_Arguments(args..., Arg<NULL_ARGUMENT>())
+        Command(std::string name, std::string description, Fn function, Args... args) : m_Name(std::move(name)),
+                                                                                        m_Description(std::move(description)),
+                                                                                        m_Function(function),
+                                                                                        m_Arguments(args..., Arg<NULL_ARGUMENT>())
         {}
 
         /*!
@@ -101,7 +101,7 @@ namespace csys
          * \return
          *      Returns item error if the parsing in someway was messed up, and none if there was no issue
          */
-        Item operator()(String &input) final
+        Item operator()(std::string &input) final
         {
             try
             {
@@ -112,7 +112,7 @@ namespace csys
             catch (Exception &ae)
             {
                 // Error happened with parsing
-                return Item(ERROR) << (m_Name.m_String + ": " + ae.what());
+                return Item(ERROR) << (m_Name + ": " + ae.what());
             }
             return Item(NONE);
         }
@@ -125,8 +125,8 @@ namespace csys
          */
         [[nodiscard]] std::string Help() final
         {
-            return m_Name.m_String + DisplayArguments(std::make_index_sequence<sizeof ...(Args)>{}) + "\n\t\t- " +
-                   m_Description.m_String + "\n\n";
+            return m_Name + DisplayArguments(std::make_index_sequence<sizeof ...(Args)>{}) + "\n\t\t- " +
+                   m_Description + "\n\n";
         }
 
         /*!
@@ -162,7 +162,7 @@ namespace csys
          *      String of arguments to be parsed
          */
         template<size_t... Is_p, size_t... Is_c>
-        void Call(String &input, const std::index_sequence<Is_p...> &, const std::index_sequence<Is_c...> &)
+        void Call(std::string &input, const std::index_sequence<Is_p...> &, const std::index_sequence<Is_c...> &)
         {
             size_t start = 0;
 
@@ -188,8 +188,8 @@ namespace csys
             return (std::get<Is>(m_Arguments).Info() + ...);
         }
 
-        const String m_Name;                                            //!< Name of command
-        const String m_Description;                                     //!< Description of the command
+        const std::string m_Name;                                       //!< Name of command
+        const std::string m_Description;                                //!< Description of the command
         std::function<void(typename Args::ValueType...)> m_Function;    //!< Function to be invoked as command
         std::tuple<Args..., Arg<NULL_ARGUMENT>> m_Arguments;            //!< Arguments to be passed into m_Function
     };
@@ -215,9 +215,9 @@ namespace csys
          * \param function
          *      Function to run when command is called
          */
-        Command(String name, String description, Fn function) : m_Name(std::move(name)),
-                                                                m_Description(std::move(description)),
-                                                                m_Function(function), m_Arguments(Arg<NULL_ARGUMENT>())
+        Command(std::string name, std::string description, Fn function) : m_Name(std::move(name)),
+                                                                          m_Description(std::move(description)),
+                                                                          m_Function(function), m_Arguments(Arg<NULL_ARGUMENT>())
         {}
 
         /*!
@@ -228,7 +228,7 @@ namespace csys
          * \return
          *      Returns item error if the parsing in someway was messed up, and none if there was no issue
          */
-        Item operator()(String &input) final
+        Item operator()(std::string &input) final
         {
             // call the function
             size_t start = 0;
@@ -240,7 +240,7 @@ namespace csys
             catch (Exception &ae)
             {
                 // Command had something passed into it
-                return Item(ERROR) << (m_Name.m_String + ": " + ae.what());
+                return Item(ERROR) << (m_Name + ": " + ae.what());
             }
 
             // Call function
@@ -256,7 +256,7 @@ namespace csys
          */
         [[nodiscard]] std::string Help() final
         {
-            return m_Name.m_String + "\n\t\t- " + m_Description.m_String + "\n\n";
+            return m_Name + "\n\t\t- " + m_Description + "\n\n";
         }
 
         /*!
@@ -282,8 +282,8 @@ namespace csys
         }
     private:
 
-        const String m_Name;                           //!< Name of command
-        const String m_Description;                    //!< Description of the command
+        const std::string m_Name;                      //!< Name of command
+        const std::string m_Description;               //!< Description of the command
         std::function<void(void)> m_Function;          //!< Function to be invoked as command
         std::tuple<Arg<NULL_ARGUMENT>> m_Arguments;    //!< Arguments to be passed into m_Function
     };

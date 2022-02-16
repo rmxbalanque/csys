@@ -46,3 +46,5 @@ Thumbs.db
 /Default.xml
 /documentation/
 /build/
+/.vs/
+/out/

@@ -116,7 +116,7 @@ namespace csys
          * \param start
          *      Start in 'input' to where this argument should be parsed from
          */
-        inline ArgumentParser(String &input, size_t &start);
+        inline ArgumentParser(std::string &input, size_t &start);
 
         T m_Value; //!< Value of parsed argument
     };
@@ -129,16 +129,16 @@ namespace csys
   template<> \
   struct CSYS_API ArgumentParser<TYPE> \
   { \
-    inline ArgumentParser(String &input, size_t &start); \
-    TYPE m_Value = 0; \
+    inline ArgumentParser(std::string &input, size_t &start); \
+    TYPE m_Value{}; \
   }; \
-  inline ArgumentParser<TYPE>::ArgumentParser(String &input, size_t &start)
+  inline ArgumentParser<TYPE>::ArgumentParser(std::string &input, size_t &start)
 
     /*!
      * \brief
      *      Macro for getting the sub-string within a range, used for readability
      */
-#define ARG_PARSE_SUBSTR(range) input.m_String.substr(range.first, range.second - range.first)
+#define ARG_PARSE_SUBSTR(range) input.substr(range.first, range.second - range.first)
 
     /*!
      * \brief
@@ -147,7 +147,7 @@ namespace csys
 #define ARG_PARSE_GENERAL_SPEC(TYPE, TYPE_NAME, FUNCTION) \
   ARG_PARSE_BASE_SPEC(TYPE) \
   { \
-    auto range = input.NextPoi(start); \
+    auto range = NextPoi(input, start); \
     try \
     { \
       m_Value = (TYPE)FUNCTION(ARG_PARSE_SUBSTR(range), &range.first); \
@@ -155,21 +155,21 @@ namespace csys
     catch (const std::out_of_range&) \
     { \
       throw Exception(std::string("Argument too large for ") + TYPE_NAME, \
-                              input.m_String.substr(range.first, range.second));  \
+                              input.substr(range.first, range.second));  \
     } \
     catch (const std::invalid_argument&) \
     { \
       throw Exception(std::string("Missing or invalid ") + TYPE_NAME + " argument", \
-                              input.m_String.substr(range.first, range.second)); } \
+                              input.substr(range.first, range.second)); } \
   }
 
     /*!
      * \brief
      *      Template specialization for string argument parsing
      */
-    ARG_PARSE_BASE_SPEC(csys::String)
+    ARG_PARSE_BASE_SPEC(std::string)
     {
-        m_Value.m_String.clear(); // Empty string before using
+        m_Value.clear(); // Empty string before using
 
         // Lambda for getting a word from the string and checking for reserved chars
         static auto GetWord = [](std::string &str, size_t start, size_t end)
@@ -200,11 +200,11 @@ namespace csys
         };
 
         // Go to the start of the string argument
-        auto range = input.NextPoi(start);
+        auto range = NextPoi(input, start);
 
         // If its a single string
-        if (input.m_String[range.first] != '"')
-            m_Value = GetWord(input.m_String, range.first, range.second);
+        if (input[range.first] != '"')
+            m_Value = GetWord(input, range.first, range.second);
         // Multi word string
         else
         {
@@ -212,28 +212,28 @@ namespace csys
             while (true)
             {
                 // Get the next non-escaped "
-                range.second = input.m_String.find('"', range.first);
-                while (range.second != std::string::npos && Reserved::IsEscaped(input.m_String, range.second))
-                    range.second = input.m_String.find('"', range.second + 1);
+                range.second = input.find('"', range.first);
+                while (range.second != std::string::npos && Reserved::IsEscaped(input, range.second))
+                    range.second = input.find('"', range.second + 1);
 
                 // Check for closing "
                 if (range.second == std::string::npos)
                 {
-                    range.second = input.m_String.size();
+                    range.second = input.size();
                     throw Exception("Could not find closing '\"'", ARG_PARSE_SUBSTR(range));
                 }
 
                 // Add word to already existing string
-                m_Value.m_String += GetWord(input.m_String, range.first, range.second);
+                m_Value += GetWord(input, range.first, range.second);
 
                 // Go to next word
                 range.first = range.second + 1;
 
                 // End of string check
-                if (range.first < input.m_String.size() && !std::isspace(input.m_String[range.first]) && input.m_String[range.first] != '\0')
+                if (range.first < input.size() && !std::isspace(input[range.first]))
                 {
                     // joining two strings together
-                    if (input.m_String[range.first] == '"')
+                    if (input[range.first] == '"')
                         ++range.first;
                 }
                 else
@@ -258,26 +258,26 @@ namespace csys
         static const char *s_true = "true";
 
         // Get argument
-        auto range = input.NextPoi(start);
+        auto range = NextPoi(input, start);
 
         // check if the length is between the len of "true" and "false"
-        input.m_String[range.first] = char(std::tolower(input.m_String[range.first]));
+        input[range.first] = char(std::tolower(input[range.first]));
 
         // true branch
-        if (range.second - range.first == 4 && input.m_String[range.first] == 't')
+        if (range.second - range.first == 4 && input[range.first] == 't')
         {
             // Go through comparing grabbed arg to "true" char by char, bail if not the same
             for (size_t i = range.first + 1; i < range.second; ++i)
-                if ((input.m_String[i] = char(std::tolower(input.m_String[i]))) != s_true[i - range.first])
+                if ((input[i] = char(std::tolower(input[i]))) != s_true[i - range.first])
                     throw Exception(s_err_msg + std::string(", expected true"), ARG_PARSE_SUBSTR(range));
             m_Value = true;
         }
         // false branch
-        else if (range.second - range.first == 5 && input.m_String[range.first] == 'f')
+        else if (range.second - range.first == 5 && input[range.first] == 'f')
         {
             // Go through comparing grabbed arg to "false" char by char, bail if not the same
             for (size_t i = range.first + 1; i < range.second; ++i)
-                if ((input.m_String[i] = char(std::tolower(input.m_String[i]))) != s_false[i - range.first])
+                if ((input[i] = char(std::tolower(input[i]))) != s_false[i - range.first])
                     throw Exception(s_err_msg + std::string(", expected false"), ARG_PARSE_SUBSTR(range));
             m_Value = false;
         }
@@ -293,7 +293,7 @@ namespace csys
     ARG_PARSE_BASE_SPEC(char)
     {
         // Grab the argument
-        auto range = input.NextPoi(start);
+        auto range = NextPoi(input, start);
         size_t len = range.second - range.first;
 
         // Check if its 3 or more letters
@@ -303,18 +303,18 @@ namespace csys
         else if (len == 2)
         {
             // Check if the first char is \ and the second is a reserved char
-            if (!Reserved::IsEscaping(input.m_String, range.first))
+            if (!Reserved::IsEscaping(input, range.first))
                 throw Exception("Too many chars were given", ARG_PARSE_SUBSTR(range));
 
             // is correct
-            m_Value = input.m_String[range.first + 1];
+            m_Value = input[range.first + 1];
         }
         // if its one char and reserved
-        else if (Reserved::IsReservedChar(input.m_String[range.first]))
+        else if (Reserved::IsReservedChar(input[range.first]))
             throw Exception(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
         // one char, not reserved
         else
-            m_Value = input.m_String[range.first];
+            m_Value = input[range.first];
     }
 
     /*!
@@ -324,7 +324,7 @@ namespace csys
     ARG_PARSE_BASE_SPEC(unsigned char)
     {
         // Grab the argument
-        auto range = input.NextPoi(start);
+        auto range = NextPoi(input, start);
         size_t len = range.second - range.first;
 
         // Check if its 3 or more letters
@@ -334,18 +334,18 @@ namespace csys
         else if (len == 2)
         {
             // Check if the first char is \ and the second is a reserved char
-            if (!Reserved::IsEscaping(input.m_String, range.first))
+            if (!Reserved::IsEscaping(input, range.first))
                 throw Exception("Too many chars were given", ARG_PARSE_SUBSTR(range));
 
             // is correct
-            m_Value = static_cast<unsigned char>(input.m_String[range.first + 1]);
+            m_Value = static_cast<unsigned char>(input[range.first + 1]);
         }
         // if its one char and reserved
-        else if (Reserved::IsReservedChar(input.m_String[range.first]))
+        else if (Reserved::IsReservedChar(input[range.first]))
             throw Exception(s_ErrMsgReserved, ARG_PARSE_SUBSTR(range));
         // one char, not reserved
         else
-            m_Value = static_cast<unsigned char>(input.m_String[range.first]);
+            m_Value = static_cast<unsigned char>(input[range.first]);
     }
 
     /*!
@@ -432,7 +432,7 @@ namespace csys
          * \param start
          *      Start of this argument
          */
-        ArgumentParser(String &input, size_t &start);
+        ArgumentParser(std::string &input, size_t &start);
 
         std::vector<T> m_Value;    //!< Vector of data parsed
     };
@@ -448,57 +448,57 @@ namespace csys
      *      Start of this argument
      */
     template<typename T>
-    ArgumentParser<std::vector<T>>::ArgumentParser(String &input, size_t &start)
+    ArgumentParser<std::vector<T>>::ArgumentParser(std::string &input, size_t &start)
     {
         // Clean out vector before use
         m_Value.clear();
 
         // Grab the start of the vector argument
-        auto range = input.NextPoi(start);
+        auto range = NextPoi(input, start);
 
         // Empty
-        if (range.first == input.End()) return;
+        if (range.first == EndPoi(input)) return;
 
         // Not starting with [
-        if (input.m_String[range.first] != '[')
+        if (input[range.first] != '[')
             throw Exception("Invalid vector argument missing opening [", ARG_PARSE_SUBSTR(range));
 
         // Erase [
-        input.m_String[range.first] = ' ';
+        input[range.first] = ' ';
         while (true)
         {
             // Get next argument in vector
-            range = input.NextPoi(range.first);
+            range = NextPoi(input, range.first);
 
             // No more, empty vector
-            if (range.first == input.End()) return;
+            if (range.first == EndPoi(input)) return;
 
             // Is a nested vector, go deeper
-            else if (input.m_String[range.first] == '[')
+            else if (input[range.first] == '[')
                 m_Value.push_back(ArgumentParser<T>(input, range.first).m_Value);
             else
             {
                 // Find first non-escaped ]
-                range.second = input.m_String.find(']', range.first);
-                while (range.second != std::string::npos && Reserved::IsEscaped(input.m_String, range.second))
-                    range.second = input.m_String.find(']', range.second + 1);
+                range.second = input.find(']', range.first);
+                while (range.second != std::string::npos && Reserved::IsEscaped(input, range.second))
+                    range.second = input.find(']', range.second + 1);
 
                 // Check for closing ]
                 if (range.second == std::string::npos)
                 {
-                    range.second = input.m_String.size();
+                    range.second = input.size();
                     throw Exception("Invalid vector argument missing closing ]", ARG_PARSE_SUBSTR(range));
                 }
 
                 // Erase ]
-                input.m_String[range.second] = ' ';
+                input[range.second] = ' ';
                 start = range.first;
 
                 // Parse all arguments contained within the vector
                 while (true)
                 {
                     // If end of parsing, get out
-                    if ((range.first = input.NextPoi(range.first).first) >= range.second)
+                    if ((range.first = NextPoi(input, range.first).first) >= range.second)
                     {
                         start = range.first;
                         return;

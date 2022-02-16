@@ -237,21 +237,21 @@ namespace csys
     // Private methods ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
-    CSYS_INLINE void System::ParseCommandLine(const String &line)
+    CSYS_INLINE void System::ParseCommandLine(const std::string &line)
     {
         // Get first non-whitespace char.
         size_t line_index = 0;
-        std::pair<size_t, size_t> range = line.NextPoi(line_index);
+        std::pair<size_t, size_t> range = NextPoi(line, line_index);
 
         // Just whitespace was passed in. Don't log as command.
-        if (range.first == line.End())
+        if (range.first == EndPoi(line))
             return;
 
         // Push to history.
-        m_CommandHistory.PushBack(line.m_String);
+        m_CommandHistory.PushBack(line);
 
         // Get name of command.
-        std::string command_name = line.m_String.substr(range.first, range.second - range.first);
+        std::string command_name = line.substr(range.first, range.second - range.first);
 
         // Set or get
         bool is_cmd_set = command_name == s_Set;
@@ -261,22 +261,22 @@ namespace csys
         // Edge case for if user is just runs "help" command
         if (is_cmd_help)
         {
-            range = line.NextPoi(line_index);
-            if (range.first != line.End())
-                command_name += " " + line.m_String.substr(range.first, range.second - range.first);
+            range = NextPoi(line, line_index);
+            if (range.first != EndPoi(line))
+                command_name += " " + line.substr(range.first, range.second - range.first);
         }
 
             // Its a set or get command
         else if (is_cmd_set || is_cmd_get)
         {
             // Try to get variable name
-            if ((range = line.NextPoi(line_index)).first == line.End())
+            if ((range = NextPoi(line, line_index)).first == EndPoi(line))
             {
                 Log(ERROR) << s_ErrorNoVar << endl;
                 return;
             } else
                 // Append variable name.
-                command_name += " " + line.m_String.substr(range.first, range.second - range.first);
+                command_name += " " + line.substr(range.first, range.second - range.first);
         }
 
         // Get runnable command
@@ -287,7 +287,7 @@ namespace csys
         else
         {
             // Get the arguments.
-            String arguments = line.m_String.substr(range.second, line.m_String.size() - range.first);
+            std::string arguments = line.substr(range.second, line.size() - range.first);
 
             // Execute command.
             auto cmd_out = (*command->second)(arguments);

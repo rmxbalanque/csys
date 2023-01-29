@@ -102,7 +102,7 @@ namespace csys
          * \brief
          *      Creates a new item entry to log information
          * \param type
-         *      Log type (COMMAND, LOG, WARNING, ERROR)
+         *      Log type (COMMAND, LOG, WARNING, CSYS_ERROR)
          * \return
          *      Reference to console items obj
          */
@@ -169,7 +169,7 @@ namespace csys
             // Check if command has a name
             else if (range.first == name.End())
             {
-                Log(ERROR) << "Empty command name given" << csys::endl;
+                Log(CSYS_ERROR) << "Empty command name given" << csys::endl;
                 return;
             }
 

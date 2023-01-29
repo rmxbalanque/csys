@@ -121,7 +121,7 @@ namespace csys
         // Exit if not found.
         if (script_pair == m_Scripts.end())
         {
-            m_ItemLog.log(ERROR) << "Script \"" << script_name << "\" not found" << csys::endl;
+            m_ItemLog.log(CSYS_ERROR) << "Script \"" << script_name << "\" not found" << csys::endl;
             return;
         }
 
@@ -137,7 +137,7 @@ namespace csys
             }
             catch (csys::Exception &e)
             {
-                Log(ERROR) << e.what() << csys::endl;
+                Log(CSYS_ERROR) << e.what() << csys::endl;
             }
         }
 
@@ -272,7 +272,7 @@ namespace csys
             // Try to get variable name
             if ((range = line.NextPoi(line_index)).first == line.End())
             {
-                Log(ERROR) << s_ErrorNoVar << endl;
+                Log(CSYS_ERROR) << s_ErrorNoVar << endl;
                 return;
             } else
                 // Append variable name.
@@ -282,7 +282,7 @@ namespace csys
         // Get runnable command
         auto command = m_Commands.find(command_name);
         if (command == m_Commands.end())
-            Log(ERROR) << s_ErrorSetGetNotFound << endl;
+            Log(CSYS_ERROR) << s_ErrorSetGetNotFound << endl;
             // Run the command
         else
         {

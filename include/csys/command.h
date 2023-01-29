@@ -112,7 +112,7 @@ namespace csys
             catch (Exception &ae)
             {
                 // Error happened with parsing
-                return Item(ERROR) << (m_Name.m_String + ": " + ae.what());
+                return Item(CSYS_ERROR) << (m_Name.m_String + ": " + ae.what());
             }
             return Item(NONE);
         }
@@ -240,7 +240,7 @@ namespace csys
             catch (Exception &ae)
             {
                 // Command had something passed into it
-                return Item(ERROR) << (m_Name.m_String + ": " + ae.what());
+                return Item(CSYS_ERROR) << (m_Name.m_String + ": " + ae.what());
             }
 
             // Call function
